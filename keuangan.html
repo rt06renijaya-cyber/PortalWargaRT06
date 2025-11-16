@@ -23,10 +23,8 @@
     background:var(--bg);color:#0f172a;-webkit-font-smoothing:antialiased;
   }
 
-  /* container */
   .wrap{max-width:1100px;margin:18px auto;padding:0 16px;}
 
-  /* header */
   header.site{
     background:#16324a;color:#fff;padding:18px;border-radius:10px;
     display:flex;gap:12px;align-items:center;
@@ -35,12 +33,10 @@
   .hdr-text h1{margin:0;font-size:20px;font-weight:700;line-height:1.25}
   .hdr-text p{margin:4px 0 0;font-size:12px;color:#dbeafe}
 
-  /* report title */
   .report-title{ text-align:center;margin:18px 0 10px;}
   .report-title h2{margin:0;color:var(--accent);font-size:22px;font-weight:700}
   .report-title p{margin:6px 0 0;color:var(--muted);font-weight:600}
 
-  /* top grid */
   .top-grid{
     display:grid;grid-template-columns:420px 1fr;gap:18px;align-items:start;
     margin-bottom:18px;
@@ -48,7 +44,7 @@
   .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
   .kpi{font-weight:700;font-size:20px;color:#0f172a}
 
-  /* bars & summary */
+  /* SALDO BARS */
   .saldo-wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
   .bars{width:180px;display:flex;justify-content:center;gap:16px;align-items:end;height:150px;margin:0 auto}
   .bar{width:60px;border-radius:8px 8px 0 0;display:flex;align-items:flex-end;justify-content:center;color:#fff;font-weight:700;font-size:10px;padding-bottom:4px}
@@ -60,7 +56,6 @@
   .percent{font-size:18px;font-weight:700}
   .spent{font-weight:700;font-size:22px}
 
-  /* planned/actual bars */
   .pl-actual{display:flex;gap:12px;align-items:center;margin-top:12px}
   .pl-actual .label{width:80px;color:var(--muted);font-size:13px}
   .plbar{flex:1;height:12px;border-radius:8px;background:#eef3ff;overflow:hidden}
@@ -69,7 +64,6 @@
   .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
   .mini-col{background:#fff;padding:10px;border-radius:8px;text-align:center;box-shadow:0 6px 16px rgba(2,6,23,0.03)}
 
-  /* tables */
   .section{margin-top:16px}
   .table-wrap{overflow-x:auto;border-radius:8px}
   table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card)}
@@ -77,7 +71,6 @@
   th{background:#f8fafc;font-weight:700;color:#111827}
   tr:hover td{background:#fbfdff}
 
-  /* donut chart container */
   #donutWrap canvas{
     width:100%!important;
     max-width:380px;
@@ -87,16 +80,14 @@
 
   footer{margin:24px 0;text-align:center;color:var(--muted);font-size:13px}
 
-  /* RESPONSIVE AREA — IMPROVED VERSION */
+  /* RESPONSIVE FIX — SMARTPHONE */
 
-  /* Tablet */
   @media (max-width:980px){
     .top-grid{grid-template-columns:1fr; }
     header.site{padding:14px}
     .hdr-text h1{font-size:18px}
   }
 
-  /* HP / Small Devices */
   @media (max-width:520px){
 
     .wrap{padding:0 10px;margin:12px auto}
@@ -106,32 +97,48 @@
       padding:14px;
       gap:10px;
     }
-    .logo{width:52px;height:52px}
+    .logo{width:50px;height:50px}
     .hdr-text h1{font-size:15px}
     .hdr-text p{font-size:11px}
 
     .report-title h2{font-size:18px}
     .report-title p{font-size:13px}
 
-    .bars{height:110px;width:140px}
-    .bar{width:38px;font-size:9px}
-    .kpi{font-size:17px}
-    .percent{font-size:16px}
-    .spent{font-size:18px}
+    /* BARS DIPERKECIL 35% */
+    .bars{
+      height:90px;       /* turun dari 110 */
+      width:120px;       /* turun dari 140 */
+      gap:10px;
+    }
+    .bar{
+      width:32px;        /* turun dari 38 */
+      font-size:8px;
+    }
 
-    .pl-actual .label{width:64px;font-size:11px}
+    .kpi{font-size:16px}
+    .percent{font-size:15px}
+    .spent{font-size:17px}
+
+    .pl-actual .label{width:60px;font-size:11px}
     th,td{padding:8px;font-size:12px}
     .mini-grid{grid-template-columns:1fr}
 
     table th, table td{white-space:normal}
   }
 
-  /* Extra small (≤380px) */
   @media (max-width:380px){
     header.site{flex-direction:column;text-align:center}
     .logo{margin-bottom:8px}
-    .bars{width:120px;height:100px}
-    .bar{width:34px}
+
+    .bars{
+      width:100px;
+      height:70px;
+      gap:8px;
+    }
+    .bar{
+      width:28px;
+      font-size:7px;
+    }
   }
 
 </style>
@@ -139,406 +146,320 @@
 <body>
 
 <div class="wrap">
+<!-- HEADER -->
+<header class="site">
+  <div class="logo"></div>
+  <div class="hdr-text">
+    <h1>Laporan Keuangan RT 06</h1>
+    <p>Periode berjalan</p>
+  </div>
+</header>
 
-  <header class="site card" aria-hidden="false">
-    <div class="logo" role="img" aria-label="logo"></div>
-    <div class="hdr-text">
-      <h1>RUKUN TETANGGA 06/06 — Reni Jaya</h1>
-      <p>Kel. Pondok Benda • Kecamatan Pamulang • Kota Tangerang Selatan</p>
+<!-- JUDUL -->
+<div class="report-title">
+  <h2>Ringkasan Keuangan</h2>
+  <p>Saldo Awal • Pemasukan • Pengeluaran • Saldo Akhir</p>
+</div>
+
+<!-- BAGIAN SALDO -->
+<div class="top-grid">
+
+  <!-- KOTAK SALDO -->
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:#0f172a;font-weight:700;">Saldo Keuangan</h3>
+
+    <div class="saldo-wrap">
+
+      <div style="flex:1">
+        <p style="margin:0;color:#64748b;font-size:13px;">Saldo Awal</p>
+        <div class="kpi" id="saldoAwal">Rp 0</div>
+
+        <p style="margin:12px 0 0;color:#64748b;font-size:13px;">Saldo Akhir</p>
+        <div class="kpi" id="saldoAkhir">Rp 0</div>
+      </div>
+
+      <!-- BAR VERTICAL -->
+      <div style="flex:1;text-align:center">
+        <div class="bars">
+          <div class="bar bar-left" id="barAwal" style="height:40%;">Awal</div>
+          <div class="bar bar-right" id="barAkhir" style="height:60%;">Akhir</div>
+        </div>
+        <div class="bars-label">Perbandingan Saldo</div>
+      </div>
+
     </div>
-  </header>
 
-  <div class="report-title">
-    <h2>LAPORAN KEUANGAN</h2>
-    <p>Oktober 2025</p>
+    <div class="summary-stat" style="margin-top:12px">
+      <div class="percent" id="persentasePerubahan">0%</div>
+      <div class="spent">Perubahan Saldo</div>
+    </div>
+
   </div>
 
-  <div class="top-grid">
-
-    <!-- LEFT: SALDO + BARS -->
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-        <div>
-          <div style="font-size:12px;color:var(--muted)">SALDO AWAL</div>
-          <div class="kpi" id="saldoAwalUI">Rp0</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:12px;color:var(--muted)">SALDO AKHIR</div>
-          <div class="kpi" id="saldoAkhirUI">Rp0</div>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div class="saldo-wrap">
-        <div class="bars" id="barsWrap">
-          <div style="text-align:center">
-            <div class="bar bar-left" id="barAwal" style="height:100px"></div>
-            <div class="bars-label">SALDO AWAL</div>
-          </div>
-          <div style="text-align:center">
-            <div class="bar bar-right" id="barAkhir" style="height:100px"></div>
-            <div class="bars-label">SALDO AKHIR</div>
-          </div>
-        </div>
-
-        <div style="flex:1;min-width:180px">
-          <div class="summary-stat">
-            <div class="percent" id="percentChange">0%</div>
-            <div class="desc" id="changeDesc">No change</div>
-            <div style="height:8px"></div>
-            <div class="spent" id="spentThis">Rp0</div>
-            <div style="color:var(--muted);font-size:13px">Spent this month</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT: PLANNED / ACTUAL -->
-    <div>
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-          <div>
-            <h3 style="margin:0">Pengeluaran</h3>
-            <div style="color:var(--muted);font-size:13px">Planned vs Actual</div>
-          </div>
-          <div style="text-align:right">
-            <div style="color:var(--muted);font-size:13px">Planned</div>
-            <div id="plannedOut" class="kpi">Rp0</div>
-            <div style="height:8px"></div>
-            <div style="color:var(--muted);font-size:13px">Actual</div>
-            <div id="actualOut" class="kpi">Rp0</div>
-          </div>
-        </div>
-
-        <div class="pl-actual">
-          <div class="label">Progress</div>
-          <div class="plbar"><div id="fillOut" class="plfill" style="width:40%"></div></div>
-        </div>
-
-        <div class="mini-grid">
-          <div class="mini-col">
-            <div style="font-size:12px;color:var(--muted)">Planned</div>
-            <div id="plannedOutSmall" style="font-weight:700;margin-top:8px">Rp0</div>
-          </div>
-          <div class="mini-col">
-            <div style="font-size:12px;color:var(--muted)">Actual</div>
-            <div id="actualOutSmall" style="font-weight:700;margin-top:8px">Rp0</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:14px">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-          <div>
-            <h3 style="margin:0">Pemasukan</h3>
-            <div style="color:var(--muted);font-size:13px">Planned vs Actual</div>
-          </div>
-          <div style="text-align:right">
-            <div style="color:var(--muted);font-size:13px">Planned</div>
-            <div id="plannedIn" class="kpi">Rp0</div>
-            <div style="height:8px"></div>
-            <div style="color:var(--muted);font-size:13px">Actual</div>
-            <div id="actualIn" class="kpi">Rp0</div>
-          </div>
-        </div>
-
-        <div class="pl-actual">
-          <div class="label">Progress</div>
-          <div class="plbar"><div id="fillIn" class="plfill" style="width:60%"></div></div>
-        </div>
-
-        <div class="mini-grid">
-          <div class="mini-col">
-            <div style="font-size:12px;color:var(--muted)">Planned</div>
-            <div id="plannedInSmall" style="font-weight:700;margin-top:8px">Rp0</div>
-          </div>
-          <div class="mini-col">
-            <div style="font-size:12px;color:var(--muted)">Actual</div>
-            <div id="actualInSmall" style="font-weight:700;margin-top:8px">Rp0</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div> <!-- end top-grid -->
-
-  <!-- donut chart -->
-  <div id="donutWrap" style="margin-top:10px;margin-bottom:18px"></div>
-
-  <!-- Tables -->
-  <div class="section">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
-        <h3 style="margin:0">Pengeluaran</h3>
-        <div style="color:var(--muted);font-size:13px">Detail transaksi</div>
-      </div>
-
-      <div class="table-wrap" style="margin-top:12px">
-        <table id="tableOut">
-          <thead><tr><th>Tanggal</th><th>Jumlah</th><th>Keterangan</th><th>Kategori</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:14px">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
-        <h3 style="margin:0">Pemasukan</h3>
-        <div style="color:var(--muted);font-size:13px">Detail transaksi</div>
-      </div>
-
-      <div class="table-wrap" style="margin-top:12px">
-        <table id="tableIn">
-          <thead><tr><th>Tanggal</th><th>Jumlah</th><th>Keterangan</th><th>Kategori</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
+  <!-- KOTAK DONUT -->
+  <div class="card">
+    <h3 style="margin:0 0 12px;font-size:17px;color:#0f172a;font-weight:700;">Komposisi Pemasukan vs Pengeluaran</h3>
+    <div id="donutWrap">
+      <canvas id="donutChart"></canvas>
     </div>
   </div>
 
-  <footer>Generated from Google Sheets — RT06 Reni Jaya</footer>
-</div> <!-- wrap -->
+</div>
 
+<!-- TABEL PEMASUKAN -->
+<div class="section">
+  <div class="card">
+    <h3 style="font-size:17px;margin:0 0 12px;font-weight:700;">Daftar Pemasukan</h3>
+    <div class="table-wrap">
+      <table id="tableMasuk">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Kategori</th>
+            <th>Keterangan</th>
+            <th>Nominal</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TABEL PENGELUARAN -->
+<div class="section">
+  <div class="card">
+    <h3 style="font-size:17px;margin:0 0 12px;font-weight:700;">Daftar Pengeluaran</h3>
+    <div class="table-wrap">
+      <table id="tableKeluar">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Kategori</th>
+            <th>Keterangan</th>
+            <th>Nominal</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Laporan Keuangan RT 06 — Generated Automatically
+</footer>
 <script>
-/* ================================
-   FETCH DATA • SALDO AWAL • SUMMARY
-   ================================ */
-
+// =======================
+// KONFIGURASI GOOGLE SHEET
+// =======================
 const SHEET_ID = "1EMYpie82paCl-vupfhyj11Z9tNGFp2p7aIDwIIl_Z0o";
-const BASE = "https://opensheet.elk.sh/" + SHEET_ID;
+const BASE_URL = `https://opensheet.elk.sh/${SHEET_ID}`;
 
-const URL_IN     = BASE + "/web_Pemasukan";
-const URL_OUT    = BASE + "/web_Pengeluaran";
-const URL_SALDO  = BASE + "/web_SaldoAwal";  // NEW
+const URL_SALDO   = `${BASE_URL}/web_SaldoAwal`;
+const URL_IN      = `${BASE_URL}/web_Pemasukan`;
+const URL_OUT     = `${BASE_URL}/web_Pengeluaran`;
 
-/* ----------- Helpers ----------- */
-
-function parseNum(v){
-  if(v==null) return 0;
-  const cleaned = String(v).replace(/[^0-9\-]/g,"");
-  const n = parseInt(cleaned,10);
-  return isNaN(n) ? 0 : n;
+// =======================
+// FUNCTION BANTUAN
+// =======================
+function cleanNumber(v) {
+  if (!v) return 0;
+  return parseInt(String(v).replace(/[^0-9\-]/g, "")) || 0;
+}
+function rupiah(n) {
+  return n.toLocaleString("id-ID", { style: "currency", currency: "IDR" });
 }
 
-function fmt(n){
-  return n.toLocaleString("id-ID",{style:"currency",currency:"IDR"});
-}
-
-async function fetchJSON(url){
+// Ambil JSON aman
+async function getJSON(url) {
   try {
     const r = await fetch(url);
-    if(!r.ok) throw new Error(r.status);
+    if (!r.ok) throw new Error(r.status);
     return await r.json();
-  } catch (e){
-    console.warn("Fetch error:", url, e);
-    return null;
+  } catch (err) {
+    console.error("Fetch error:", url, err);
+    return [];
   }
 }
 
-/* ----------- MAIN ----------- */
-
-async function init(){
-
-  const [inData, outData, saldoSheet] = await Promise.all([
-    fetchJSON(URL_IN),
-    fetchJSON(URL_OUT),
-    fetchJSON(URL_SALDO)
+// =======================
+// SCRIPT UTAMA
+// =======================
+async function init() {
+  const [saldoSheet, pemasukan, pengeluaran] = await Promise.all([
+    getJSON(URL_SALDO),
+    getJSON(URL_IN),
+    getJSON(URL_OUT)
   ]);
 
-  const pemasukan   = Array.isArray(inData) ? inData : [];
-  const pengeluaran = Array.isArray(outData) ? outData : [];
-
-  /* ==========================
-        1. SALDO AWAL
-     ========================== */
-
+  // =======================
+  // 1. SALDO AWAL
+  // =======================
   let saldoAwal = 0;
 
-  if(Array.isArray(saldoSheet) && saldoSheet.length > 0){
-
+  if (saldoSheet.length > 0) {
     const row = saldoSheet[0];
-
-    // TRY key common names
-    const possibleNames = [
-      "SaldoAwal","Saldo Awal","saldoawal","saldo_awal",
-      "Saldo","Initial","Start","Awal"
-    ];
-
-    for(const key of Object.keys(row)){
-      const cleanKey = key.toLowerCase().replace(/\s+/g,'');
-      if(possibleNames.map(s=>s.toLowerCase().replace(/\s+/g,'')).includes(cleanKey)){
-        saldoAwal = parseNum(row[key]);
+    for (const key of Object.keys(row)) {
+      if (String(key).toLowerCase().includes("saldo")) {
+        saldoAwal = cleanNumber(row[key]);
         break;
       }
     }
+  }
 
-    // Fallback → first numeric value in row
-    if(saldoAwal === 0){
-      for(const key of Object.keys(row)){
-        const v = parseNum(row[key]);
-        if(v !== 0){ saldoAwal = v; break; }
+  // fallback → ambil angka pertama
+  if (saldoAwal === 0) {
+    for (const key of Object.keys(saldoSheet[0] || {})) {
+      const val = cleanNumber(saldoSheet[0][key]);
+      if (val !== 0) {
+        saldoAwal = val;
+        break;
       }
     }
   }
 
-  /* ==========================
-        2. HITUNG PEMASUKAN / PENGELUARAN
-     ========================== */
+  // =======================
+  // 2. HITUNG PEMASUKAN
+  // =======================
+  let totalIn = 0;
+  pemasukan.forEach(r => {
+    totalIn += cleanNumber(r.Jumlah || r.Nominal || r.Amount);
+  });
 
-  let totalIn  = 0;
+  // =======================
+  // 3. HITUNG PENGELUARAN
+  // =======================
   let totalOut = 0;
-
-  pemasukan.forEach(r=>{
-    totalIn += parseNum(r.Jumlah || r.Nominal || r.Amount || 0);
+  pengeluaran.forEach(r => {
+    totalOut += cleanNumber(r.Jumlah || r.Nominal || r.Amount);
   });
 
-  pengeluaran.forEach(r=>{
-    totalOut += parseNum(r.Jumlah || r.Nominal || r.Amount || 0);
-  });
+  // =======================
+  // 4. SALDO AKHIR
+  // =======================
+  const saldoAkhir = saldoAwal + totalIn - totalOut;
 
-  // Planned = Actual (karena tidak pakai web_Summary)
-  const plannedIn  = totalIn;
-  const plannedOut = totalOut;
-  const actualIn   = totalIn;
-  const actualOut  = totalOut;
+  // =======================
+  // 5. PERUBAHAN SALDO
+  // =======================
+  const selisih = saldoAkhir - saldoAwal;
+  const persentase = saldoAwal === 0
+    ? 0
+    : Math.round((selisih / Math.abs(saldoAwal)) * 100);
 
-  /* ==========================
-        3. HITUNG SALDO AKHIR
-     ========================== */
+  // =======================
+  // 6. UPDATE UI
+  // =======================
+  document.getElementById("saldoAwal").innerText = rupiah(saldoAwal);
+  document.getElementById("saldoAkhir").innerText = rupiah(saldoAkhir);
+  document.getElementById("persentasePerubahan").innerText =
+    (persentase > 0 ? "+" : "") + persentase + "%";
 
-  const net = totalIn - totalOut;
-  const saldoAkhir = saldoAwal + net;
-
-  let pct = 0;
-  if(saldoAwal !== 0){
-    pct = Math.round((saldoAkhir - saldoAwal)/Math.abs(saldoAwal) * 100);
-  } else {
-    pct = net === 0 ? 0 : Math.round(net / Math.max(1,totalIn) * 100);
-  }
-
-  /* ==========================
-        4. UPDATE UI SUMMARY
-     ========================== */
-
-  const set = (id,val)=>{ document.getElementById(id).innerText = val; };
-
-  set("saldoAwalUI", fmt(saldoAwal));
-  set("saldoAkhirUI", fmt(saldoAkhir));
-
-  set("percentChange", (pct>0?"+":"") + pct + "%");
-  set("changeDesc", pct>0 ? "Increase in total savings" : "Decrease in total savings");
-
-  set("spentThis", fmt(Math.abs(net)));
-
-  /* --- Planned vs Actual --- */
-
-  set("plannedOut", fmt(plannedOut));
-  set("actualOut", fmt(actualOut));
-  set("plannedOutSmall", fmt(plannedOut));
-  set("actualOutSmall", fmt(actualOut));
-
-  set("plannedIn", fmt(plannedIn));
-  set("actualIn", fmt(actualIn));
-  set("plannedInSmall", fmt(plannedIn));
-  set("actualInSmall", fmt(actualIn));
-
-  document.getElementById("fillOut").style.width =
-    (plannedOut>0 ? Math.min(100, Math.round(actualOut/plannedOut*100)) : 100) + "%";
-
-  document.getElementById("fillIn").style.width =
-    (plannedIn>0 ? Math.min(100, Math.round(actualIn/plannedIn*100)) : 100) + "%";
-
-  /* ==========================
-        5. UPDATE BARS
-     ========================== */
-
-  const maxBar = Math.max(Math.abs(saldoAwal), Math.abs(saldoAkhir), 1);
+  // =======================
+  // 7. UPDATE BAR — RESPONSIVE
+  // =======================
+  const maxHeight = window.innerWidth < 520 ? 80 : 130; // HP lebih pendek
+  const maxValue = Math.max(Math.abs(saldoAwal), Math.abs(saldoAkhir), 1);
 
   document.getElementById("barAwal").style.height =
-    (Math.round((Math.abs(saldoAwal)/maxBar)*120)+20) + "px";
+    (Math.abs(saldoAwal) / maxValue) * maxHeight + "px";
 
   document.getElementById("barAkhir").style.height =
-    (Math.round((Math.abs(saldoAkhir)/maxBar)*120)+20) + "px";
+    (Math.abs(saldoAkhir) / maxValue) * maxHeight + "px";
 
-  /* ==========================
-        6. TABLES
-     ========================== */
+  // =======================
+  // 8. DONUT CHART
+  // =======================
+  const ctx = document.getElementById("donutChart").getContext("2d");
 
-  const tbodyOut = document.querySelector("#tableOut tbody");
-  const tbodyIn  = document.querySelector("#tableIn tbody");
-
-  tbodyOut.innerHTML = "";
-  tbodyIn.innerHTML  = "";
-
-  function safeDate(d){
-    if(!d) return new Date(0);
-    const s = String(d).trim();
-
-    // DD/MM/YYYY
-    const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
-    if(m){
-      let dd=m[1], mm=m[2], yy=m[3];
-      if(yy.length===2) yy="20"+yy;
-      return new Date(`${yy}-${mm.padStart(2,"0")}-${dd.padStart(2,"0")}`);
-    }
-
-    const dt = new Date(s);
-    return isNaN(dt) ? new Date(0) : dt;
-  }
-
-  pengeluaran.sort((a,b)=> safeDate(a.Tanggal) - safeDate(b.Tanggal));
-  pemasukan.sort((a,b)=> safeDate(a.Tanggal) - safeDate(b.Tanggal));
-
-  pengeluaran.forEach(r=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${r.Tanggal||""}</td>
-      <td>${fmt(parseNum(r.Jumlah))}</td>
-      <td>${r.Keterangan||""}</td>
-      <td>${r.Kategori||""}</td>`;
-    tbodyOut.appendChild(tr);
-  });
-
-  pemasukan.forEach(r=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${r.Tanggal||""}</td>
-      <td>${fmt(parseNum(r.Jumlah))}</td>
-      <td>${r.Keterangan||""}</td>
-      <td>${r.Kategori||""}</td>`;
-    tbodyIn.appendChild(tr);
-  });
-
-  /* ==========================
-        7. DONUT CHART
-     ========================== */
-
-  const wrap = document.getElementById("donutWrap");
-  wrap.innerHTML = "";
-  const canvas = document.createElement("canvas");
-  wrap.appendChild(canvas);
-
-  new Chart(canvas,{
-    type:"doughnut",
-    data:{
-      labels:["Pemasukan","Pengeluaran"],
-      datasets:[{
-        data:[totalIn,totalOut],
-        backgroundColor:["#1f6feb","#e76f51"]
-      }]
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Pemasukan", "Pengeluaran"],
+      datasets: [
+        {
+          data: [totalIn, totalOut],
+          backgroundColor: ["#1f6feb", "#e76f51"]
+        }
+      ]
     },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{ legend:{ position:"bottom" } }
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: "bottom" }
+      }
     }
   });
 
-} // END INIT
+  // =======================
+  // 9. TABEL PEMASUKAN
+  // =======================
+  const tbIn = document.querySelector("#tableMasuk tbody");
+  tbIn.innerHTML = "";
+
+  pemasukan.forEach(r => {
+    tbIn.innerHTML += `
+      <tr>
+        <td>${r.Tanggal || ""}</td>
+        <td>${r.Kategori || ""}</td>
+        <td>${r.Keterangan || ""}</td>
+        <td>${rupiah(cleanNumber(r.Jumlah))}</td>
+      </tr>
+    `;
+  });
+
+  // =======================
+  // 10. TABEL PENGELUARAN
+  // =======================
+  const tbOut = document.querySelector("#tableKeluar tbody");
+  tbOut.innerHTML = "";
+
+  pengeluaran.forEach(r => {
+    tbOut.innerHTML += `
+      <tr>
+        <td>${r.Tanggal || ""}</td>
+        <td>${r.Kategori || ""}</td>
+        <td>${r.Keterangan || ""}</td>
+        <td>${rupiah(cleanNumber(r.Jumlah))}</td>
+      </tr>
+    `;
+  });
+}
 
 init();
 </script>
+<script>
+// ----------------------------
+// 6. UPDATE UI CARD SALDO
+// ----------------------------
+function updateBalanceCards() {
+    document.getElementById("saldoAwal").textContent =
+        formatRupiah(totalSaldoAwal);
 
+    document.getElementById("saldoAkhir").textContent =
+        formatRupiah(totalSaldoAwal + totalPemasukan - totalPengeluaran);
+
+    document.getElementById("totalPemasukan").textContent =
+        formatRupiah(totalPemasukan);
+
+    document.getElementById("totalPengeluaran").textContent =
+        formatRupiah(totalPengeluaran);
+}
+
+// ----------------------------
+// 7. FORMAT RUPIAH
+// ----------------------------
+function formatRupiah(num) {
+    return "Rp. " + num.toLocaleString("id-ID");
+}
+
+// ----------------------------
+// 8. FETCH DATA SAAT PERTAMA KALI
+// ----------------------------
+document.addEventListener("DOMContentLoaded", loadSheetData);
+</script>
 </body>
 </html>
+
