@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Laporan Masalah - RT 06 Reni Jaya</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #eef3f2;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #004d40;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #b52d3a;
+        }
+        .success-box {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-left: 5px solid #28a745;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #004d40;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Form Laporan Permasalahan Lingkungan</h2>
+        <div id="success" class="success-box">Laporan berhasil dikirim! Terima kasih atas partisipasi Anda.</div>
+
+        <form id="laporanForm">
+            <label>Nama Pelapor</label>
+            <input type="text" name="nama" required />
+
+            <label>Alamat</label>
+            <input type="text" name="alamat" required />
+
+            <label>Kategori Masalah</label>
+            <select name="kategori" required>
+                <option value="">-- Pilih Kategori --</option>
+                <option>Keamanan</option>
+                <option>Kebersihan</option>
+                <option>Fasilitas Umum</option>
+                <option>Lainnya</option>
+            </select>
+
+            <label>Deskripsi Masalah</label>
+            <textarea name="deskripsi" rows="4" required></textarea>
+
+            <label>No. HP (opsional)</label>
+            <input type="text" name="nohp" />
+
+            <button type="submit">Kirim Laporan</button>
+        </form>
+
+        <a href="formulir.html" class="back-link">⬅ Kembali</a>
+    </div>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxwPOjac1Kunt7Xv_e2LjuDKMcMV5oAF8_j-cdZRyQP9G_PJuH9e7lD1nYuVOOMo8Xu/exec"; // Ganti dengan URL Web App Google Script Anda
+        const form = document.getElementById("laporanForm");
+        const successBox = document.getElementById("success");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            fetch(scriptURL, { method: "POST", body: new FormData(form) })
+                .then((response) => {
+                    successBox.style.display = "block";
+                    form.reset();
+                })
+                .catch((error) => alert("Terjadi kesalahan. Coba lagi."));
+        });
+    </script>
+</body>
+
+<!-- Google Apps Script: simpan sebagai Code.gs di project Apps Script -->
+<!-- Ganti SPREADSHEET_ID dan SHEET_NAME sesuai Google Sheet Anda -->
+<script>
+
+</script>
+
+<!-- Petunjuk deploy: -->
+<!-- 1. Buka https://script.google.com dan buat project baru. -->
+<!-- 2. Tambahkan file Code.gs, paste kode di atas (hapus /* */ komentar sekitar fungsi). -->
+<!-- 3. Ganti 'SPREADSHEET_ID' dengan ID Google Sheet Anda (dapat dari URL sheet). -->
+<!-- 4. Ganti 'SHEET_NAME' dengan nama tab (worksheet) yang akan menyimpan data. -->
+<!-- 5. Save, lalu pilih Deploy -> New deployment -> Web app. -->
+<!--    - Pilih Execute as: Me -->
+<!--    - Who has access: Anyone (atau Anyone with Google account) tergantung kebutuhan -->
+<!-- 6. Salin Web app URL dan tempelkan ke variabel scriptURL di form-laporan-masalah.html -->
+
+<!-- Catatan keamanan: Jika Anda memilih "Anyone, even anonymous", maka form bisa di-submit tanpa login Google. -->
+<!-- Jika ingin verifikasi lebih ketat, gunakan akses terbatas dan sertakan autentikasi. -->
+
+</html>
