@@ -81,9 +81,10 @@
     </div>
 
 <script>
-const SHEET_URL = "https://opensheet.elk.sh/1EMYpie82paCl-vupfhyj11Z9tNGFp2p7aIDwIIl_Z0o";
-const pemasukanURL = SHEET_URL + "/web_Pemasukan";
-const pengeluaranURL = SHEET_URL + "/web_Pengeluaran";
+const SHEET_ID = "1EMYpie82paCl-vupfhyj11Z9tNGFp2p7aIDwIIl_Z0o";
+
+const pemasukanURL   = `https://opensheet.elk.sh/${SHEET_ID}/web_Pemasukan`;
+const pengeluaranURL = `https://opensheet.elk.sh/${SHEET_ID}/web_Pengeluaran`;
 
 function formatRupiah(num) {
     return "Rp" + Number(num).toLocaleString("id-ID");
@@ -96,51 +97,46 @@ async function loadData() {
             fetch(pengeluaranURL)
         ]);
 
-        const pemasukan = await pemasukanRes.json();
+        const pemasukan   = await pemasukanRes.json();
         const pengeluaran = await pengeluaranRes.json();
 
-        let totalPemasukan = 0;
+        let totalPemasukan   = 0;
         let totalPengeluaran = 0;
 
-        const tablePemasukan = document.querySelector("#table-pemasukan tbody");
+        const tablePemasukan   = document.querySelector("#table-pemasukan tbody");
         const tablePengeluaran = document.querySelector("#table-pengeluaran tbody");
 
-        // Tampil Pemasukan
+        // Pemasukan
         pemasukan.forEach(row => {
             if (!row.Jumlah) return;
             const jumlah = Number(row.Jumlah.replace(/[^0-9]/g, ""));
             totalPemasukan += jumlah;
-
             tablePemasukan.innerHTML += `
                 <tr>
                     <td>${row.Tanggal}</td>
                     <td>${formatRupiah(jumlah)}</td>
                     <td>${row.Keterangan}</td>
                     <td>${row.Kategori}</td>
-                </tr>
-            `;
+                </tr>`;
         });
 
-        // Tampil Pengeluaran
+        // Pengeluaran
         pengeluaran.forEach(row => {
             if (!row.Jumlah) return;
             const jumlah = Number(row.Jumlah.replace(/[^0-9]/g, ""));
             totalPengeluaran += jumlah;
-
             tablePengeluaran.innerHTML += `
                 <tr>
                     <td>${row.Tanggal}</td>
                     <td>${formatRupiah(jumlah)}</td>
                     <td>${row.Keterangan}</td>
                     <td>${row.Kategori}</td>
-                </tr>
-            `;
+                </tr>`;
         });
 
-        // Update Summary
-        document.getElementById("total-pemasukan").innerText = formatRupiah(totalPemasukan);
-        document.getElementById("total-pengeluaran").innerText = formatRupiah(totalPengeluaran);
-        document.getElementById("saldo-akhir").innerText = formatRupiah(totalPemasukan - totalPengeluaran);
+        document.getElementById("total-pemasukan").innerText   = formatRupiah(totalPemasukan);
+        document.getElementById("total-pengeluaran").innerText  = formatRupiah(totalPengeluaran);
+        document.getElementById("saldo-akhir").innerText        = formatRupiah(totalPemasukan - totalPengeluaran);
 
         document.getElementById("loading").style.display = "none";
         document.getElementById("content").style.display = "block";
