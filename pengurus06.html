@@ -8,40 +8,25 @@
     
     <script>
         // =========================================================================
-        // IMPLEMENTASI PROTEKSI PASSWORD SISI CLIENT DENGAN JAVASCRIPT
-        // PERHATIAN: Ini TIDAK aman dan HANYA untuk menyembunyikan dari casual user.
+        // JAVASCRIPT AUTHENTIKASI SESI (Harus ada di halaman dashboard)
         // =========================================================================
-        const ADMIN_PASSWORD = "adminrt06"; // <<< GANTI INI DENGAN PASSWORD ANDA
+        const CORRECT_USERNAME = "adminrt06"; // Harus sama dengan username yang benar di halaman login
 
-        function checkPassword() {
-            // 1. Cek apakah user sudah terautentikasi (disimpan di browser session)
-            if (sessionStorage.getItem('auth') === ADMIN_PASSWORD) {
+        function checkAuth() {
+            // Cek apakah user sudah menyimpan status 'auth' dari halaman login
+            if (sessionStorage.getItem('auth') === CORRECT_USERNAME) {
                 return true;
-            }
-
-            // 2. Jika belum, minta password
-            const enteredPassword = prompt("Masukkan password Pengurus RT untuk mengakses Dashboard:");
-
-            if (enteredPassword === ADMIN_PASSWORD) {
-                sessionStorage.setItem('auth', ADMIN_PASSWORD); // Simpan status login
-                alert("Akses berhasil! Selamat datang, Pengurus RT.");
-                return true;
-            } else if (enteredPassword !== null && enteredPassword !== '') {
-                // Password salah atau kosong, tapi user tidak menekan Cancel
-                alert("Password salah. Akses ditolak.");
-                window.location.href = "index.html"; // Redirect
-                return false;
             } else {
-                // User menekan Cancel atau input kosong
-                window.location.href = "index.html"; // Redirect
+                // Jika belum, paksa user kembali ke halaman login
+                alert("Anda harus login untuk mengakses dashboard.");
+                window.location.href = "pengurus06_login.html"; 
                 return false;
             }
         }
 
-        // Jalankan pemeriksaan password saat halaman dimuat
-        if (!checkPassword()) {
-            // Jika gagal, sembunyikan semua konten (untuk mencegah kedipan)
-            document.body.style.display = 'none'; 
+        // Jalankan pemeriksaan autentikasi saat halaman dimuat
+        if (!checkAuth()) {
+            document.body.style.display = 'none'; // Sembunyikan konten jika gagal
         }
     </script>
     
@@ -201,6 +186,22 @@
         .btn-green { background-color: #28a745; }
         .btn-green:hover { background-color: #1e7e34; box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4); }
 
+        .btn-logout {
+            background-color: #dc3545; /* Merah untuk Logout */
+            margin-top: 30px;
+            padding: 10px 25px;
+            font-size: 0.9em;
+            width: auto;
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
 
         /* ============================
            FOOTER
@@ -318,9 +319,12 @@
                     <i class="fas fa-sliders-h"></i> Pengaturan (Demo)
                 </a>
             </div>
-
-
+            
         </div>
+        
+        <a href="#" id="logoutButton" class="btn-logout">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
 
     </div>
 
@@ -328,6 +332,16 @@
         <p>Portal Warga RT. 06 Reni Jaya</p>
         <p>&copy; 2025 Hak Cipta Dilindungi.<br>Dikelola oleh Pengurus RT. 06 | <a href="#">Kebijakan Privasi</a></p>
     </div>
+    
+    <script>
+        // FUNGSI LOGOUT (Hanya menghapus sesi dan redirect ke halaman utama)
+        document.getElementById('logoutButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            sessionStorage.removeItem('auth'); // Hapus status login
+            alert("Anda berhasil logout.");
+            window.location.href = "index.html"; // Redirect ke halaman utama
+        });
+    </script>
 
 </body>
 </html>
