@@ -125,7 +125,10 @@
             background-color: white; 
             padding: 30px;
             border-radius: 12px;
-            width: 350px;
+            /* Hapus batasan width agar responsif bekerja */
+            /* width: 350px; */ 
+            flex: 1; /* Tambahkan flex untuk pembagian ruang yang adil */
+            max-width: 400px; /* Batasan maksimum agar tidak terlalu lebar di desktop */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             text-align: center;
@@ -208,8 +211,12 @@
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes softFloat { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
 
-        /* Responsive */
+        /* ============================
+           RESPONSIVE DESIGN (BREAKPOINT: 768px) 📱
+           ============================= */
         @media(max-width: 768px) {
+            
+            /* HEADER */
             .header-elegant {
                 padding: 40px 15px;
                 border-bottom-left-radius: 30px;
@@ -225,13 +232,21 @@
                 width: 90px;
                 height: 90px;
             }
+            
+            /* ROLE SELECTION (PENTING!) */
             .role-selection {
+                /* Mengubah layout dari horizontal (flex) menjadi tumpukan vertikal */
                 flex-direction: column;
                 gap: 20px;
+                align-items: center; /* Memastikan kartu berada di tengah */
             }
+            
             .role-card {
-                width: 100%;
+                /* Kartu mengambil lebar penuh container pada mobile, tapi dibatasi max-width */
+                width: 100%; 
+                max-width: 380px; 
             }
+            
             h2 {
                 font-size: 1.8em;
             }
