@@ -1,249 +1,399 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Laporan Permasalahan - RT 06 Reni Jaya</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Laporan Masalah Warga RT. 06</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+        .page-header {
+            background: linear-gradient(135deg, #cc4444, #e76f51); /* Merah/Oranye */
+            color: white;
+            width: 100%;
+            padding: 50px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
 
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: "Poppins", sans-serif;
-        background: #f4f7f6;
-    }
+        .header-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
 
-    .header {
-        background: #004d40;
-        color: white;
-        padding: 30px 20px;
-        text-align: center;
-        border-bottom-left-radius: 12px;
-        border-bottom-right-radius: 12px;
-    }
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
 
-    .header img {
-        width: 110px;
-        border-radius: 50%;
-        border: 4px solid white;
-        margin-bottom: 10px;
-    }
+        .page-header p {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-    .container {
-        max-width: 600px;
-        margin: 20px auto;
-        background: white;
-        padding: 25px;
-        border-radius: 14px;
-        box-shadow: 0 4px 18px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #004d40;
-        font-weight: 600;
-    }
-
-    .field {
-        margin-bottom: 18px;
-    }
-
-    .label {
-        font-weight: 500;
-        margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #004d40;
-    }
-
-    .label i {
-        font-size: 18px;
-        color: #00897b;
-    }
-
-    input, select, textarea {
-        width: 100%;
-        padding: 12px 14px;
-        border: 2px solid #c8e6c9;
-        border-radius: 10px;
-        font-size: 15px;
-        outline: none;
-        transition: 0.25s;
-    }
-
-    input:focus, select:focus, textarea:focus {
-        border-color: #26a69a;
-        box-shadow: 0 0 6px rgba(38,166,154,0.25);
-    }
-
-    textarea {
-        height: 120px;
-        resize: vertical;
-    }
-
-    #preview {
-        width: 100%;
-        margin-top: 10px;
-        display: none;
-        border-radius: 10px;
-    }
-
-    button {
-        width: 100%;
-        padding: 14px;
-        background: #00796b;
-        border: none;
-        color: white;
-        font-size: 16px;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.2s;
-    }
-
-    button:hover {
-        background: #00695c;
-        transform: translateY(-2px);
-    }
-
-    .loading {
-        display: none;
-        text-align: center;
-        margin-top: 15px;
-        font-weight: 500;
-        color: #004d40;
-    }
-
-    @media (max-width: 480px) {
         .container {
-            margin: 10px;
-            padding: 18px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+        }
+
+        /* Styling umum untuk input teks/area/select */
+        input[type="text"],
+        input[type="tel"],
+        textarea,
+        select,
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-size: 15px;
+            color: #495057;
         }
         
-        h2 {
-            font-size: 20px;
+        input[type="file"] {
+            padding: 8px 12px; /* Lebih kecil untuk file input */
         }
-    }
-</style>
+        
+        /* Overriding style for checkbox to prevent 100% width and default padding */
+        input[type="checkbox"] {
+            width: 20px !important;
+            height: 20px;
+            padding: 0;
+            margin: 0;
+            box-sizing: content-box; /* Kembali ke model box normal untuk ukuran */
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-<!-- ICON PACK -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #e76f51;
+            box-shadow: 0 0 0 0.2rem rgba(231, 111, 81, 0.35);
+            outline: none;
+        }
 
+        button[type="submit"] {
+            background-color: #e76f51;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 20px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(231, 111, 81, 0.3);
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button[type="submit"]:hover:not(:disabled) {
+            background-color: #cc4444;
+            box-shadow: 0 6px 15px rgba(231, 111, 81, 0.4);
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .keterangan {
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        /* Loading Indicator Styles */
+        #loading {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            z-index: 1000;
+            text-align: center;
+            padding-top: 20%;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
+    
+    <!-- Loading Indicator -->
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Mengirim laporan dan mengupload foto. Mohon tunggu...</p>
+    </div>
+    <!-- End Loading Indicator -->
 
-<div class="header">
-    <img src="logo_rt06.png" alt="Logo RT 06">
-    <h1>Laporan Permasalahan Lingkungan</h1>
-    <p>Gunakan form ini untuk melaporkan masalah keamanan, kebersihan, fasilitas umum, atau gangguan lainnya di lingkungan RT 06.</p>
-</div>
+    <div class="page-header">
+        <i class="fas fa-bullhorn header-icon"></i>
+        <h1>Lapor Masalah RT. 06</h1>
+        <p>Gunakan form ini untuk melaporkan masalah infrastruktur, keamanan, atau kejadian mendesak di lingkungan RT.</p>
+    </div>
+    
+    <div class="container">
+        <!-- ACTION URL akan diatur oleh JavaScript -->
+        <form id="laporMasalahForm">
+            
+            <!-- Tambahkan hidden field untuk URL redirect setelah sukses -->
+            <input type="hidden" name="redirect" value="https://rt06renijaya-cyber.github.io/eRTe06renijaya/layanan.html">
+            
+            <div class="form-group">
+                <label for="nama">Nama Pelapor (Opsional)</label>
+                <!-- Nama field disesuaikan dengan GS: data.nama -->
+                <input type="text" id="nama" name="nama" placeholder="Anonim, atau Nama Anda">
+            </div>
+            
+            <div class="form-group">
+                <label for="nohp">No. Handphone (Untuk Follow-up)</label>
+                <!-- Nama field disesuaikan dengan GS: data.nohp -->
+                <input type="tel" id="nohp" name="nohp" placeholder="Cth: 0812xxxxxx">
+                <span class="keterangan">Akan digunakan hanya jika pengurus perlu detail lebih lanjut.</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="alamat">Lokasi Kejadian/Masalah</label>
+                <!-- Nama field disesuaikan dengan GS: data.alamat -->
+                <input type="text" id="alamat" name="alamat" required placeholder="Cth: Depan Pos Ronda Blok A, Jln. Mawar No. 10">
+            </div>
 
-<div class="container">
+            <div class="form-group">
+                <label for="kategori">Jenis Masalah</label>
+                <!-- Nama field disesuaikan dengan GS: data.kategori -->
+                <select id="kategori" name="kategori" required>
+                    <option value="">-- Pilih Jenis Masalah --</option>
+                    <option value="Keamanan">Keamanan/Kriminalitas</option>
+                    <option value="Infrastruktur">Jalan Rusak/Infrastruktur Lingkungan</option>
+                    <option value="Sampah">Sampah/Kebersihan</option>
+                    <option value="Konflik">Konflik Antar Warga</option>
+                    <option value="Lainnya">Lainnya (Jelaskan di Detail)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="deskripsi">Detail Lengkap Laporan</label>
+                <!-- Nama field disesuaikan dengan GS: data.deskripsi -->
+                <textarea id="deskripsi" name="deskripsi" rows="5" required placeholder="Jelaskan secara rinci apa yang terjadi, kapan, dan dampaknya."></textarea>
+            </div>
 
-    <h2>Form Laporan Warga</h2>
+            <!-- Bagian Upload Foto dengan Preview -->
+            <div class="form-group">
+                <label for="foto">Foto Bukti (Maks. 2MB, format JPG/PNG)</label>
+                <input type="file" id="foto" accept="image/jpeg, image/png">
+            </div>
+            
+            <!-- Kontainer Preview Foto (akan muncul saat foto dipilih) -->
+            <div id="imagePreviewContainer" style="margin-bottom: 20px; display: none; text-align: center; border: 1px dashed #e76f51; padding: 10px; border-radius: 6px; background-color: #fef7f6;">
+                <p style="font-size: 14px; color: #495057; margin-bottom: 5px; font-weight: 600;">Pratinjau Foto Bukti:</p>
+                <img id="imagePreview" src="" alt="Pratinjau Foto" style="max-width: 100%; max-height: 200px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: block; margin: 0 auto;">
+            </div>
+            <!-- Akhir Bagian Upload Foto -->
 
-    <form id="laporanForm">
+            <!-- START: Kolom Konfirmasi Validasi Baru -->
+            <div class="form-group" style="margin-top: 30px;">
+                <div style="display: flex; align-items: flex-start;">
+                    <!-- Checkbox dengan attribute required -->
+                    <input type="checkbox" id="konfirmasi" name="konfirmasi_validasi" required 
+                           style="margin-top: 2px; margin-right: 10px; flex-shrink: 0;">
+                    
+                    <label for="konfirmasi" style="display: inline; font-weight: 400; font-size: 14px; color: #333; margin-bottom: 0;">
+                        Saya mengonfirmasi bahwa semua informasi yang saya berikan di atas adalah benar dan valid.
+                    </label>
+                </div>
+            </div>
+            <!-- END: Kolom Konfirmasi Validasi Baru -->
 
-        <div class="field">
-            <label class="label"><i class="fa-solid fa-user"></i> Nama Pelapor</label>
-            <input type="text" name="nama" required>
-        </div>
+            <button type="submit" id="submitBtn">
+                <i class="fas fa-exclamation-triangle"></i> KIRIM LAPORAN SEGERA
+            </button>
+        </form>
+    </div>
 
-        <div class="field">
-            <label class="label"><i class="fa-solid fa-house"></i> Alamat Lengkap</label>
-            <input type="text" name="alamat" required>
-        </div>
+    <script>
+        // PENTING: Ganti URL ini dengan URL Deployment Apps Script Anda
+        const GS_URL = "https://script.google.com/macros/s/AKfycbx5YKKMUMnNo2kSjVRTzu0ucPS9xxMnFCqSSFTIKMMqd_rVUYdhxH5bTj7omG_wT3oH/exec";
+        
+        const form = document.getElementById('laporMasalahForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingScreen = document.getElementById('loading');
+        const fileInput = document.getElementById('foto');
+        
+        const imagePreview = document.getElementById('imagePreview');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
 
-        <div class="field">
-            <label class="label"><i class="fa-solid fa-list"></i> Kategori Masalah</label>
-            <select name="kategori" required>
-                <option value="">-- Pilih Kategori --</option>
-                <option>Keamanan</option>
-                <option>Kebersihan</option>
-                <option>Fasilitas Umum</option>
-                <option>Keributan</option>
-                <option>Lainnya</option>
-            </select>
-        </div>
+        // Fungsi untuk menampilkan/menyembunyikan loading screen
+        function toggleLoading(show) {
+            loadingScreen.style.display = show ? 'block' : 'none';
+            submitBtn.disabled = show;
+        }
 
-        <div class="field">
-            <label class="label"><i class="fa-solid fa-file-lines"></i> Deskripsi Masalah</label>
-            <textarea name="deskripsi" required></textarea>
-        </div>
+        // --- Fungsi Preview Foto ---
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
 
-        <div class="field">
-            <label class="label"><i class="fa-solid fa-phone"></i> No. HP</label>
-            <input type="text" name="nohp" required>
-        </div>
+            if (file) {
+                // Check tipe file dan ukuran
+                if (!file.type.match('image.*')) {
+                    alert('Hanya diperbolehkan format gambar (JPG/PNG).');
+                    this.value = ''; 
+                    imagePreviewContainer.style.display = 'none';
+                    return;
+                }
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('Ukuran foto terlalu besar. Maksimal 2MB.');
+                    this.value = '';
+                    imagePreviewContainer.style.display = 'none';
+                    return;
+                }
 
-        <div class="field">
-            <label class="label"><i class="fa-solid fa-image"></i> Upload Foto (Opsional)</label>
-            <input type="file" id="fotoInput" accept="image/*">
-
-            <img id="preview">
-        </div>
-
-        <input type="hidden" name="fotoBase64">
-        <input type="hidden" name="fotoName">
-        <input type="hidden" name="fotoType">
-        <input type="hidden" name="redirect" value="form-laporan-masalah.html">
-
-        <button type="submit">Kirim Laporan</button>
-
-        <div class="loading" id="loadingText">Mengirim laporan...</div>
-
-    </form>
-</div>
-
-<script>
-    const form = document.getElementById("laporanForm");
-    const fotoInput = document.getElementById("fotoInput");
-    const preview = document.getElementById("preview");
-
-    fotoInput.addEventListener("change", function() {
-        const file = this.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.style.display = "block";
-
-            document.querySelector("input[name='fotoBase64']").value = e.target.result.split(",")[1];
-            document.querySelector("input[name='fotoName']").value = file.name;
-            document.querySelector("input[name='fotoType']").value = file.type;
-        };
-        reader.readAsDataURL(file);
-    });
-
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
-        document.getElementById("loadingText").style.display = "block";
-
-        fetch("https://script.google.com/macros/s/AKfycbwL_Zaqt7GcfThSjg-f1ZOyAQoM2SQOmBAoSCxjRSUYnT60i5aO58vdcwVpKjfE3JBj/exec", {
-            method: "POST",
-            body: new FormData(form)
-        })
-        .then(response => response.text())
-        .then(html => {
-            document.open();
-            document.write(html);
-            document.close();
-        })
-        .catch(err => {
-            alert("Gagal mengirim laporan:\n" + err);
-            document.getElementById("loadingText").style.display = "none";
+                // Baca file sebagai URL data untuk preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Sembunyikan jika file dihapus/tidak ada
+                imagePreview.src = '';
+                imagePreviewContainer.style.display = 'none';
+            }
         });
-    });
-</script>
 
+        // Fungsi utama saat form disubmit
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validasi checkbox konfirmasi (sudah dihandle oleh attribute 'required' HTML5, tapi ditambahkan di sini untuk alur logis)
+            if (!document.getElementById('konfirmasi').checked) {
+                alert('Anda harus mengonfirmasi bahwa informasi yang diberikan valid.');
+                return;
+            }
+
+            toggleLoading(true);
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            // 1. Jika ada foto, konversi ke Base64
+            if (file) {
+                // Ukuran file sudah divalidasi di event 'change', tapi kita cek lagi untuk keamanan
+                if (file.size > 2 * 1024 * 1024) {
+                    toggleLoading(false);
+                    alert('Ukuran foto terlalu besar. Maksimal 2MB.'); 
+                    return;
+                }
+                
+                reader.onloadend = function() {
+                    const base64Data = reader.result.split(',')[1];
+                    sendData(base64Data, file.name, file.type);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // 2. Jika tidak ada foto, kirim data tanpa Base64
+                sendData(null, null, null);
+            }
+        });
+
+        // Fungsi untuk mengirim data ke Google Apps Script
+        function sendData(base64Data, fileName, fileType) {
+            const formData = new FormData(form);
+            const data = {};
+            
+            // Konversi FormData ke objek
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            
+            // Tambahkan data foto ke objek
+            if (base64Data) {
+                data.fotoBase64 = base64Data;
+                data.fotoName = fileName;
+                data.fotoType = fileType;
+            }
+
+            // Kirim data menggunakan fetch
+            fetch(GS_URL, {
+                method: 'POST',
+                // Perhatikan: Karena kita mengirim JSON melalui fetch, Apps Script akan memprosesnya.
+                body: JSON.stringify(data), 
+            })
+            .then(response => {
+                // Apps Script akan merespon dengan HTML (halaman sukses)
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Gagal mengirim data ke Apps Script. Status: ' + response.status);
+                }
+            })
+            .then(htmlContent => {
+                // Tampilkan halaman sukses yang dikembalikan oleh Apps Script
+                document.open();
+                document.write(htmlContent);
+                document.close();
+            })
+            .catch(error => {
+                toggleLoading(false);
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat pengiriman: ' + error.message);
+            });
+        }
+    </script>
 </body>
 </html>
-
-
-
-
