@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Datang | Portal Warga RT. 06 Reni Jaya</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* ============================
+           GLOBAL STYLING
+           ============================= */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex; /* Tambahkan ini untuk centering */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        /* ============================
+           SELECTION PAGE STYLING
+           ============================= */
+        .selection-container {
+            max-width: 900px;
+            padding: 40px;
+            text-align: center;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .selection-container h1 {
+            color: #004d40;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .selection-container p {
+            color: #6c757d;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+        }
+
+        .role-selection {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .role-card {
+            background-color: #f0f4f8;
+            padding: 30px;
+            border-radius: 12px;
+            width: 350px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .role-card i {
+            font-size: 3.5em;
+            color: #005c5c;
+            margin-bottom: 15px;
+        }
+
+        .role-card h3 {
+            color: #004d40;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .btn-role {
+            display: inline-block;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-top: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-role.citizen { background-color: #007bff; }
+        .btn-role.citizen:hover { background-color: #0056b3; }
+
+        .btn-role.management { background-color: #28a745; }
+        .btn-role.management:hover { background-color: #1e7e34; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            .role-selection {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .role-card {
+                width: 100%;
+            }
+            .selection-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="selection-container">
+        <h1>Portal Warga RT. 06 Reni Jaya</h1>
+        <p>Silakan pilih peran Anda untuk melanjutkan ke layanan yang tersedia.</p>
+        
+        <div class="role-selection">
+            
+            <div class="role-card">
+                <i class="fas fa-home"></i>
+                <h3>Saya adalah Warga</h3>
+                <p>Akses cepat ke informasi, pengumuman, dan transparansi keuangan lingkungan.</p>
+                <a href="warga06.html" class="btn-role citizen">
+                    <i class="fas fa-arrow-right"></i> Masuk ke Portal Warga
+                </a>
+            </div>
+
+            <div class="role-card">
+                <i class="fas fa-user-tie"></i>
+                <h3>Saya adalah Pengurus RT</h3>
+                <p>Akses ke fitur administrasi, input data keuangan, dan pengelolaan laporan warga.</p>
+                <a href="pengurus06.html" class="btn-role management">
+                    <i class="fas fa-lock"></i> Masuk ke Area Pengurus
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
