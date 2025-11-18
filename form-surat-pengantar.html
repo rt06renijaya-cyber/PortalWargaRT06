@@ -5,48 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Pengajuan Surat Pengantar RT. 06</title>
     
+    <!-- Link Font Awesome (Untuk Ikon) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Link Font Poppins (Konsisten dengan Portal) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
         /* Styling Umum yang Disesuaikan */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f8;
-            padding: 0; /* Hapus padding body agar header bisa full width */
+            font-family: 'Poppins', sans-serif; /* Diubah ke Poppins */
+            background-color: #f8fafc; /* Warna latar belakang sangat terang */
+            padding: 0;
             margin: 0;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             align-items: center;
+            color: #333;
         }
 
-        /* --- STYLING HEADER BARU (Sesuai Permintaan) --- */
+        /* --- STYLING HEADER BARU (Konsisten dengan portal) --- */
         .page-header {
-            background-color: #004d40; /* Warna Hijau Tua (Teal) */
+            background: linear-gradient(135deg, #004d40, #005c5c); /* Gradient Teal/Hijau */
             color: white;
             width: 100%;
-            padding: 40px 20px;
+            padding: 50px 20px;
             text-align: center;
-            margin-bottom: 30px; /* Jarak antara header dan container form */
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         }
 
+        .header-icon {
+            font-size: 3.5em; /* Ukuran Ikon Besar */
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Menggantikan IMG Logo dengan Ikon, agar tidak ada broken image */
         .page-header img {
-            width: 100px; /* Ukuran logo */
-            height: 100px;
-            margin-bottom: 20px;
-            border: 4px solid white; /* Border putih di sekitar logo */
-            border-radius: 50%; /* Jika logo bulat */
-            background-color: white;
+            display: none; 
         }
 
         .page-header h1 {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             line-height: 1.2;
+            letter-spacing: 0.5px;
         }
 
         .page-header p {
-            font-size: 18px;
-            font-weight: 300;
+            font-size: 16px;
+            font-weight: 400;
             opacity: 0.9;
             max-width: 800px;
             margin: 0 auto;
@@ -56,50 +67,60 @@
         .container {
             background-color: #ffffff;
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 10px; /* Sudut lebih membulat */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 700px;
-            margin-bottom: 40px; /* Tambahkan margin bawah agar tidak mepet footer */
+            max-width: 750px; /* Lebar form sedikit diperluas */
+            margin-bottom: 40px;
         }
 
-        /* Header Form (Yang Lama, di dalam container, kini diubah jadi Judul Form) */
+        /* Header Form */
         .form-title {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #e9ecef;
+            border-bottom: 3px solid #17a2b8; /* Warna aksen Teal */
         }
 
         .form-title h2 {
             color: #343a40;
             margin-bottom: 8px;
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
         }
 
         .form-title p {
             color: #6c757d;
-            font-size: 15px;
+            font-size: 16px;
             margin: 0;
         }
 
         /* Bagian Form (Section) */
         .form-section {
-            border: 1px solid #dcdfe4;
+            border: 1px solid #e0e0e0;
             padding: 25px;
-            border-radius: 6px;
-            margin-bottom: 25px;
-            background-color: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            background-color: #fbfbfb;
+            transition: box-shadow 0.3s;
+        }
+        
+        .form-section:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .form-section h3 {
-            color: #17a2b8;
+            color: #007bff; /* Warna biru untuk judul section */
             padding-bottom: 5px;
             margin-top: 0;
             margin-bottom: 20px;
             font-size: 20px;
             font-weight: 600;
+            border-bottom: 1px dashed #e9ecef;
+        }
+
+        .form-section h3 i {
+            margin-right: 8px;
         }
 
         /* Form Group */
@@ -111,7 +132,7 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
-            color: #343a40;
+            color: #495057;
             font-size: 14px;
         }
 
@@ -122,9 +143,9 @@
         textarea,
         select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px; /* Padding ditingkatkan */
             border: 1px solid #ced4da;
-            border-radius: 4px;
+            border-radius: 6px; /* Sudut lebih membulat */
             box-sizing: border-box;
             transition: border-color 0.2s, box-shadow 0.2s;
             font-size: 15px;
@@ -134,8 +155,8 @@
         input:focus,
         textarea:focus,
         select:focus {
-            border-color: #17a2b8;
-            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+            border-color: #007bff; /* Biru terang saat fokus */
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
             outline: none;
         }
 
@@ -160,21 +181,24 @@
 
         /* Tombol Submit */
         button[type="submit"] {
-            background-color: #007bff;
+            background-color: #28a745; /* Warna hijau untuk submit (Sukses) */
             color: white;
-            padding: 12px 20px;
+            padding: 15px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 50px; /* Bentuk kapsul */
             cursor: pointer;
             width: 100%;
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 10px;
-            transition: background-color 0.3s, transform 0.1s;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 20px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
         }
 
         button[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: #1e7e34;
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
         }
         
         button[type="submit"]:active {
@@ -187,27 +211,25 @@
                 padding: 30px 15px;
             }
             .page-header h1 {
-                font-size: 28px;
+                font-size: 26px;
             }
-            .page-header p {
-                font-size: 16px;
-            }
-
             .container {
                 padding: 20px;
                 margin: 0 10px 40px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             }
-
             .form-title h2 {
                 font-size: 22px;
+            }
+            button[type="submit"] {
+                font-size: 16px;
+                padding: 12px 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="page-header">
-        <img src="URL_LOGO_ANDA" alt="Logo Pengurus RT 06">
+        <i class="fas fa-file-invoice" class="header-icon"></i> <!-- Ikon Baru untuk Surat Pengantar -->
         <h1>Form Pengajuan Surat Pengantar RT. 06</h1>
         <p>Gunakan form ini untuk mengajukan surat pengantar yang diperlukan untuk berbagai keperluan administrasi.</p>
     </div>
@@ -217,10 +239,11 @@
             <p>Mohon isi data diri Anda dengan lengkap dan benar.</p>
         </header>
         
+        <!-- Action URL Dibiarkan Sesuai Script Lama Anda -->
         <form action="https://script.google.com/macros/s/AKfycbw_tQVulzMJaYvmVrIUTbGm2uZifyjW9gkZHErq1sYHpOxcXBFlheoNcJT9zIPcf-LI/exec" method="POST">
             
             <div class="form-section">
-                <h3><i class="fas fa-user-circle"></i> Identitas Diri</h3>
+                <h3><i class="fas fa-id-card"></i> Data Kependudukan</h3>
                 
                 <div class="form-group">
                     <label for="nama">Nama Lengkap</label>
@@ -236,7 +259,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="alamat">Alamat Lengkap</label>
+                    <label for="alamat">Alamat Lengkap (Sesuai KTP)</label>
                     <textarea id="alamat" name="Alamat Lengkap" rows="3" required placeholder="Jalan, RT/RW, Kelurahan, Kecamatan"></textarea>
                 </div>
 
@@ -282,7 +305,11 @@
                         <option value="WNA">WNA (Warga Negara Asing)</option>
                     </select>
                 </div>
-
+            </div>
+            
+            <div class="form-section">
+                <h3><i class="fas fa-briefcase"></i> Data Pekerjaan & Kontak</h3>
+                
                 <div class="form-group">
                     <label for="pendidikan">Pendidikan Terakhir</label>
                     <select id="pendidikan" name="Pendidikan Terakhir" required>
@@ -297,7 +324,7 @@
                     </select>
                 </div>
 
-                   <div class="form-group">
+                <div class="form-group">
                     <label for="pekerjaan">Pekerjaan</label>
                     <select id="pekerjaan" name="Pekerjaan" required>
                         <option value="">-- Pilih Pekerjaan --</option>
@@ -312,13 +339,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="hp">No. Handphone Aktif</label>
+                    <label for="hp">No. Handphone Aktif (WA)</label>
                     <input type="tel" id="hp" name="No. Handphone" required pattern="[0-9]{10,14}" placeholder="Contoh: 081234567890">
                 </div>
             </div>
             
             <div class="form-section">
-                <h3><i class="fas fa-file-alt"></i> Detail Dokumen & Keperluan</h3>
+                <h3><i class="fas fa-scroll"></i> Detail Dokumen & Tujuan</h3>
                 
                 <div class="form-group">
                     <label for="nik">NIK (Nomor Induk Kependudukan)</label>
@@ -354,14 +381,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="keperluan_surat">Keperluan Surat</label>
-                    <textarea id="keperluan_surat" name="Keperluan Surat" rows="2" placeholder="Contoh: Pengurusan KTP, Pengantar Nikah, Keterangan Usaha" required></textarea>
+                    <label for="keperluan_surat">Keperluan Surat (Tujuan)</label>
+                    <textarea id="keperluan_surat" name="Keperluan Surat" rows="3" placeholder="Contoh: Pengurusan E-KTP, Pengantar Nikah ke KUA, Permohonan Beasiswa Anak" required></textarea>
                 </div>
             </div>
 
-            <button type="submit" name="submit">Kirim Data</button>
+            <button type="submit" name="submit">
+                <i class="fas fa-check-circle"></i> KIRIM DATA PENGAJUAN
+            </button>
         </form>
     </div>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
