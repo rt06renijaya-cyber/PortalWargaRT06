@@ -9,170 +9,175 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ============================
-           GLOBAL STYLING (DIAMBIL DARI FILE UTAMA ANDA)
-           ============================= */
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8fafc;
-            color: #333;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    /* ============================
+       GLOBAL STYLING (DIAMBIL DARI FILE UTAMA ANDA)
+       ============================= */
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8fafc;
+        color: #333;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px;
-            text-align: center;
-        }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 20px;
+        text-align: center;
+    }
 
-        .header-elegant {
-            background: linear-gradient(135deg, #003636, #005c5c);
-            color: white;
-            padding: 40px 20px;
-            border-bottom-left-radius: 60px;
-            border-bottom-right-radius: 60px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            text-align: center;
-        }
-        .title-elegant {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin: 0;
-        }
-        
-        h2 {
-            font-size: 2.2em;
-            font-weight: 700;
-            color: #004d40;
-            margin-bottom: 10px;
-            margin-top: 40px;
-        }
-        
-        .divider {
-            width: 80px;
-            height: 4px;
-            background-color: #007bff;
-            margin: 0 auto 40px auto;
-            border-radius: 2px;
-        }
+    .header-elegant {
+        background: linear-gradient(135deg, #003636, #005c5c);
+        color: white;
+        padding: 40px 20px;
+        border-bottom-left-radius: 60px;
+        border-bottom-right-radius: 60px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        text-align: center;
+    }
+    .title-elegant {
+        font-size: 2.5em;
+        font-weight: 700;
+        margin: 0;
+    }
+    
+    h2 {
+        font-size: 2.2em;
+        font-weight: 700;
+        color: #004d40;
+        margin-bottom: 10px;
+        margin-top: 40px;
+    }
+    
+    .divider {
+        width: 80px;
+        height: 4px;
+        background-color: #007bff;
+        margin: 0 auto 40px auto;
+        border-radius: 2px;
+    }
 
-        /* ============================
-           SECTION STYLING (Visi Misi)
-           ============================= */
-        .section-box {
-            background-color: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            text-align: left;
-        }
+    /* ============================
+       SECTION STYLING (Visi Misi)
+       ============================= */
+    .section-box {
+        background-color: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        text-align: left;
+    }
 
-        .section-box p {
-            max-width: 900px;
-            margin: 15px auto 30px auto;
-            font-size: 1.1em;
-            color: #555;
-            text-align: center;
-        }
-        .section-box h3 {
-            color: #004d40;
-            margin-top: 25px;
-            margin-bottom: 5px;
-            text-align: center;
-        }
-        .section-box ul {
-            max-width: 800px; 
-            margin: 0 auto; 
-            text-align: left; 
-            list-style-type: disc; 
-            color: #555;
-            padding-left: 40px;
-        }
+    /* Perbaikan: Memastikan semua judul dan paragraf di section-box di tengah */
+    .section-box h2,
+    .section-box h3,
+    .section-box p {
+        text-align: center; 
+    }
+
+    .section-box p {
+        max-width: 900px;
+        margin: 15px auto 30px auto;
+        font-size: 1.1em;
+        color: #555;
+    }
+    .section-box h3 {
+        color: #004d40;
+        margin-top: 25px;
+        margin-bottom: 5px;
+    }
+    .section-box ul {
+        max-width: 800px; 
+        margin: 0 auto; 
+        text-align: left; /* Biarkan daftar poin tetap rata kiri */
+        list-style-type: disc; 
+        color: #555;
+        padding-left: 40px;
+    }
 
 
-        /* ============================
-           ORGANIZATION CARD GRID STYLING
-           ============================= */
+    /* ============================
+       ORGANIZATION CARD GRID STYLING
+       ============================= */
+    .org-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .position-card {
+        background-color: #e0ffff; 
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #004d40;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    
+    .position-card:hover {
+        box-shadow: 0 5px 15px rgba(0, 77, 64, 0.2);
+        transform: translateY(-3px);
+    }
+
+    .position-card h4 {
+        font-size: 1.2em;
+        color: #004d40;
+        margin: 0 0 5px 0;
+        font-weight: 600;
+    }
+
+    .position-card p {
+        font-size: 1.1em;
+        color: #333;
+        margin: 0;
+        font-weight: 700;
+    }
+    
+    .icon-small {
+        color: #007bff;
+        margin-right: 10px;
+    }
+    .position-card .icon-jabatan {
+        font-size: 1.8em;
+        color: #004d40;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    /* ============================
+       FOOTER
+       ============================= */
+    .footer {
+        background: linear-gradient(135deg, #002e28, #004d40);
+        color: #e0ffff;
+        text-align: center;
+        padding: 40px 15px;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+        box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+        margin-top: 40px;
+    }
+    .footer p { margin: 5px 0; font-size: 0.9em; opacity: 0.9; }
+    .footer a { color: #ffc107; text-decoration: none; transition: color 0.3s; }
+    .footer a:hover { color: #fff; }
+    
+    /* Responsive Adjustments */
+    @media(max-width: 768px) {
         .org-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-            text-align: center; /* Pastikan konten di tengah */
+            grid-template-columns: 1fr;
         }
-
-        .position-card {
-            background-color: #e0ffff; 
+        .section-box {
             padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #004d40;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            text-align: center;
         }
-        
-        .position-card:hover {
-            box-shadow: 0 5px 15px rgba(0, 77, 64, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .position-card h4 {
-            font-size: 1.2em;
-            color: #004d40;
-            margin: 0 0 5px 0;
-            font-weight: 600;
-        }
-
-        .position-card p {
-            font-size: 1.1em;
-            color: #333;
-            margin: 0;
-            font-weight: 700;
-        }
-        
-        .icon-small {
-            color: #007bff;
-            margin-right: 10px;
-        }
-        .position-card .icon-jabatan {
-            font-size: 1.8em;
-            color: #004d40;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        /* ============================
-           FOOTER
-           ============================= */
-        .footer {
-            background: linear-gradient(135deg, #002e28, #004d40);
-            color: #e0ffff;
-            text-align: center;
-            padding: 40px 15px;
-            border-top-left-radius: 30px;
-            border-top-right-radius: 30px;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
-            margin-top: 40px;
-        }
-        .footer p { margin: 5px 0; font-size: 0.9em; opacity: 0.9; }
-        .footer a { color: #ffc107; text-decoration: none; transition: color 0.3s; }
-        .footer a:hover { color: #fff; }
-        
-        /* Responsive Adjustments */
-        @media(max-width: 768px) {
-            .org-grid {
-                grid-template-columns: 1fr;
-            }
-            .section-box {
-                padding: 20px;
-            }
-        }
-    </style>
+    }
+</style>
 
 </head>
 
