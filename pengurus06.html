@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pengurus RT. 06</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        // =========================================================================
+        // IMPLEMENTASI PROTEKSI PASSWORD SISI CLIENT DENGAN JAVASCRIPT
+        // PERHATIAN: Ini TIDAK aman dan HANYA untuk menyembunyikan dari casual user.
+        // =========================================================================
+        const ADMIN_PASSWORD = "adminrt06"; // <<< GANTI INI DENGAN PASSWORD ANDA
+
+        function checkPassword() {
+            // 1. Cek apakah user sudah terautentikasi (disimpan di browser session)
+            if (sessionStorage.getItem('auth') === ADMIN_PASSWORD) {
+                return true;
+            }
+
+            // 2. Jika belum, minta password
+            const enteredPassword = prompt("Masukkan password Pengurus RT untuk mengakses Dashboard:");
+
+            if (enteredPassword === ADMIN_PASSWORD) {
+                sessionStorage.setItem('auth', ADMIN_PASSWORD); // Simpan status login
+                alert("Akses berhasil! Selamat datang, Pengurus RT.");
+                return true;
+            } else if (enteredPassword !== null && enteredPassword !== '') {
+                // Password salah atau kosong, tapi user tidak menekan Cancel
+                alert("Password salah. Akses ditolak.");
+                window.location.href = "index.html"; // Redirect
+                return false;
+            } else {
+                // User menekan Cancel atau input kosong
+                window.location.href = "index.html"; // Redirect
+                return false;
+            }
+        }
+
+        // Jalankan pemeriksaan password saat halaman dimuat
+        if (!checkPassword()) {
+            // Jika gagal, sembunyikan semua konten (untuk mencegah kedipan)
+            document.body.style.display = 'none'; 
+        }
+    </script>
+    
+    <style>
+        /* ============================
+           GLOBAL STYLING
+           ============================= */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        /* ============================
+           HEADER ELEGAN & VISUAL
+           ============================= */
+        .header-elegant {
+            background: linear-gradient(135deg, #003636, #005c5c);
+            color: white;
+            padding: 50px 20px; 
+            border-bottom-left-radius: 60px;
+            border-bottom-right-radius: 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .header-elegant::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="p" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23p)"/></svg>') repeat;
+            opacity: 0.2;
+            z-index: 1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            animation: slideUp 1.2s ease-out;
+        }
+        
+        .title-elegant {
+            font-size: 2.5em; 
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: fadeIn 1.6s ease-out;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .slogan-elegant {
+            margin-top: 10px;
+            font-size: 1em;
+            opacity: 0.85;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeIn 2s ease-out;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* ============================
+           ADMIN FEATURE STYLING
+           ============================= */
+        h2 {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #004d40;
+            margin-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        .divider {
+            width: 80px;
+            height: 4px;
+            background-color: #28a745; /* Warna hijau untuk admin */
+            margin: 0 auto 40px auto;
+            border-radius: 2px;
+        }
+        
+        .admin-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .admin-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+            border-left: 6px solid #28a745;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .admin-card i {
+            font-size: 3em;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+        
+        .admin-card h3 {
+            color: #004d40;
+            margin-top: 0;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .admin-card p {
+            font-size: 0.95em;
+            color: #6c757d;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-top: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        .btn-green { background-color: #28a745; }
+        .btn-green:hover { background-color: #1e7e34; box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4); }
+
+
+        /* ============================
+           FOOTER
+           ============================= */
+        .footer {
+            background: linear-gradient(135deg, #002e28, #004d40);
+            color: #e0ffff;
+            text-align: center;
+            padding: 40px 15px;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+            margin-top: 50px;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .footer a {
+            color: #ffc107;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer a:hover {
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            .header-elegant {
+                padding: 60px 15px;
+                border-bottom-left-radius: 30px;
+                border-bottom-right-radius: 30px;
+            }
+            .title-elegant {
+                font-size: 2.2em;
+            }
+            .slogan-elegant {
+                font-size: 1em;
+            }
+        }
+        
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="header-elegant">
+        <div class="header-content">
+            <h1 class="title-elegant">DASHBOARD PENGURUS RT. 06</h1>
+            <p class="slogan-elegant">Selamat datang di Area Manajemen Sistem.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Fitur Administrasi</h2>
+        <div class="divider"></div>
+
+        <div class="admin-features">
+            
+            <div class="admin-card">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h3>Input Transaksi Keuangan</h3>
+                <p>Masukkan data pemasukan dan pengeluaran kas RT secara berkala.</p>
+                <a href="input_keuangan.html" class="btn-primary btn-green">
+                    <i class="fas fa-edit"></i> Input Keuangan
+                </a>
+            </div>
+
+            <div class="admin-card">
+                <i class="fas fa-list-alt"></i>
+                <h3>Kelola Laporan Warga</h3>
+                <p>Lihat dan tindak lanjuti laporan masalah, keluhan, atau saran dari warga.</p>
+                <a href="kelola_laporan.html" class="btn-primary btn-green">
+                    <i class="fas fa-check-square"></i> Lihat Laporan (Demo)
+                </a>
+            </div>
+            
+            <div class="admin-card">
+                <i class="fas fa-bullhorn"></i>
+                <h3>Kirim Pengumuman Instan</h3>
+                <p>Buat dan publikasikan pengumuman mendesak untuk warga RT. 06.</p>
+                <a href="buat_pengumuman.html" class="btn-primary btn-green">
+                    <i class="fas fa-paper-plane"></i> Buat Pengumuman (Demo)
+                </a>
+            </div>
+            
+            <div class="admin-card">
+                <i class="fas fa-users-cog"></i>
+                <h3>Kelola Data Warga</h3>
+                <p>Lihat, edit, dan kelola data kependudukan dan iuran warga.</p>
+                <a href="kelola_warga.html" class="btn-primary btn-green">
+                    <i class="fas fa-database"></i> Kelola Data (Demo)
+                </a>
+            </div>
+            
+            <div class="admin-card">
+                <i class="fas fa-calendar-alt"></i>
+                <h3>Manajemen Jadwal</h3>
+                <p>Input dan kelola jadwal kegiatan, rapat, atau acara lingkungan.</p>
+                <a href="manajemen_jadwal.html" class="btn-primary btn-green">
+                    <i class="fas fa-clock"></i> Atur Jadwal (Demo)
+                </a>
+            </div>
+            
+            <div class="admin-card">
+                <i class="fas fa-cogs"></i>
+                <h3>Pengaturan Sistem</h3>
+                <p>Kelola pengaturan website, akun pengurus, dan opsi portal.</p>
+                <a href="pengaturan_sistem.html" class="btn-primary btn-green">
+                    <i class="fas fa-sliders-h"></i> Pengaturan (Demo)
+                </a>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>Portal Warga RT. 06 Reni Jaya</p>
+        <p>&copy; 2025 Hak Cipta Dilindungi.<br>Dikelola oleh Pengurus RT. 06 | <a href="#">Kebijakan Privasi</a></p>
+    </div>
+
+</body>
+</html>
