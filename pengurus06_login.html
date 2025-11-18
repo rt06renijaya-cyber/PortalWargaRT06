@@ -14,7 +14,7 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #e6f7ff; /* Warna latar belakang lebih terang */
+            background-color: #e6f7ff; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -179,7 +179,7 @@
         // PERINGATAN: Kredensial ini dapat dilihat di source code (TIDAK AMAN)
         // =========================================================================
         document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah form submit default (reload halaman)
+            event.preventDefault(); 
 
             // Kredensial yang BENAR (Hanya untuk demonstrasi)
             const CORRECT_USERNAME = "adminrt06";
@@ -193,20 +193,19 @@
                 // Login Berhasil
                 errorMessage.style.display = 'none';
                 
-                // Simpan status autentikasi di sessionStorage
+                // Simpan status autentikasi
                 sessionStorage.setItem('auth', CORRECT_USERNAME); 
                 
                 alert("Login Berhasil! Mengarahkan ke Dashboard...");
-                // Ganti "pengurus06.html" sesuai nama file dashboard Anda
                 window.location.href = "pengurus06.html"; 
             } else {
                 // Login Gagal
                 errorMessage.style.display = 'block';
-                document.getElementById('password').value = ''; // Kosongkan input password
+                document.getElementById('password').value = ''; 
             }
         });
 
-        // Cek jika sudah login, langsung redirect ke dashboard (untuk mencegah login ganda)
+        // Cek jika sudah login, langsung redirect
         if (sessionStorage.getItem('auth') === "adminrt06") {
             window.location.href = "pengurus06.html";
         }
