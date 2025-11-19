@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Dashboard Keuangan RT 06</title>
+<title>Dashboard Keuangan RT. 06 Reni Jaya</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -11,57 +11,111 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 
 <style>
-    /* Variabel Warna Disesuaikan */
+    /* ============================
+       GLOBAL VAR & BASE STYLING
+       ============================ */
     :root{
-        --primary: #007bff; /* Biru Primer */
-        --primary-dark: #0056b3;
-        --secondary: #17a2b8; /* Cyan Sekunder */
+        --primary-deep: #004d40; /* Teal Dark */
+        --primary-light: #005c5c; 
         --success: #28a745; /* Hijau Sukses */
         --error: #dc3545; /* Merah Error */
-        --bg: #f8fafc; /* Background terang */
+        --loading: #ffc107; /* Kuning (untuk Pengeluaran/Accent) */
+        --bg: #f8fafc; /* Background sangat terang */
         --card: #ffffff;
         --text-color: #343a40;
         --muted-color: #6c757d;
-        --loading: #ffc107; /* Kuning (untuk Pengeluaran) */
     }
     
-    /* Gaya Dasar Konsisten dengan Layanan Admin */
-    *{box-sizing:border-box}
-    body{
-        margin:0;font-family:"Poppins",sans-serif;
-        background:var(--bg);color:var(--text-color);-webkit-font-smoothing:antialiased;
-        padding: 0;
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: var(--bg);
+        color: var(--text-color);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
     }
-    .page-header {
-        background: linear-gradient(135deg, var(--primary-dark), var(--primary)); 
+    .wrap {
+        max-width: 1200px;
+        margin: -60px auto 60px auto; /* Margin negatif untuk menutupi header */
+        padding: 0 20px;
+        position: relative;
+        z-index: 10;
+    }
+
+    /* ============================
+       HEADER ELEGAN (PORTAL STYLE)
+       ============================ */
+    .header-elegant {
+        background: linear-gradient(135deg, #003636, #005c5c); 
         color: white;
-        padding: 80px 20px 40px;
-        text-align: center;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        margin-bottom: 30px;
+        padding: 90px 20px 120px 20px;
+        border-bottom-left-radius: 60px;
+        border-bottom-right-radius: 60px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
     }
-    .page-header h1 {
+    .header-elegant::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="p" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23p)"/></svg>') repeat;
+        opacity: 0.2;
+        z-index: 1;
+    }
+    .header-content {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+    }
+    .title-elegant {
         font-size: 2.8em;
         font-weight: 700;
-        margin: 0 0 10px 0;
+        margin: 0;
+        letter-spacing: 1.5px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
-    .page-header p {
+    .slogan-elegant {
+        margin-top: 15px;
         font-size: 1.1em;
-        opacity: 0.9;
+        opacity: 0.85;
+        font-weight: 300;
         max-width: 800px;
-        margin: 0 auto;
+        margin-left: auto;
+        margin-right: auto;
     }
-    .divider {
-        width: 80px;
-        height: 4px;
-        background-color: var(--secondary);
-        margin: 10px auto 40px auto;
-        border-radius: 2px;
+    
+    /* STYLE DROPDOWN BARU */
+    .form-select {
+        padding: 8px 15px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-top: 15px;
+        cursor: pointer;
+        appearance: none; 
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658h9.596L7.247 11.14z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 30px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
-    .wrap{max-width:1200px;margin:30px auto 60px auto; padding: 0 20px;}
+    .form-select option {
+        color: var(--text-color); 
+        background: white;
+    }
 
-    /* Card disesuaikan */
+    /* ============================
+       CARD & GRID STYLING
+       ============================ */
     .card{
         background:var(--card);
         padding:24px;
@@ -73,14 +127,14 @@
     .card h2 {
         font-size: 1.6em;
         font-weight: 700;
-        color: #004d40;
+        color: var(--primary-deep);
         margin-top: 0;
         margin-bottom: 15px;
         border-bottom: 2px solid #f1f5f9;
         padding-bottom: 10px;
     }
 
-    /* Grid untuk Summary Cards */
+    /* Summary Cards */
     .summary-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -115,11 +169,11 @@
         margin-top: 5px;
     }
 
-    /* Warna Kartu Disesuaikan */
-    .card-primary { background: #e0edfe; color: var(--primary); border-left: 5px solid var(--primary); }
+    /* Warna Kartu Disesuaikan dengan Palet Baru */
+    .card-primary { background: #e0f2f1; color: var(--primary-deep); border-left: 5px solid var(--primary-deep); }
     .card-success { background: #e6ffed; color: var(--success); border-left: 5px solid var(--success); }
     .card-accent { background: #fff8e6; color: var(--loading); border-left: 5px solid var(--loading); } 
-    .card-neutral { background: #f0f4f8; color: var(--text-color); border-left: 5px solid var(--secondary); }
+    .card-neutral { background: #f0f4f8; color: var(--text-color); border-left: 5px solid var(--primary-light); }
     
     /* Layout Utama */
     .dashboard-layout {
@@ -154,7 +208,7 @@
     }
     
     .inflow { color: var(--success); font-weight: 600; }
-    .outflow { color: var(--error); font-weight: 600; } /* Merah untuk Pengeluaran */
+    .outflow { color: var(--error); font-weight: 600; } 
     
     /* Ringkasan Kategori */
     .category-summary {
@@ -179,31 +233,64 @@
         text-align: center;
         padding: 30px 15px;
         margin-top: 40px;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
     }
     .footer p { margin: 5px 0; font-size: 0.9em; }
+
+    /* Tombol Kembali */
+    .btn-back {
+        display: inline-block;
+        color: var(--primary-deep);
+        text-decoration: none;
+        font-weight: 600;
+        padding: 10px 15px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+    }
+    .btn-back:hover {
+        background-color: #f1f5f9;
+    }
+
 
     /* Responsif */
     @media (max-width: 900px) {
         .dashboard-layout {
             grid-template-columns: 1fr;
         }
+        .wrap {
+            margin-top: -40px;
+        }
     }
     @media (max-width: 768px) {
-        .page-header h1 {
+        .title-elegant {
             font-size: 2.2em;
+        }
+        .slogan-elegant {
+            font-size: 1em;
         }
     }
 </style>
 </head>
 <body>
 
-<div class="page-header">
-    <i class="fas fa-chart-line" style="font-size: 3em; margin-bottom: 15px;"></i>
-    <h1>Dashboard Keuangan RT. 06</h1>
-    <p>Ringkasan realisasi anggaran dan transaksi keuangan RT 06 bulan <span id="currentMonthYear"></span> (Data Real-Time).</p>
+<div class="header-elegant">
+    <div class="header-content">
+        <h1 class="title-elegant"><i class="fas fa-hand-holding-usd"></i> Transparansi Keuangan RT. 06</h1>
+        <p class="slogan-elegant">
+            Laporan aliran kas, pemasukan, dan pengeluaran iuran RT bulan <span id="currentMonthYear">Memuat...</span> secara *real-time*.
+        </p>
+        
+        <select id="periodSelector" class="form-select">
+            <option value="">Memuat periode...</option>
+        </select>
+        
+    </div>
 </div>
 
 <div class="wrap">
+    
     <div class="summary-grid">
         <div class="summary-card card-primary">
             <h3><i class="fas fa-wallet icon"></i> Saldo Kas Saat Ini</h3>
@@ -226,15 +313,15 @@
         <div class="summary-card card-neutral">
             <h3><i class="fas fa-calendar-alt icon"></i> Saldo Awal Bulan</h3>
             <div class="value" id="saldoBulanLalu">Memuat...</div>
-            <span>Diambil dari sheet Saldo Awal</span>
+            <span>Diambil dari data bulan sebelumnya</span>
         </div>
     </div>
     
     <div class="dashboard-layout">
         <div class="main-content">
             <div class="card">
-                <h2><i class="fas fa-chart-bar"></i> Perbandingan Bulan</h2>
-                <p>Aliran kas Bulan Ini (<span id="currentMonthShort"></span>) vs. Bulan Lalu (<span id="prevMonthShort"></span>).</p>
+                <h2><i class="fas fa-chart-bar"></i> Perbandingan Aliran Kas</h2>
+                <p>Perbandingan Total Pemasukan dan Pengeluaran Bulan Ini (<span id="currentMonthShort"></span>) vs. Bulan Lalu (<span id="prevMonthShort"></span>).</p>
                 <canvas id="flowChart" height="100"></canvas>
             </div>
             
@@ -277,14 +364,14 @@
     </div>
     
     <div style="margin-top: 40px; text-align: center;">
-        <a href="index.html" style="color: var(--primary); text-decoration: none; font-weight: 600;"><i class="fas fa-arrow-left"></i> Kembali ke Portal Utama</a>
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Portal Utama</a>
     </div>
 
 </div>
 
 <div class="footer">
-    <p>Portal Keuangan Warga RT. 06</p>
-    <p>&copy; 2025 Hak Cipta Dilindungi.</p>
+    <p>Portal Warga RT. 06 Reni Jaya</p>
+    <p>&copy; 2025 Hak Cipta Dilindungi.<br>Dikelola oleh Pengurus RT. 06</p>
 </div>
 
 <script>
@@ -293,21 +380,7 @@
 // ===============================================
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbw6e8cX1sLWWYrIp2FLx5hP5WhhQGky65FpDcVa7b7teVZUql_ujY5SgHux3EGwAwCU-w/exec"; 
 
-const today = new Date();
 const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-
-const currentMonthYear = `${monthNames[today.getMonth()]} ${today.getFullYear()}`;
-const currentMonthShort = monthNames[today.getMonth()];
-
-const prevMonthDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-const prevMonthYear = `${monthNames[prevMonthDate.getMonth()]} ${prevMonthDate.getFullYear()}`;
-const prevMonthShort = monthNames[prevMonthDate.getMonth()];
-
-
-document.getElementById('currentMonthYear').textContent = currentMonthYear;
-document.getElementById('currentMonthShort').textContent = currentMonthShort;
-document.getElementById('prevMonthShort').textContent = prevMonthShort;
-
 let flowChartInstance = null;
 
 /**
@@ -319,11 +392,73 @@ function formatRupiah(number) {
 }
 
 /**
+ * Helper: Mengambil daftar bulan yang tersedia dari Apps Script
+ */
+async function populatePeriodSelector() {
+    const select = document.getElementById('periodSelector');
+    
+    try {
+        const response = await fetch(`${ENDPOINT_APPS_SCRIPT}?action=getAvailablePeriods`);
+        const data = await response.json();
+
+        if (data.status === 'success' && data.periods && data.periods.length > 0) {
+            select.innerHTML = '';
+            
+            data.periods.forEach(period => {
+                const [year, month] = period.split('-');
+                const monthName = monthNames[parseInt(month) - 1]; 
+                
+                const option = document.createElement('option');
+                option.value = period; // Format: YYYY-MM
+                option.textContent = `${monthName} ${year}`;
+                
+                // Set default option ke periode terbaru (yang pertama di array)
+                if (period === data.periods[0]) {
+                    option.selected = true;
+                }
+                
+                select.appendChild(option);
+            });
+
+            // Setelah dropdown terisi, pasang event listener dan muat data pertama kali
+            select.addEventListener('change', (e) => {
+                const [year, month] = e.target.value.split('-');
+                fetchDashboardData(month, year);
+            });
+
+            // Muat data untuk bulan yang terpilih (bulan terbaru)
+            const [defaultYear, defaultMonth] = data.periods[0].split('-');
+            fetchDashboardData(defaultMonth, defaultYear);
+            
+        } else {
+            select.innerHTML = '<option value="">Tidak ada data histori</option>';
+            fetchDashboardData(null, null); // Coba muat bulan ini sebagai fallback
+        }
+
+    } catch (error) {
+        console.error('Error fetching available periods:', error);
+        select.innerHTML = '<option value="">Gagal memuat periode</option>';
+        fetchDashboardData(null, null); // Coba muat bulan ini sebagai fallback
+    }
+}
+
+
+/**
  * Main function: Mengambil semua data dashboard
  */
-async function fetchDashboardData() {
+async function fetchDashboardData(month = null, year = null) {
+    let url = `${ENDPOINT_APPS_SCRIPT}?action=getDashboard`;
+    
+    // Tambahkan parameter jika ada
+    if (month && year) {
+        url += `&month=${month}&year=${year}`;
+    }
+    
+    // Tampilkan status loading di kartu utama
+    document.getElementById('saldoSaatIni').textContent = 'Memuat...';
+
     try {
-        const response = await fetch(`${ENDPOINT_APPS_SCRIPT}?action=getDashboard`);
+        const response = await fetch(url);
         
         if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
         
@@ -331,10 +466,25 @@ async function fetchDashboardData() {
         const data = JSON.parse(text);
 
         if (data.status === 'success') {
+            
+            // Perbarui label bulan berdasarkan data yang dikembalikan Apps Script
+            const targetMonthName = data.periodInfo.monthName;
+            const targetYear = data.periodInfo.year;
+            
+            // Tentukan label bulan lalu (diperlukan untuk chart)
+            const targetDate = new Date(targetYear, data.periodInfo.month - 1, 1);
+            const prevMonthDate = new Date(targetDate.getFullYear(), targetDate.getMonth() - 1, 1);
+            const prevMonthShort = monthNames[prevMonthDate.getMonth()];
+            
+            document.getElementById('currentMonthYear').textContent = `${targetMonthName} ${targetYear}`;
+            document.getElementById('currentMonthShort').textContent = targetMonthName;
+            document.getElementById('prevMonthShort').textContent = prevMonthShort;
+
+            // Update komponen lainnya
             updateSummaryCards(data.summary);
             updateTransactionTable(data.lastTransactions);
-            updateCategoryBreakdown(data.categoryBreakdown); // PANGGIL FUNGSI BARU
-            updateChartComparison(data.monthlyComparison); // PANGGIL FUNGSI BARU
+            updateCategoryBreakdown(data.categoryBreakdown);
+            updateChartComparison(data.monthlyComparison, targetMonthName, prevMonthShort);
         } else {
             console.error("Gagal memuat data dashboard:", data.message);
             document.getElementById('saldoSaatIni').textContent = `ERROR: ${data.message.substring(0, 30)}...`;
@@ -347,7 +497,7 @@ async function fetchDashboardData() {
 }
 
 /**
- * Memperbarui kartu ringkasan (Tidak Berubah)
+ * Memperbarui kartu ringkasan
  */
 function updateSummaryCards(summary) {
     document.getElementById('saldoSaatIni').textContent = formatRupiah(summary.currentBalance);
@@ -368,7 +518,7 @@ function updateSummaryCards(summary) {
 }
 
 /**
- * Memperbarui tabel transaksi terakhir (Tidak Berubah)
+ * Memperbarui tabel transaksi terakhir
  */
 function updateTransactionTable(transactions) {
     const tbody = document.getElementById('lastTransactionsBody');
@@ -390,12 +540,12 @@ function updateTransactionTable(transactions) {
         });
     } else {
         const row = tbody.insertRow();
-        row.innerHTML = `<td colspan="5" style="text-align:center; color: var(--muted-color);">Belum ada transaksi bulan ini.</td>`;
+        row.innerHTML = `<td colspan="5" style="text-align:center; color: var(--muted-color);">Belum ada transaksi di bulan yang dipilih.</td>`;
     }
 }
 
 /**
- * Memperbarui ringkasan kategori (Baru)
+ * Memperbarui ringkasan kategori (Pemasukan & Pengeluaran)
  */
 function updateCategoryBreakdown(data) {
     // 1. Pemasukan
@@ -413,7 +563,7 @@ function updateCategoryBreakdown(data) {
             inflowUl.appendChild(li);
         });
     } else {
-        inflowUl.innerHTML = `<li style="text-align:center; padding: 10px; color: var(--muted-color);">Belum ada pemasukan bulan ini.</li>`;
+        inflowUl.innerHTML = `<li style="text-align:center; padding: 10px; color: var(--muted-color);">Belum ada pemasukan di bulan ini.</li>`;
     }
     
     // 2. Pengeluaran
@@ -431,7 +581,7 @@ function updateCategoryBreakdown(data) {
             outflowUl.appendChild(li);
         });
     } else {
-        outflowUl.innerHTML = `<li style="text-align:center; padding: 10px; color: var(--muted-color);">Belum ada pengeluaran bulan ini.</li>`;
+        outflowUl.innerHTML = `<li style="text-align:center; padding: 10px; color: var(--muted-color);">Belum ada pengeluaran di bulan ini.</li>`;
     }
 }
 
@@ -439,16 +589,14 @@ function updateCategoryBreakdown(data) {
 /**
  * Inisialisasi dan Update Chart (Perbandingan Bulanan)
  */
-function updateChartComparison(data) {
+function updateChartComparison(data, currentMonthName, prevMonthName) {
     const ctx = document.getElementById('flowChart').getContext('2d');
     
     if (flowChartInstance) {
         flowChartInstance.destroy(); 
     }
 
-    const labels = data.labels; // ['Pemasukan', 'Pengeluaran']
-    const currentData = data.current;
-    const previousData = data.previous;
+    const labels = data.labels;
 
     flowChartInstance = new Chart(ctx, {
         type: 'bar',
@@ -456,18 +604,16 @@ function updateChartComparison(data) {
             labels: labels,
             datasets: [
                 {
-                    label: `Bulan Ini (${currentMonthShort})`,
-                    data: currentData,
-                    // Warna untuk Pemasukan (Hijau) dan Pengeluaran (Kuning)
+                    label: `Bulan Ini (${currentMonthName})`,
+                    data: data.current,
                     backgroundColor: ['rgba(40, 167, 69, 0.9)', 'rgba(255, 193, 7, 0.9)'], 
                     borderColor: ['var(--success)', 'var(--loading)'],
                     borderWidth: 1,
                     borderRadius: 4
                 },
                 {
-                    label: `Bulan Lalu (${prevMonthShort})`,
-                    data: previousData,
-                    // Warna lebih pudar untuk bulan lalu
+                    label: `Bulan Lalu (${prevMonthName})`,
+                    data: data.previous,
                     backgroundColor: ['rgba(40, 167, 69, 0.4)', 'rgba(255, 193, 7, 0.4)'], 
                     borderColor: ['var(--success)', 'var(--loading)'],
                     borderWidth: 1,
@@ -501,7 +647,7 @@ function updateChartComparison(data) {
 
 // Jalankan saat dokumen selesai dimuat
 document.addEventListener('DOMContentLoaded', () => {
-    fetchDashboardData(); 
+    populatePeriodSelector(); 
 });
 </script>
 </body>
