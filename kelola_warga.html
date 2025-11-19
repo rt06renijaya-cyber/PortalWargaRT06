@@ -178,4 +178,137 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
-            color: #004d40
+            color: #004d40;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="tel"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        .grid-2-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        /* Utility */
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px; /* Tambahkan gap agar responsif */
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex-grow: 1;
+            max-width: 300px;
+        }
+        
+        .search-box input {
+             padding: 8px;
+             border: 1px solid #ced4da;
+             border-radius: 6px;
+             flex-grow: 1;
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: #6c757d;
+            padding: 40px;
+            background: #f1f1f1;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .alert-icon {
+            font-size: 3em; 
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        .custom-alert.alert-error .alert-icon {
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .header-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .header-controls > div {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-box {
+                max-width: 100%;
+            }
+            .grid-2-cols {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <script>
+        let allData = []; // Variabel global untuk menyimpan data mentah dari sumber aktif
+        let currentSource = 'warga'; // Default: warga
+        
+        // =========================================================================
+        // JAVASCRIPT UTAMA (LOAD DATA, RENDER, SEARCH, FILTER)
+        // =========================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!checkAuth()) return;
+            loadData(currentSource); // Mulai muat data warga
+        });
+
+        // FUNGSI UTAMA LOAD DATA DINAMIS
+        async function loadData(source) {
+            currentSource = source; // Update status sumber aktif
+            const dataResultElement = document.getElementById('data-warga-result');
+            const searchInput = document.getElementById('searchInput');
+            const btnAddWarga = document.getElementById('btnAddWarga');
+            const btnWarga = document.getElementById('btnViewWarga');
+            const btnPengajuan = document.getElementById('btnViewPengajuan');
+            
+            // 1. Update Tampilan Tombol & UI
+            btnWarga.style.backgroundColor = (source === 'warga') ? '#28a745' : '#6c757d';
+            btnPengajuan.style.backgroundColor = (source === 'pengajuan') ? '#007bff' : '#6c757d';
+            
+            let actionParam, placeholderText;
+            if (source === 'warga') {
+                actionParam = 'getDataWarga';
+                placeholderText = 'Cari NIK, Nama, atau KK...';
+                btnAddWarga.style.display = 'inline-block';
+            } else {
+                actionParam = 'getDataPengajuan';
+                placeholderText = 'Cari NIK, Jenis Surat, atau Status...';
+                btnAddWarga.style.display = 'none';
+            }
+            searchInput.placeholder = placeholderText;
+            searchInput.value = ''; // Clear search
+            
+            dataResultElement.innerHTML = '
