@@ -28,7 +28,6 @@
     </script>
     
     <style>
-        /* (Style CSS disamakan dengan buat_pengumuman.html untuk konsistensi visual) */
         /* ============================
            GLOBAL & HEADER STYLING
            ============================= */
@@ -66,7 +65,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="p" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23p)"/></svg>') repeat;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="p" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23p)"/></pattern></defs><rect width="100" height="100" fill="url(%23p)"/></svg>') repeat;
             opacity: 0.2;
             z-index: 1;
         }
@@ -147,8 +146,9 @@
             min-height: 150px;
         }
 
+        /* BUTTON KHUSUS JADWAL (Biru) */
         .btn-submit {
-            background-color: #007bff; /* Biru Khusus untuk Jadwal */
+            background-color: #007bff; 
             color: white;
             padding: 15px 40px;
             border: none;
@@ -325,6 +325,7 @@
     <script>
         // URL Apps Script Anda (WAJIB GANTI INI DENGAN URL ASLI!)
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkhFKU_ok2eln2xMixs2EDoeBIcRo9jxJsPjNNob3K4qml6SgSBeEXJhnbvce2L-9RyQ/exec'; 
+        // PASTIKAN URL ini SAMA dengan yang digunakan di buat_pengumuman.html dan informasi.html
 
         function closeCustomAlert(id) {
             document.getElementById(id).classList.remove('show');
@@ -336,7 +337,6 @@
         }
 
         function showCustomAlert(id, title, message, isSuccess = true) {
-            // (Kode showCustomAlert sama dengan buat_pengumuman.html)
             const alertElement = document.getElementById(id);
             const iconElement = alertElement.querySelector('.alert-icon');
             const titleElement = alertElement.querySelector('h3');
@@ -361,7 +361,7 @@
             const data = {};
             formData.forEach((value, key) => { data[key] = value; });
 
-            // 2. TAMBAHKAN KUNCI PENTING: Target Sheet tujuan
+            // 2. KUNCI PERBEDAAN: Target Sheet tujuan di Apps Script (harus sesuai dengan nama sheet Anda)
             data.sheet = 'SheetJadwal'; 
 
             // Tampilkan loading
