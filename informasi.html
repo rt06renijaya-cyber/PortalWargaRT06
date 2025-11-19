@@ -9,7 +9,7 @@
     
     <style>
         /* ============================
-           GLOBAL STYLING (Konsisten dengan warga06.html)
+           GLOBAL STYLING
            ============================= */
         body {
             font-family: 'Poppins', sans-serif;
@@ -28,18 +28,19 @@
             text-align: center;
         }
 
-        /* HEADER ELEGANT (Disesuaikan) */
+        /* HEADER ELEGANT */
         .header-elegant {
             background: linear-gradient(135deg, #003636, #005c5c); 
             color: white;
-            padding: 50px 20px 70px 20px; /* Padding bawah lebih besar */
+            padding: 50px 20px 70px 20px;
             border-bottom-left-radius: 60px;
             border-bottom-right-radius: 60px;
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            overflow: hidden;
         }
         
-        .header-elegant::before { /* Dekorasi Garis/Cahaya */
+        .header-elegant::before {
             content: "";
             position: absolute;
             top: 0;
@@ -70,7 +71,6 @@
             font-weight: 300;
         }
         
-        /* Breadcrumb / Navigasi Cepat */
         .breadcrumb {
             margin-top: 20px;
             font-size: 0.9em;
@@ -78,7 +78,7 @@
             color: #d1e5e5;
         }
         .breadcrumb a {
-            color: #ffc107; /* Warna kuning sebagai aksen */
+            color: #ffc107;
             text-decoration: none;
         }
         .breadcrumb a:hover {
@@ -120,7 +120,7 @@
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            border-left: 5px solid #007bff; /* Garis Biru/Aksen */
+            border-left: 5px solid #007bff; /* Warna default */
             transition: all 0.3s;
         }
         
@@ -146,7 +146,7 @@
         
         .info-meta i {
             margin-right: 5px;
-            color: #007bff;
+            color: #007bff; /* Warna default */
         }
 
         .info-card p {
@@ -161,14 +161,15 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9em;
+            cursor: pointer;
         }
         .btn-readmore:hover {
             text-decoration: underline;
         }
         
-        /* Styling Khusus Jadwal */
+        /* Styling Khusus Jadwal (Data statis) */
         .schedule-card {
-            border-left-color: #ffc107; /* Aksen Kuning untuk jadwal */
+            border-left-color: #ffc107;
         }
         .schedule-card .info-meta i {
             color: #ffc107;
@@ -195,8 +196,7 @@
             background-color: #003636;
         }
 
-
-        /* FOOTER (Konsisten) */
+        /* FOOTER */
         .footer {
             background: linear-gradient(135deg, #002e28, #004d40);
             color: #e0ffff;
@@ -257,8 +257,8 @@
         <h2>Pengumuman Terbaru</h2>
         <div class="divider"></div>
 
-        <div class="info-grid">
-
+        <div class="info-grid" id="announcementGrid">
+            
             <div class="info-card">
                 <h3><i class="fas fa-volume-up"></i> Musyawarah Warga Rutin Bulanan</h3>
                 <div class="info-meta">
@@ -266,34 +266,17 @@
                     <i class="fas fa-user-tie"></i> Ketua RT. 06
                 </div>
                 <p>Diundang seluruh Kepala Keluarga untuk menghadiri Musyawarah Rutin. Agenda: Evaluasi Keamanan dan Rencana Kegiatan Akhir Tahun.</p>
-                <a href="#" class="btn-readmore">Baca Detail Selengkapnya <i class="fas fa-arrow-right"></i></a>
+                <a href="#" class="btn-readmore" onclick="alert('Detail: Musyawarah Rutin akan membahas anggaran tahun depan dan pemilihan pengurus baru. Mohon kehadiran semua Bapak/Ibu tepat waktu.')">
+                    Baca Detail Selengkapnya <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
-
-            <div class="info-card">
-                <h3><i class="fas fa-trash-alt"></i> Jadwal Kerja Bakti Kebersihan</h3>
-                <div class="info-meta">
-                    <i class="fas fa-calendar-alt"></i> 10 Desember 2025 | 
-                    <i class="fas fa-user-tie"></i> Seksi Lingkungan
-                </div>
-                <p>Kerja bakti akan berfokus pada pembersihan selokan dan lingkungan sekitar pos ronda. Diharapkan partisipasi aktif seluruh warga.</p>
-                <a href="#" class="btn-readmore">Baca Detail Selengkapnya <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <div class="info-card">
-                <h3><i class="fas fa-wifi"></i> Pemeliharaan Jaringan Internet Warga</h3>
-                <div class="info-meta">
-                    <i class="fas fa-calendar-alt"></i> 15 November 2025 | 
-                    <i class="fas fa-user-tie"></i> Tim IT Warga
-                </div>
-                <p>Akan ada pemadaman sementara layanan internet RT 06 untuk pemeliharaan rutin. Perkiraan durasi: 09:00 - 12:00 WIB.</p>
-                <a href="#" class="btn-readmore">Baca Detail Selengkapnya <i class="fas fa-arrow-right"></i></a>
-            </div>
-            
         </div>
         
         
         <h2>Jadwal Kegiatan Mendatang</h2>
-        <div class="divider" style="background-color: #ffc107;"></div> <div class="info-grid">
+        <div class="divider" style="background-color: #ffc107;"></div>
+        
+        <div class="info-grid">
 
             <div class="info-card schedule-card">
                 <h3><i class="fas fa-running"></i> Lomba Kemerdekaan Tahun 2025</h3>
@@ -302,19 +285,10 @@
                     <i class="fas fa-map-pin"></i> Lapangan RT. 06
                 </div>
                 <p>Pendaftaran lomba 17-an dibuka mulai minggu depan. Segera daftarkan tim Anda!</p>
-                <a href="#" class="btn-readmore">Lihat Kategori Lomba <i class="fas fa-arrow-right"></i></a>
+                <a href="#" class="btn-readmore" onclick="alert('Detail Lomba: Kategori yang dilombakan adalah Balap Karung, Makan Kerupuk, dan Tarik Tambang. Hubungi Seksi Pemuda.')">
+                    Lihat Kategori Lomba <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
-
-            <div class="info-card schedule-card">
-                <h3><i class="fas fa-shield-alt"></i> Pelatihan Keamanan Lingkungan</h3>
-                <div class="info-meta">
-                    <i class="fas fa-clock"></i> 02 Desember 2025 | 
-                    <i class="fas fa-map-pin"></i> Pos Ronda Utama
-                </div>
-                <p>Pelatihan singkat P3K dan penanganan darurat kebakaran oleh Tim Damkar wilayah setempat.</p>
-                <a href="#" class="btn-readmore">Daftar Partisipasi <i class="fas fa-arrow-right"></i></a>
-            </div>
-
         </div>
 
         <div class="back-button-container">
@@ -329,6 +303,125 @@
         <p>Portal Warga RT. 06 Reni Jaya</p>
         <p>&copy; 2025 Hak Cipta Dilindungi.<br>Dikelola oleh Pengurus RT. 06 | <a href="#">Kebijakan Privasi</a></p>
     </div>
+
+    <script>
+        // GANTI URL INI DENGAN URL APPS SCRIPT WEB APP ANDA YANG SEBENARNYA
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkhFKU_ok2eln2xMixs2EDoeBIcRo9jxJsPjNNob3K4qml6SgSBeEXJhnbvce2L-9RyQ/exec'; 
+
+        function loadAnnouncements() {
+            const infoGrid = document.getElementById('announcementGrid');
+            
+            // Tampilkan loading state
+            infoGrid.innerHTML = `
+                <p style="grid-column: 1 / -1; text-align:center; color:#005c5c; margin-top:20px;">
+                    <i class="fas fa-spinner fa-spin"></i> Memuat data pengumuman terbaru dari server...
+                </p>
+            `;
+
+            // Ambil data dari Apps Script menggunakan Fetch API (metode GET)
+            fetch(APPS_SCRIPT_URL)
+            .then(response => response.json())
+            .then(result => {
+                // Hapus placeholder/loading (dan item statis pertama)
+                infoGrid.innerHTML = ''; 
+                
+                const announcements = result.data;
+                
+                if (announcements.length === 0) {
+                    const defaultMessage = document.createElement('p');
+                    defaultMessage.innerHTML = 'Saat ini belum ada pengumuman terbaru dari pengurus RT.';
+                    defaultMessage.style.cssText = 'grid-column: 1 / -1; margin-top: 20px; font-style: italic; color: #777; text-align: center;';
+                    infoGrid.appendChild(defaultMessage);
+                    return;
+                }
+                
+                // Tampilkan maksimal 6 item terbaru dari Google Sheet
+                const displayLimit = Math.min(announcements.length, 6); 
+
+                for (let i = 0; i < displayLimit; i++) {
+                    const item = announcements[i];
+                    
+                    // Format Tanggal (data tanggal dari Sheets biasanya string YYYY-MM-DD)
+                    const dateString = item.tanggal; 
+                    const dateObj = new Date(dateString + 'T00:00:00');
+                    const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                    
+                    // Tentukan ikon dan warna border berdasarkan kategori
+                    let iconClass = 'fas fa-volume-up';
+                    let borderColor = '#007bff'; // Biru Default
+                    
+                    if (item.kategori === 'keamanan') {
+                        iconClass = 'fas fa-shield-alt';
+                        borderColor = '#dc3545'; // Merah
+                    } else if (item.kategori === 'keuangan') {
+                        iconClass = 'fas fa-hand-holding-usd';
+                        borderColor = '#ffc107'; // Kuning
+                    } else if (item.kategori === 'darurat') {
+                        iconClass = 'fas fa-exclamation-triangle';
+                        borderColor = '#dc3545'; 
+                    }
+
+                    // Buat elemen card baru
+                    const card = document.createElement('div');
+                    card.className = 'info-card';
+                    card.style.borderLeftColor = borderColor;
+                    
+                    // Menampilkan 150 karakter pertama konten
+                    const truncatedContent = item.konten.substring(0, 150) + (item.konten.length > 150 ? '...' : '');
+
+                    card.innerHTML = `
+                        <h3><i class="${iconClass}"></i> ${item.judul}</h3>
+                        <div class="info-meta">
+                            <i class="fas fa-calendar-alt" style="color:${borderColor};"></i> ${formattedDate} | 
+                            <i class="fas fa-user-tie" style="color:${borderColor};"></i> ${item.penanggungJawab}
+                        </div>
+                        <p>${truncatedContent}</p>
+                        <a href="#" class="btn-readmore" onclick="alert('DETAIL PENGUMUMAN - ${item.judul}\\n\\nTanggal: ${formattedDate}\\nPenanggung Jawab: ${item.penanggungJawab}\\nKonten Lengkap:\\n${item.konten}')">
+                            Baca Detail Selengkapnya <i class="fas fa-arrow-right"></i>
+                        </a>
+                    `;
+                    
+                    // Tambahkan card ke grid
+                    infoGrid.appendChild(card);
+                }
+                
+                // Tambahkan lagi card statis (placeholder) setelah card dinamis
+                const staticCard = `
+                    <div class="info-card">
+                        <h3><i class="fas fa-volume-up"></i> Musyawarah Warga Rutin Bulanan</h3>
+                        <div class="info-meta">
+                            <i class="fas fa-calendar-alt"></i> 25 November 2025 | 
+                            <i class="fas fa-user-tie"></i> Ketua RT. 06
+                        </div>
+                        <p>Diundang seluruh Kepala Keluarga untuk menghadiri Musyawarah Rutin. Agenda: Evaluasi Keamanan dan Rencana Kegiatan Akhir Tahun.</p>
+                        <a href="#" class="btn-readmore" onclick="alert('Detail: Musyawarah Rutin akan membahas anggaran tahun depan dan pemilihan pengurus baru. Mohon kehadiran semua Bapak/Ibu tepat waktu.')">
+                            Baca Detail Selengkapnya <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                `;
+                 // Gunakan appendChild untuk menambahkan card statis ke grid
+                 if (document.querySelector('.info-card:not(.schedule-card)') && announcements.length < 6) {
+                    infoGrid.insertAdjacentHTML('beforeend', staticCard);
+                }
+
+            })
+            .catch(error => {
+                // Tampilkan pesan error jika gagal mengambil data
+                infoGrid.innerHTML = `
+                    <p style="grid-column: 1 / -1; text-align:center; color:#dc3545; margin-top:20px; font-weight:600;">
+                        <i class="fas fa-exclamation-circle"></i> Gagal memuat data. Mohon cek URL Apps Script atau koneksi internet.
+                    </p>
+                `;
+                console.error('Error fetching data from Apps Script:', error);
+            });
+        }
+
+        // Panggil fungsi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tunggu sebentar agar efek loading bisa dilihat
+            setTimeout(loadAnnouncements, 500); 
+        });
+    </script>
 
 </body>
 </html>
