@@ -3,86 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Data Warga & Pengajuan - RT. 06</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Manajemen Data RT. 06</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <script>
-        // =========================================================================
-        // PENTING: GANTI DENGAN URL APPS SCRIPT ANDA
-        // =========================================================================
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbymhNBbvtqrJxREQiJNqxy_P-fS0IHmw3qGdLHPxk7hijEI2CEzf9DxKWZG_ijcU6eS/exec"; 
-        const CORRECT_USERNAME = "adminrt06";
-
-        function checkAuth() {
-            if (sessionStorage.getItem('auth') === CORRECT_USERNAME) {
-                return true;
-            } else {
-                // GANTI DENGAN URL LOGIN ANDA
-                window.location.href = "pengurus06_login.html"; 
-                return false;
-            }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #00796B; /* Hijau Tua */
+            --color-secondary: #26A69A; /* Hijau Muda */
         }
-        
-        if (!checkAuth()) {
-            document.body.style.display = 'none';
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Poppins', sans-serif;
         }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .header-title {
+            color: var(--color-primary);
+            font-weight: 700;
+            border-bottom: 3px solid var(--color-secondary);
+            display: inline-block;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        .btn-primary-custom {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            background-color: var(--color-secondary);
+            border-color: var(--color-secondary);
+        }
+        .btn-view.active {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+        .btn-view:not(.active) {
+            background-color: #f0f0f0;
+            border-color: #ccc;
+            color: #555;
+        }
+        .table thead th {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        .loading {
+            padding: 50px;
+            font-size: 1.2em;
+            color: var(--color-primary);
+        }
+        .no-data {
+            padding: 50px;
+            font-size: 1.2em;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
+            <h2 class="header-title mt-3"><i class="fas fa-users"></i> Manajemen Data RT. 06</h2>
+        </div>
+    </div>
+
+    <div class="card p-4">
+        <p class="text-muted">Lihat dan kelola database warga atau log pengajuan surat dari warga.</p>
         
-        let allData = { header: [], data: [] }; // Data mentah dari Apps Script
-        let currentSource = 'warga'; 
-        let filteredData = []; // Data yang sudah difilter berdasarkan view (warga/pengajuan)
+        <div class="d-flex flex-wrap align-items-center mb-4">
+            <span class="me-3">Pilih View:</span>
+            
+            <div class="btn-group me-3" role="group">
+                <button type="button" class="btn btn-view active" id="btn-view-warga" onclick="setView('warga')">
+                    <i class="fas fa-database"></i> Database Warga
+                </button>
+                <button type="button" class="btn btn-view" id="btn-view-pengajuan" onclick="setView('pengajuan')">
+                    <i class="fas fa-file-alt"></i> Pengajuan Surat
+                </button>
+            </div>
 
-        // Tempatkan fungsi ini di dalam tag <script> di kelola_warga.html
+            <div class="input-group flex-grow-1 me-3 my-2 my-md-0" style="max-width: 300px;">
+                <input type="text" class="form-control" placeholder="Cari NIK, Nama, atau KK..." id="search-input">
+                <button class="btn btn-primary-custom" type="button" onclick="searchData()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <button class="btn btn-success my-2 my-md-0" id="btn-tambah-warga" onclick="openTambahWargaModal()">
+                <i class="fas fa-plus-circle"></i> Tambah Warga Baru
+            </button>
+        </div>
 
-    // Variabel untuk menyimpan data yang dimuat
+        <div id="data-table-container">
+            <div class="loading text-center">Memuat data...</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">Detail Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body-content">
+                <p>Detail akan ditampilkan di sini.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tambahWargaModal" tabindex="-1" aria-labelledby="tambahWargaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tambahWargaModalLabel">Form Input Warga Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Form input warga baru akan ditempatkan di sini.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // GANTI DENGAN URL WEB APP ANDA YANG SUDAH DI DEPLOY
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbymhNBbvtqrJxREQiJNqxy_P-fS0IHmw3qGdLHPxk7hijEI2CEzf9DxKWZG_ijcU6eS/exec"; 
+
+    // Variabel global untuk menyimpan data yang dimuat
     let loadedDataWarga = [];
     let loadedDataPengajuan = [];
-    
-    // Fungsi untuk membuat tabel dinamis
-    function buildTableHTML(header, data, type) {
-        if (data.length === 0) {
-            return `<div class="alert alert-warning text-center">
-                        <i class="fas fa-exclamation-circle"></i> Tidak ada data yang ditemukan.
-                    </div>`;
-        }
-    
-        let tableHTML = `<div class="table-responsive"><table class="table table-striped table-hover"><thead><tr>`;
+    let currentHeaders = [];
+
+    // Tentukan View yang aktif (default: warga)
+    let currentView = 'warga';
+
+    // =========================================================
+    // FUNGSI PENGATUR VIEW & LOADING DATA
+    // =========================================================
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Panggil data saat halaman dimuat
+        loadDataWarga(); 
+    });
+
+    function setView(viewType) {
+        currentView = viewType;
         
-        // Tampilkan Header (dari Apps Script)
-        header.forEach(h => {
-            tableHTML += `<th>${h}</th>`;
-        });
-        tableHTML += `<th>AKSI</th></tr></thead><tbody>`;
-    
-        // Isi Baris Data
-        data.forEach((row, index) => {
-            tableHTML += `<tr>`;
-            
-            row.forEach((cell) => {
-                // Mengganti null/undefined/kosong dengan '-'
-                const displayValue = cell === '' || cell === null || cell === undefined ? '-' : cell;
-                tableHTML += `<td>${displayValue}</td>`;
-            });
-    
-            // Tambahkan tombol Aksi
-            if (type === 'warga') {
-                tableHTML += `<td><button class="btn btn-primary btn-sm" onclick="showWargaDetail(${index})">
-                                <i class="fas fa-eye"></i>
-                              </button></td>`;
-            } else if (type === 'pengajuan') {
-                tableHTML += `<td><button class="btn btn-info btn-sm" onclick="showPengajuanDetail(${index})">
-                                <i class="fas fa-file-alt"></i>
-                              </button></td>`;
-            }
-            
-            tableHTML += `</tr>`;
-        });
-    
-        tableHTML += `</tbody></table></div>`;
-        return tableHTML;
+        document.getElementById('btn-view-warga').classList.remove('active');
+        document.getElementById('btn-view-pengajuan').classList.remove('active');
+
+        if (viewType === 'warga') {
+            document.getElementById('btn-view-warga').classList.add('active');
+            document.getElementById('btn-tambah-warga').style.display = 'inline-block';
+            loadDataWarga();
+        } else {
+            document.getElementById('btn-view-pengajuan').classList.add('active');
+            document.getElementById('btn-tambah-warga').style.display = 'none';
+            loadDataPengajuan();
+        }
     }
-    
-    // Fungsi Pemuat Data Warga (dipanggil saat tombol 'Database Warga' diklik)
+
     function loadDataWarga() {
         document.getElementById('data-table-container').innerHTML = '<div class="loading text-center"><i class="fas fa-spinner fa-spin"></i> Memuat Data Warga...</div>';
         
@@ -94,22 +196,22 @@
                     return;
                 }
                 
-                // Simpan data mentah untuk fungsi Detail/Edit
+                // Simpan data mentah
                 loadedDataWarga = data.data; 
-    
+                currentHeaders = data.header;
+
                 // Bangun dan tampilkan tabel
                 const htmlTable = buildTableHTML(data.header, data.data, 'warga');
                 document.getElementById('data-table-container').innerHTML = htmlTable;
             })
             .catch(error => {
                 console.error('Fetch error:', error);
-                document.getElementById('data-table-container').innerHTML = `<div class="alert alert-danger">Error Jaringan: Gagal terhubung ke Apps Script.</div>`;
+                document.getElementById('data-table-container').innerHTML = `<div class="alert alert-danger">Error Jaringan: Gagal terhubung ke Apps Script. Cek URL Web App.</div>`;
             });
     }
-    
-    // Fungsi Pemuat Data Pengajuan (dipanggil saat tombol 'Pengajuan Surat' diklik)
+
     function loadDataPengajuan() {
-        document.getElementById('data-table-container').innerHTML = '<div class="loading text-center"><i class="fas fa-spinner fa-spin"></i> Memuat Data Pengajuan...</div>';
+        document.getElementById('data-table-container').innerHTML = '<div class="loading text-center"><i class="fas fa-spinner fa-spin"></i> Memuat Log Pengajuan Surat...</div>';
         
         fetch(WEB_APP_URL + '?action=getDataPengajuan') 
             .then(response => response.json())
@@ -119,598 +221,115 @@
                     return;
                 }
                 
-                // Simpan data mentah untuk fungsi Detail/Edit
+                // Simpan data mentah
                 loadedDataPengajuan = data.data; 
-    
+                currentHeaders = data.header;
+
                 // Bangun dan tampilkan tabel
                 const htmlTable = buildTableHTML(data.header, data.data, 'pengajuan');
                 document.getElementById('data-table-container').innerHTML = htmlTable;
             })
             .catch(error => {
                 console.error('Fetch error:', error);
-                document.getElementById('data-table-container').innerHTML = `<div class="alert alert-danger">Error Jaringan: Gagal terhubung ke Apps Script.</div>`;
+                document.getElementById('data-table-container').innerHTML = `<div class="alert alert-danger">Error Jaringan: Gagal terhubung ke Apps Script. Cek URL Web App.</div>`;
             });
     }
-    </script>
 
-    <style>
-        /* ============================
-           GLOBAL STYLING & UTILITY
-           ============================= */
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8fafc;
-            color: #333;
-            line-height: 1.6;
+    // =========================================================
+    // FUNGSI PEMBANGUN TABEL (DYNAMIC)
+    // =========================================================
+
+    function buildTableHTML(header, data, type) {
+        if (data.length === 0) {
+            return `<div class="no-data alert alert-light">
+                        <i class="fas fa-info-circle me-2"></i> Tidak ada data ${type === 'warga' ? 'Warga' : 'Pengajuan'} yang ditemukan.
+                    </div>`;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-
-        h2 {
-            font-size: 2em;
-            font-weight: 700;
-            color: #004d40;
-            margin-bottom: 5px;
-            border-bottom: 3px solid #28a745;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-
-        .btn-primary {
-            display: inline-block;
-            color: white;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-green { background-color: #28a745; }
-        .btn-green:hover { background-color: #1e7e34; }
-        .btn-blue { background-color: #007bff; }
-        .btn-blue:hover { background-color: #0056b3; }
-        .btn-red { background-color: #dc3545; }
-        .btn-red:hover { background-color: #c82333; }
-
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #28a745;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 2s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* ============================
-           TABLE STYLING
-           ============================= */
-        .data-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        .data-table th, .data-table td {
-            border: 1px solid #ddd;
-            padding: 10px 12px;
-            text-align: left;
-            font-size: 0.9em;
-            vertical-align: top;
-        }
-
-        .data-table th {
-            background-color: #e9ecef;
-            color: #333;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .data-table tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        .data-table tr:hover {
-            background-color: #e2f0fd;
-        }
+        // Terapkan batas tinggi agar scrollable jika data banyak
+        let tableHTML = `<div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                            <table class="table table-striped table-hover"><thead><tr>`;
         
-        /* ============================
-           MODAL STYLING (Custom Alert)
-           ============================= */
-        .custom-alert {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            overflow-y: auto;
-        }
+        // Tampilkan Header (dari Apps Script yang sudah difilter/diproses)
+        header.forEach(h => {
+            // Memastikan header di-capitalize dan rapi
+            const cleanHeader = String(h).toUpperCase().replace(/_/g, ' ');
+            tableHTML += `<th class="text-nowrap">${cleanHeader}</th>`;
+        });
+        tableHTML += `<th class="text-nowrap">AKSI</th></tr></thead><tbody>`;
 
-        .custom-alert.show {
-            display: flex;
-            opacity: 1;
-        }
-        
-        .alert-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 15px;
-            max-width: 600px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            transform: scale(0.7);
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            margin: 20px 10px; 
-        }
-        
-        .custom-alert.show .alert-content {
-             transform: scale(1);
-        }
+        // Isi Baris Data
+        data.forEach((row, index) => {
+            tableHTML += `<tr>`;
+            
+            row.forEach((cell) => {
+                // Mengganti null/undefined/kosong dengan '-'
+                const displayValue = cell === '' || cell === null || cell === undefined ? '-' : cell;
+                tableHTML += `<td class="text-nowrap">${displayValue}</td>`;
+            });
 
-        .form-group { margin-bottom: 15px; }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #004d40;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; transition: border-color 0.3s;
-        }
-        
-        .grid-2-cols {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .header-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .search-box {
-            display: flex;
-            gap: 10px;
-            flex-grow: 1;
-            max-width: 300px;
-        }
-        
-        .empty-message {
-            text-align: center; color: #6c757d; padding: 40px; background: #f1f1f1; border-radius: 10px; margin-top: 20px;
-        }
-        
-        .alert-icon {
-            font-size: 3em; 
-            margin-bottom: 20px;
-            color: #28a745;
-        }
-
-        .custom-alert.alert-error .alert-icon {
-            color: #dc3545;
-        }
-
-        @media (max-width: 768px) {
-            .header-controls { flex-direction: column; align-items: stretch; }
-            .grid-2-cols { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-
-<body>
-    
-    <script>
-        // =========================================================================
-        // JAVASCRIPT UTAMA (LOAD DATA, RENDER, SEARCH, FILTER)
-        // =========================================================================
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (checkAuth()) {
-                 loadData(currentSource); // Muat data awal
+            // Tambahkan tombol Aksi (Detail)
+            if (type === 'warga') {
+                tableHTML += `<td class="text-nowrap"><button class="btn btn-sm btn-primary-custom" onclick="showDetailModal(${index}, 'warga')">
+                                <i class="fas fa-eye"></i> Detail
+                              </button></td>`;
+            } else if (type === 'pengajuan') {
+                tableHTML += `<td class="text-nowrap"><button class="btn btn-sm btn-info text-white" onclick="showDetailModal(${index}, 'pengajuan')">
+                                <i class="fas fa-file-alt"></i> Detail
+                              </button></td>`;
             }
+            
+            tableHTML += `</tr>`;
         });
 
-        // Helper untuk menormalisasi kunci header (membuat perbandingan lebih mudah)
-        function normalizeHeaderKey(key) {
-            return String(key).toLowerCase().trim().replace(/[^a-z0-9\s]/g, '');
-        }
+        tableHTML += `</tbody></table></div>`;
+        return tableHTML;
+    }
 
-        // FUNGSI UTAMA LOAD DATA DINAMIS
-        async function loadData(source) {
-            currentSource = source; 
-            const dataResultElement = document.getElementById('data-warga-result');
-            const searchInput = document.getElementById('searchInput');
-            const btnAddWarga = document.getElementById('btnAddWarga');
-            const btnWarga = document.getElementById('btnViewWarga');
-            const btnPengajuan = document.getElementById('btnViewPengajuan');
-            
-            // 1. Update Tampilan Tombol & UI
-            btnWarga.style.backgroundColor = (source === 'warga') ? '#28a745' : '#6c757d';
-            btnPengajuan.style.backgroundColor = (source === 'pengajuan') ? '#007bff' : '#6c757d';
-            
-            let actionParam;
-            if (source === 'warga') {
-                actionParam = 'getDataWarga';
-                searchInput.placeholder = 'Cari NIK, Nama, atau KK...';
-                btnAddWarga.style.display = 'inline-block';
-            } else {
-                actionParam = 'getDataPengajuan';
-                searchInput.placeholder = 'Cari NIK, Jenis Surat, atau Status...';
-                btnAddWarga.style.display = 'none';
-            }
-            searchInput.value = ''; // Clear search
-            
-            dataResultElement.innerHTML = '<div class="loader"></div><p style="text-align: center; color: #6c757d; margin-top: 15px;">Memuat data ' + (source === 'warga' ? 'Database Warga' : 'Pengajuan Surat') + '...</p>';
 
-            try {
-                // Panggil doGet di Apps Script
-                const response = await fetch(`${APPS_SCRIPT_URL}?action=${actionParam}`);
-                const result = await response.json();
+    // =========================================================
+    // FUNGSI MODAL DETAIL
+    // =========================================================
 
-                if (result.error) {
-                    dataResultElement.innerHTML = `<p class="empty-message" style="color: #dc3545;">**Error Memuat Data:** ${result.error}. Cek koneksi atau URL Apps Script.</p>`;
-                    return;
-                }
+    function showDetailModal(index, type) {
+        const data = type === 'warga' ? loadedDataWarga[index] : loadedDataPengajuan[index];
+        const headers = currentHeaders;
 
-                allData = result; // Simpan data mentah
-                
-                // 2. LOGIKA FILTERING DATA UNTUK SATU SHEET (DATABASE)
-                const { header, data } = allData;
-                
-                const headerMap = header.reduce((acc, h, index) => {
-                    acc[normalizeHeaderKey(h)] = index;
-                    return acc;
-                }, {});
-                
-                const keperluanSuratIndex = headerMap['keperluan surat']; 
-
-                if (keperluanSuratIndex !== undefined) {
-                    if (source === 'warga') {
-                        // Filter 1: Hanya tampilkan data warga (Keperluan Surat KOSONG)
-                        filteredData = data.filter(row => {
-                            return !row[keperluanSuratIndex] || String(row[keperluanSuratIndex]).trim() === '';
-                        });
-                        
-                    } else { // source === 'pengajuan'
-                        // Filter 2: Hanya tampilkan data pengajuan (Keperluan Surat TERISI)
-                        filteredData = data.filter(row => {
-                            return row[keperluanSuratIndex] && String(row[keperluanSuratIndex]).trim() !== '';
-                        });
-                    }
-                } else {
-                    // Fallback jika kolom "Keperluan Surat" tidak ditemukan (tampilkan semua)
-                    filteredData = data; 
-                }
-                
-                renderTable(filteredData, source);
-
-            } catch (e) {
-                console.error(`Fetch Data ${source} Error:`, e);
-                dataResultElement.innerHTML = `<p class="empty-message" style="color: #dc3545;">Terjadi kesalahan koneksi saat memuat data: ${e.message}</p>`;
-            }
-        }
-
-        // FUNGSI PENGGANTI loadDataWarga (untuk dipanggil dari HTML)
-        function switchDataView(source) {
-            loadData(source);
-        }
-
-        // FUNGSI RENDER TABEL
-        function renderTable(dataToRender, source) {
-            const dataResultElement = document.getElementById('data-warga-result');
-            const { header } = allData;
-
-            if (!dataToRender || dataToRender.length === 0) {
-                dataResultElement.innerHTML = `<p class="empty-message"><i class="fas fa-box-open"></i> Data ${source === 'warga' ? 'Warga' : 'Pengajuan'} masih kosong atau tidak ditemukan.</p>`;
-                return;
-            }
-            
-            let tableHtml = '<table class="data-table">';
-            
-            // --- LOGIC PENENTUAN KOLOM BERDASARKAN SUMBER DATA ---
-            let columnsToShow, actionButtonText;
-            if (source === 'warga') {
-                columnsToShow = ["waktu", "nama lengkap", "no. nik", "no. kk", "jenis kelamin", "alamat lengkap", "no. handphone"];
-                actionButtonText = 'Aksi';
-            } else { // source === 'pengajuan'
-                columnsToShow = ["waktu", "nama lengkap", "no. nik", "keperluan surat", "no. handphone", "alamat lengkap"];
-                actionButtonText = 'Lihat Detail';
-            }
-            
-            // Map header ke indeks kolom
-            const headerMap = header.reduce((acc, h, index) => {
-                acc[normalizeHeaderKey(h)] = index;
-                return acc;
-            }, {});
-
-            // Header Tabel
-            tableHtml += '<thead><tr>';
-            columnsToShow.forEach(key => {
-                const cleanKey = normalizeHeaderKey(key);
-                const originalHeader = header.find(h => normalizeHeaderKey(h) === cleanKey) || key;
-                tableHtml += `<th style="min-width: ${key.includes('alamat') ? '250px' : '120px'};">${originalHeader.replace(/^(No\.\s)?/i, '').trim()}</th>`;
-            });
-            tableHtml += `<th style="min-width: 100px;">${actionButtonText}</th></tr></thead>`;
-            
-            // Body Tabel
-            tableHtml += '<tbody>';
-            dataToRender.forEach((row, rowIndex) => {
-                tableHtml += '<tr>';
-
-                columnsToShow.forEach(key => {
-                    const cleanKey = normalizeHeaderKey(key);
-                    const index = headerMap[cleanKey];
-                    let cellValue = (index !== undefined && row[index] !== null) ? row[index] : '-';
-
-                    // Format Tanggal/Waktu
-                    if (key.includes("waktu") && cellValue !== '-') {
-                       if (cellValue instanceof Date || (typeof cellValue === 'string' && !isNaN(new Date(cellValue)))) {
-                           const dateObj = new Date(cellValue);
-                           cellValue = dateObj.toLocaleDateString('id-ID', {
-                               year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                           });
-                       }
-                    }
-
-                    // Format Alamat
-                    if (key.includes("alamat") && cellValue !== '-') {
-                        cellValue = String(cellValue).replace(/\n/g, ', ').substring(0, 50) + '...';
-                    }
-                    
-                    // Kolom Status (ASUMSI: Ada kolom Status)
-                    if (key.includes("status") && source === 'pengajuan') {
-                        let color = '#6c757d';
-                        let textColor = 'white';
-                        if (String(cellValue).toLowerCase().includes('selesai')) { color = '#28a745'; }
-                        else if (String(cellValue).toLowerCase().includes('pending')) { color = '#ffc107'; textColor = '#333'; }
-                        else if (String(cellValue).toLowerCase().includes('ditolak')) { color = '#dc3545'; }
-                        cellValue = `<span style="font-weight: 600; color: ${textColor}; background-color: ${color}; padding: 3px 8px; border-radius: 4px; display: inline-block;">${cellValue}</span>`;
-                    }
-                    
-                    tableHtml += `<td>${cellValue}</td>`;
-                });
-                
-                // Kolom Aksi
-                let actionBtnHtml;
-                if (source === 'warga') {
-                    // Action untuk Database Warga (Detail/Edit)
-                    // NOTE: rowIndex di sini adalah index dari array filteredData, bukan index baris asli di sheet.
-                    actionBtnHtml = `
-                        <button onclick="showWargaDetailEdit(${rowIndex}, 'detail')" class="btn-primary btn-blue" style="padding: 5px 8px; font-size: 0.8em; margin-right: 5px;"><i class="fas fa-eye"></i></button>
-                        <button onclick="showWargaDetailEdit(${rowIndex}, 'edit')" class="btn-primary btn-green" style="padding: 5px 8px; font-size: 0.8em;"><i class="fas fa-edit"></i></button>`;
-                } else {
-                    // Action untuk Pengajuan Surat (Lihat Detail/Proses)
-                    actionBtnHtml = `
-                        <button onclick="showPengajuanDetail(${rowIndex})" class="btn-primary btn-blue" style="padding: 5px 8px; font-size: 0.8em;">
-                            <i class="fas fa-file-alt"></i> Detail
-                        </button>`;
-                }
-                
-                tableHtml += `<td>${actionBtnHtml}</td>`;
-                
-                tableHtml += '</tr>';
-            });
-            tableHtml += '</tbody></table>';
-
-            dataResultElement.innerHTML = tableHtml;
-        }
-
-        // FUNGSI PENCARIAN
-        function filterWargaData() {
-            const searchText = document.getElementById('searchInput').value.toLowerCase();
-            if (!allData || !allData.data) return;
-
-            // Mulai dari data yang sudah difilter berdasarkan source (warga/pengajuan)
-            const dataFilteredBySearch = filteredData.filter(row => {
-                return row.some(cell => 
-                    String(cell).toLowerCase().includes(searchText)
-                );
-            });
-            
-            renderTable(dataFilteredBySearch, currentSource); 
-        }
-
-        // =========================================================================
-        // JAVASCRIPT MODAL & ALERT
-        // =========================================================================
-
-        function closeCustomAlert(id) {
-            document.getElementById(id).classList.remove('show');
-        }
+        let detailContent = '<ul class="list-group list-group-flush">';
         
-        function showCustomAlert(title, message, type) {
-            let alertDiv = document.getElementById('wargaToastAlert');
-            if (!alertDiv) {
-                alertDiv = document.createElement('div');
-                alertDiv.id = 'wargaToastAlert';
-                alertDiv.className = 'custom-alert';
-                document.body.appendChild(alertDiv);
-            }
-            
-            const iconClass = type === 'success' ? 'fas fa-check-circle' : type === 'info' ? 'fas fa-info-circle' : 'fas fa-exclamation-triangle';
+        data.forEach((value, i) => {
+            const header = headers[i] ? String(headers[i]).toUpperCase().replace(/_/g, ' ') : `Kolom #${i + 1}`;
+            const displayValue = value === '' || value === null || value === undefined ? '-' : value;
 
-            alertDiv.className = 'custom-alert alert-' + type;
-            alertDiv.innerHTML = `
-                <div class="alert-content" style="max-width: 350px; text-align: center;">
-                    <i class="alert-icon ${iconClass}"></i>
-                    <h3>${title}</h3>
-                    <p>${message}</p>
-                    <button class="btn-primary btn-blue" style="width: 100%;" onclick="closeCustomAlert('wargaToastAlert')">OK</button>
-                </div>`;
-            
-            alertDiv.classList.add('show');
-            setTimeout(() => { closeCustomAlert('wargaToastAlert'); }, 4000);
-        }
+            detailContent += `<li class="list-group-item d-flex justify-content-between align-items-start">
+                                <span class="fw-bold me-2" style="color: var(--color-primary);">${header}:</span>
+                                <span>${displayValue}</span>
+                              </li>`;
+        });
 
-        // FUNGSI DETAIL PENGAJUAN (Diperbaiki)
-        function showPengajuanDetail(rowIndex) {
-            const detailData = filteredData[rowIndex];
-            
-            if (!detailData) {
-                showCustomAlert('Error', 'Data pengajuan tidak ditemukan.', 'error');
-                return;
-            }
+        detailContent += '</ul>';
 
-            const header = allData.header; 
-            let htmlContent = '';
-            
-            header.forEach((label, index) => {
-                const value = detailData[index] || '-'; 
-                
-                // Normalisasi label
-                const cleanLabel = normalizeHeaderKey(label);
-
-                // Abaikan kolom yang pasti kosong atau tidak relevan untuk detail pengajuan
-                if (cleanLabel === 'formtype' || cleanLabel === 'rowindextoedit') return;
-                
-                // Abaikan kolom yang mungkin kosong saat pengajuan tapi relevan untuk warga
-                if (cleanLabel === 'tempat lahir' || cleanLabel === 'tanggal lahir' || cleanLabel === 'pendidikan terakhir' || cleanLabel === 'pekerjaan') {
-                    if (value === '-') return; // Skip jika value kosong
-                }
-
-
-                let formattedValue = String(value).replace(/\n/g, '<br>');
-
-                htmlContent += `
-                    <div style="display: flex; margin-bottom: 8px; font-size: 0.95em;">
-                        <span style="font-weight: 600; width: 170px; color: #004d40;">${label}</span>
-                        <span style="flex-grow: 1;">: ${formattedValue}</span>
-                    </div>
-                `;
-            });
-            
-            let modalDiv = document.getElementById('detailModalCustom');
-            if (!modalDiv) {
-                 modalDiv = document.createElement('div');
-                 modalDiv.id = 'detailModalCustom';
-                 modalDiv.className = 'custom-alert';
-                 document.body.appendChild(modalDiv);
-            }
-            
-            modalDiv.className = 'custom-alert show';
-            modalDiv.innerHTML = `
-                <div class="alert-content" style="max-width: 700px; text-align: left; padding: 25px;">
-                    <h3 style="color: #004d40; text-align: center; margin-bottom: 25px;">Detail Pengajuan Surat</h3>
-                    <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
-                        ${htmlContent}
-                    </div>
-                    <button class="btn-primary btn-blue" style="width: 100%; margin-top: 20px;" 
-                        onclick="closeCustomAlert('detailModalCustom')">
-                        <i class="fas fa-check"></i> Tutup
-                    </button>
-                </div>
-            `;
-        }
-
-        // FUNGSI MODAL INPUT/EDIT (Disederhanakan)
-        function showInputWargaModal(event) {
-            if (event) event.preventDefault();
-            const modal = document.getElementById('inputWargaModal');
-            const form = document.getElementById('wargaInputForm');
-            modal.querySelector('h3').textContent = 'Input Data Warga Baru';
-            form.querySelector('button[type="submit"]').textContent = 'SIMPAN DATA WARGA';
-            form.querySelector('button[type="submit"]').style.display = 'block';
-            form.querySelector('input[name="rowIndexToEdit"]').value = '';
-            form.reset(); 
-            form.querySelectorAll('input, select, textarea').forEach(input => input.disabled = false);
-            modal.classList.add('show');
-        }
-
-        function hideInputWargaModal() {
-            document.getElementById('inputWargaModal').classList.remove('show');
-        }
+        document.getElementById('detailModalLabel').innerText = `Detail ${type === 'warga' ? 'Data Warga' : 'Pengajuan Surat'}`;
+        document.getElementById('modal-body-content').innerHTML = detailContent;
         
-        function showWargaDetailEdit(rowIndex, mode) {
-             showCustomAlert('Fitur Belum Aktif', `Fitur **${mode.toUpperCase()}** data warga akan segera diimplementasikan.`, 'info');
-        }
+        const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+        detailModal.show();
+    }
 
-        // HANDLER SUBMIT FORM (Input Baru dan Edit - Dibiarkan untuk Kompatibilitas)
-        const form = document.getElementById('wargaInputForm');
-        if (form) {
-             form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                // ... (Logika fetch POST untuk Input/Edit Warga) ...
-                showCustomAlert('Demo', 'Fitur Input Warga berhasil disimulasikan.', 'success');
-                hideInputWargaModal();
-                loadData(currentSource);
-            });
-        }
+    // =========================================================
+    // FUNGSI LAINNYA
+    // =========================================================
 
-    </script>
+    function searchData() {
+        alert("Fungsi pencarian belum diimplementasikan.");
+    }
 
-    <div class="container">
-        <a href="pengurus06.html" class="btn-primary" style="background-color: #6c757d; margin-bottom: 20px;"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</a>
-        
-        <h2><i class="fas fa-database"></i> Manajemen Data RT. 06</h2>
-        <p>Lihat dan kelola database warga atau log pengajuan surat dari warga.</p>
-        
-        <div class="header-controls">
-             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <label style="font-weight: 600;">Pilih View:</label>
-                <button id="btnViewWarga" class="btn-primary btn-green" onclick="switchDataView('warga')">
-                    <i class="fas fa-users"></i> Database Warga
-                </button>
-                <button id="btnViewPengajuan" class="btn-primary" style="background-color: #007bff;" onclick="switchDataView('pengajuan')">
-                    <i class="fas fa-file-alt"></i> Pengajuan Surat
-                </button>
-            </div>
-             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Cari NIK, Jenis Surat, atau Status..." onkeyup="filterWargaData()">
-                <button class="btn-primary btn-blue" onclick="filterWargaData()"><i class="fas fa-search"></i></button>
-            </div>
-            <button class="btn-primary btn-green" onclick="showInputWargaModal(event)" id="btnAddWarga" style="display:none;">
-                <i class="fas fa-user-plus"></i> Tambah Warga Baru
-            </button>
-        </div>
+    function openTambahWargaModal() {
+        // Tampilkan modal tambah warga baru (saat ini masih placeholder)
+        const tambahWargaModal = new bootstrap.Modal(document.getElementById('tambahWargaModal'));
+        tambahWargaModal.show();
+    }
+</script>
 
-        <div id="data-warga-result" class="data-container">
-            </div>
-    </div>
-    
-    <div id="inputWargaModal" class="custom-alert">
-        <div class="alert-content" style="max-width: 650px; text-align: left; padding: 25px;">
-            <h3 style="color: #004d40; text-align: center; margin-bottom: 25px;">Input Data Warga Baru</h3>
-            <form id="wargaInputForm">
-                <input type="hidden" name="formType" value="InputWarga">
-                <button type="submit" class="btn-primary btn-green" style="width: 100%; margin-top: 15px; font-size: 1.1em; padding: 10px;"><i class="fas fa-save"></i> SIMPAN DATA WARGA</button>
-                <button type="button" onclick="hideInputWargaModal()" class="btn-primary" style="background-color: #6c757d; width: 100%; margin-top: 10px; padding: 8px;"><i class="fas fa-times"></i> Tutup/Batal</button>
-                <input type="hidden" name="rowIndexToEdit" value="">
-            </form>
-        </div>
-    </div>
-    </body>
+</body>
 </html>
