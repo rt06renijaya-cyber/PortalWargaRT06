@@ -9,7 +9,7 @@
     
     <script>
         // =========================================================================
-        // JAVASCRIPT AUTHENTIKASI SESI (TIDAK BERUBAH)
+        // JAVASCRIPT AUTHENTIKASI SESI (Disesuaikan)
         // =========================================================================
         const CORRECT_USERNAME = "adminrt06"; 
         function checkAuth() {
@@ -25,8 +25,7 @@
         // =========================================================================
         // WAJIB GANTI INI DENGAN URL DEPLOY APPS SCRIPT ANDA
         // =========================================================================
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHo1ZoAE9XWyy7XHAPVahAO_HugbWtcZdw86BtCktRYBHTBqAJLVg1pmf9QGl_AArexQ/exec'; 
-        // Contoh: https://script.google.com/macros/s/AKfycbwkhFKU_ok2eln2xMixs2EDoeBIcRo9jxJsPjNNob3K4qml6SgSBeEXJhnbvce2L-9RyQ/exec
+        const APPS_SCRIPT_URL = ''; 
         
         // --- Custom Alert Functions ---
         function closeCustomAlert(id) {
@@ -48,59 +47,75 @@
             
             alertElement.classList.add('show');
         }
-    
-        // --- Form Submission Logic ---
-        document.getElementById('announcementForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const form = e.target;
-            const submitBtn = form.querySelector('.btn-submit');
-            
-            // 1. Ambil Data Form
-            const data = {
-                action: 'postAnnouncement', // Tambahkan action jika Apps Script Anda memerlukannya
-                judul: document.getElementById('judul').value,
-                kategori: document.getElementById('kategori').value,
-                tanggal: document.getElementById('tanggal').value,
-                penanggungJawab: document.getElementById('penanggungJawab').value,
-                konten: document.getElementById('konten').value 
-            };
-            
-            // Tampilkan loading
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
-            submitBtn.disabled = true;
-            
-            // 2. Kirim data ke Apps Script menggunakan Fetch API (POST)
-            fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                body: new URLSearchParams(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.result === 'success') {
-                    showCustomAlert('successAlert', 'Pengumuman Terkirim!', 
-                                    'Informasi berhasil dipublikasikan ke Google Sheet dan siap diakses oleh warga.');
-                    form.reset();
-                } else {
-                    showCustomAlert('successAlert', 'Gagal Kirim!', 
-                                    `Terjadi kesalahan saat menyimpan data: ${result.message || 'Unknown Error'}`, false);
-                }
-            })
-            .catch(error => {
-                showCustomAlert('successAlert', 'Kesalahan Jaringan!', 
-                                `Tidak dapat terhubung ke server Apps Script. Cek URL dan konsol browser.`, false);
-                console.error('Fetch Error:', error);
-            })
-            .finally(() => {
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Publikasikan Pengumuman';
-                submitBtn.disabled = false;
+
+        // Fungsi untuk menutup alert dan redirect ke dashboard
+        function closeAlertAndRedirect(url) {
+            closeCustomAlert('successAlert');
+            window.location.href = url;
+        }
+
+        // --- Form Submission Logic (MENGIRIM DATA) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('announcementForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const form = e.target;
+                const submitBtn = form.querySelector('.btn-submit');
+                
+                // 1. Ambil Data Form
+                const data = {
+                    action: 'postAnnouncement', 
+                    judul: document.getElementById('judul').value,
+                    kategori: document.getElementById('kategori').value,
+                    tanggal: document.getElementById('tanggal').value,
+                    penanggungJawab: document.getElementById('penanggungJawab').value,
+                    konten: document.getElementById('konten').value 
+                };
+                
+                // Tampilkan loading
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+                submitBtn.disabled = true;
+                
+                // 2. Kirim data ke Apps Script menggunakan Fetch API (POST)
+                fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: new URLSearchParams(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.result === 'success') {
+                        showCustomAlert('successAlert', 'Pengumuman Terkirim!', 
+                                        'Informasi berhasil dipublikasikan ke Google Sheet dan siap diakses oleh warga.');
+                        form.reset();
+                        // Redirect otomatis setelah 3 detik
+                        setTimeout(() => {
+                            window.location.href = "pengurus06_dashboard.html";
+                        }, 3000);
+
+                    } else {
+                        showCustomAlert('successAlert', 'Gagal Kirim!', 
+                                        `Terjadi kesalahan saat menyimpan data: ${result.message || 'Unknown Error'}`, false);
+                    }
+                })
+                .catch(error => {
+                    showCustomAlert('successAlert', 'Kesalahan Jaringan!', 
+                                    `Tidak dapat terhubung ke server Apps Script. Cek URL dan konsol browser.`, false);
+                    console.error('Fetch Error:', error);
+                })
+                .finally(() => {
+                    // Hanya reset tombol jika tidak ada redirect yang terjadi
+                    if (!document.getElementById('successAlert').classList.contains('show')) {
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Publikasikan Pengumuman';
+                        submitBtn.disabled = false;
+                    }
+                });
             });
         });
     </script>
     
     <style>
         /* ============================
-           GLOBAL & HEADER STYLING (Konsisten dengan Dashboard)
+           GLOBAL & HEADER STYLING 
            ============================= */
         body {
             font-family: 'Poppins', sans-serif;
@@ -112,7 +127,7 @@
         }
 
         .container {
-            max-width: 800px; /* Lebar lebih fokus untuk form */
+            max-width: 800px; 
             margin: 0 auto;
             padding: 30px 20px;
         }
@@ -175,7 +190,7 @@
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            margin-top: -40px; /* Naik sedikit menutupi header */
+            margin-top: -40px; 
             position: relative;
             text-align: left;
         }
@@ -230,7 +245,7 @@
             text-transform: uppercase;
             box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
             transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-            width: 100%; /* Lebar penuh */
+            width: 100%; 
         }
         .btn-submit:hover {
             background-color: #1e7e34;
@@ -258,7 +273,7 @@
             background-color: #5a6268;
         }
 
-        /* Custom Alert Styling (Diambil dari Dashboard) */
+        /* Custom Alert Styling */
         .custom-alert {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.7); 
@@ -277,6 +292,7 @@
             font-size: 5em; margin-bottom: 20px; animation: pulse 1.5s infinite; 
         }
         .alert-success .alert-icon { color: #28a745; text-shadow: 0 0 15px rgba(40, 167, 69, 0.5); }
+        .alert-error .alert-icon { color: #dc3545; text-shadow: 0 0 15px rgba(220, 53, 69, 0.5); }
         .alert-content h3 { margin: 0 0 10px 0; font-size: 1.8em; font-weight: 700; color: #333; }
         .alert-content p { margin: 0 0 25px 0; color: #6c757d; font-size: 1em; }
         .alert-btn {
@@ -353,7 +369,7 @@
                 
                 <div class="form-group">
                     <label for="tanggal">Tanggal Publikasi/Kegiatan</label>
-                    <input type="date" id="tanggal" value="<?php echo date('Y-m-d'); ?>" required>
+                    <input type="date" id="tanggal" value="2025-11-22" required>
                 </div>
 
                 <div class="form-group">
@@ -390,47 +406,10 @@
         <div class="alert-content">
             <i class="alert-icon fas fa-check-circle"></i>
             <h3>Pengumuman Terkirim!</h3>
-            <p>Informasi berhasil dipublikasikan ke <a href="informasi.html" style="color:#007bff; font-weight:600;">halaman Warga</a> dan siap diakses.</p>
+            <p>Informasi berhasil dipublikasikan ke Google Sheet dan siap diakses oleh warga.</p>
             <button class="alert-btn" onclick="closeAlertAndRedirect('pengurus06_dashboard.html')">OK</button>
         </div>
     </div>
     
-    <script>
-        // Fungsi untuk menutup alert custom
-        function closeCustomAlert(id) {
-            document.getElementById(id).classList.remove('show');
-        }
-        
-        // Fungsi untuk menutup alert dan redirect ke dashboard
-        function closeAlertAndRedirect(url) {
-            closeCustomAlert('successAlert');
-            window.location.href = url;
-        }
-
-        document.getElementById('announcementForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Mencegah form dikirim secara default
-
-            // ******************************************************************
-            // CATATAN: Karena ini adalah DEMO HTML statis, kita tidak benar-benar 
-            // menyimpan data ke database. Kita hanya menampilkan pesan sukses.
-            // Di implementasi nyata, di sini akan ada kode AJAX untuk mengirim 
-            // data ke server (misal: buat_pengumuman.php).
-            // ******************************************************************
-            
-            // Tampilkan Custom Success Alert
-            document.getElementById('successAlert').classList.add('show');
-            
-            // Reset Form setelah tampilan sukses (opsional)
-            this.reset();
-            
-            // Redirect otomatis setelah 4 detik (jika tombol OK tidak diklik)
-            setTimeout(function() {
-                if (document.getElementById('successAlert').classList.contains('show')) {
-                    window.location.href = "pengurus06.html";
-                }
-            }, 4000); 
-        });
-    </script>
-
-</body>
+    </body>
 </html>
