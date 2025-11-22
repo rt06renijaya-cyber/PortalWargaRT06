@@ -5,83 +5,160 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Input Keuangan RT 06</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 /* CSS Styling */
+    /* Variabel Warna Baru */
     :root{
-        --primary: #1f6feb; /* Biru */
-        --accent: #e76f51; /* Oranye */
-        --success: #10b981; /* Hijau Sukses */
-        --error: #dc2626; /* Merah Error */
-        --bg: #f6f7fb;
+        --primary: #005c5c; /* Teal/Hijau Gelap untuk Primary/Pemasukan */
+        --primary-dark: #004d40;
+        --accent: #e76f51; /* Oranye untuk Pengeluaran (TETAP) */
+        --success: #28a745; /* Hijau Sukses */
+        --error: #dc3545; /* Merah Error */
+        --bg: #f8fafc; /* Latar belakang cerah */
         --card: #ffffff;
-        --text-color: #0f172a;
-        --muted-color: #6b7280;
-        --loading: #d97706; /* Ditambahkan */
+        --text-color: #333; /* Teks lebih gelap */
+        --muted-color: #6c757d;
+        --loading: #d97706;
+        --shadow-color: rgba(0, 0, 0, 0.15); /* Untuk bayangan card */
+        --menu-btn: #6c757d; /* Abu-abu untuk tombol menu */
+        --menu-btn-hover: #5a6268;
     }
     *{box-sizing:border-box}
     body{
-        margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-        background:var(--bg);color:var(--text-color);-webkit-font-smoothing:antialiased;
-        padding: 20px;
+        margin:0;
+        font-family:"Poppins", system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+        background:var(--bg);
+        color:var(--text-color);
+        -webkit-font-smoothing:antialiased;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
-    .wrap{max-width:550px;margin:30px auto;}
-    .card{background:var(--card);padding:24px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.08)}
+    .container {
+        max-width: 800px; 
+        margin: 0 auto;
+        padding: 0 20px;
+        flex-grow: 1;
+    }
 
-    .header-title h1{color:var(--primary); font-size: 24px; margin-bottom: 5px; font-weight: 700;}
-    .header-title p{color:var(--muted-color); font-size: 14px; margin-top: 0; margin-bottom: 25px;}
+    /* === Header Elegant === */
+    .header-elegant {
+        background: linear-gradient(135deg, #003636, var(--primary));
+        color: white;
+        padding: 50px 20px 70px 20px;
+        border-bottom-left-radius: 60px;
+        border-bottom-right-radius: 60px;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        text-align: center;
+        overflow: hidden;
+    }
 
-    label{display:block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: var(--text-color);}
+    .header-elegant::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="p" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23p)"/></svg>') repeat;
+        opacity: 0.2;
+        z-index: 1;
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 3;
+    }
+    
+    .header-content h1 {
+        font-size: 2.5em; 
+        font-weight: 700;
+        margin: 0 0 5px 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .header-content p {
+        font-size: 1em; 
+        opacity: 0.9; 
+        margin: 0;
+    }
+
+    /* Card Form */
+    .form-card{
+        background-color: var(--card);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px var(--shadow-color);
+        margin-top: -40px; 
+        position: relative;
+    }
+
+    /* === Form & Input Styling === */
+    label{
+        display:block; 
+        margin-bottom: 8px;
+        font-weight: 600; 
+        font-size: 1.1em;
+        color: var(--primary-dark);
+        text-align: left;
+    }
     input[type="date"], input[type="text"], input[type="number"], select{
         width: 100%;
-        padding: 10px;
+        padding: 12px 15px;
         margin-bottom: 15px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #ddd;
         border-radius: 8px;
-        font-size: 14px;
-        transition: border-color 0.2s, box-shadow 0.2s;
+        font-size: 1em;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        box-sizing: border-box;
+        text-align: left;
     }
     input:focus, select:focus{
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.1);
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
         outline: none;
     }
 
     .form-group{margin-bottom: 20px;}
     
+    /* === Button Styling (Submit) === */
     .btn-group{
         display: flex;
         gap: 15px;
         margin-top: 20px;
     }
+    
     button{
         flex: 1;
-        padding: 14px 10px;
+        padding: 15px 10px;
         border: none;
-        border-radius: 10px;
-        font-weight: 700;
+        border-radius: 50px;
+        font-weight: 600;
         cursor: pointer;
-        transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
         color: white;
-        font-size: 15px;
+        font-size: 1.1em;
         text-transform: uppercase;
+        display: flex; 
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
     }
     
     /* Button Pemasukan Style */
     #submitIn{
         background: var(--primary);
-        box-shadow: 0 4px 12px rgba(31, 111, 235, 0.3);
+        box-shadow: 0 6px 15px rgba(0, 92, 92, 0.4);
     }
     #submitIn:hover{
-        background: #195ac8;
+        background: var(--primary-dark);
         transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(31, 111, 235, 0.5);
+        box-shadow: 0 8px 20px rgba(0, 92, 92, 0.6);
     }
     #submitIn:disabled {
-        background: #90b8e6;
+        background: #609c9c;
         cursor: not-allowed;
         box-shadow: none;
         transform: translateY(0);
@@ -104,8 +181,33 @@
         transform: translateY(0);
     }
 
+    /* === Tombol Menu (Link) Styling === */
+    .menu-btn-container {
+        margin-top: 30px;
+        text-align: center;
+    }
+    .menu-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 25px;
+        background-color: var(--menu-btn);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1em;
+        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        gap: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .menu-link:hover {
+        background-color: var(--menu-btn-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    }
 
-    /* Notifikasi */
+    /* Notifikasi Loading */
     .notification{
         padding: 15px;
         border-radius: 8px;
@@ -116,16 +218,16 @@
         gap: 10px;
         animation: slideIn 0.3s ease-out;
     }
-    .success{background: #d1fae5; color: var(--success); border: 1px solid var(--success);}
-    .error{background: #fee2e2; color: var(--error); border: 1px solid var(--error);}
-    .loading{background: #fef3c7; color: var(--loading); border: 1px solid var(--loading);}
+    .success{background: #d4edda; color: var(--success); border: 1px solid var(--success);}
+    .error{background: #f8d7da; color: var(--error); border: 1px solid var(--error);}
+    .loading{background: #fff3cd; color: var(--loading); border: 1px solid var(--loading);}
 
     @keyframes slideIn {
         from { opacity: 0; transform: translateY(-10px); }
         to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Style untuk form tambahan Koordinator */
+    /* Koordinator Group */
     #koordinatorGroup {
         transition: all 0.3s ease-in-out;
         overflow: hidden;
@@ -138,17 +240,84 @@
         opacity: 1;
         padding-top: 10px;
     }
+
+    /* Custom Alert Styling (Tidak diubah) */
+    .custom-alert {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.7); 
+        display: none; justify-content: center; align-items: center;
+        z-index: 1000; opacity: 0; transition: opacity 0.3s ease;
+    }
+    .custom-alert.show { display: flex; opacity: 1; }
+    .alert-content {
+        background-color: white; padding: 40px 30px; border-radius: 15px;
+        max-width: 320px; text-align: center; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); 
+        transform: scale(0.7); 
+        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    .custom-alert.show .alert-content { transform: scale(1); }
+    .alert-icon {
+        font-size: 5em; margin-bottom: 20px; animation: pulse 1.5s infinite; 
+    }
+    .alert-success .alert-icon { color: var(--success); text-shadow: 0 0 15px rgba(40, 167, 69, 0.5); }
+    .alert-error .alert-icon { color: var(--error); text-shadow: 0 0 15px rgba(220, 53, 69, 0.5); }
+    .alert-content h3 { margin: 0 0 10px 0; font-size: 1.8em; font-weight: 700; color: #333; }
+    .alert-content p { margin: 0 0 25px 0; color: #6c757d; font-size: 1em; }
+    .alert-btn {
+        background-color: #007bff; color: white; padding: 10px 25px; border: none;
+        border-radius: 50px; cursor: pointer; font-weight: 600;
+        transition: background-color 0.3s, transform 0.1s;
+    }
+    .alert-btn:hover { background-color: #0056b3; transform: translateY(-2px); }
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    /* === FOOTER === */
+    .footer {
+        background: linear-gradient(135deg, #002e28, var(--primary-dark));
+        color: #e0ffff;
+        text-align: center;
+        padding: 40px 15px;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+        box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+        margin-top: 50px;
+    }
+    .footer p { margin: 5px 0; font-size: 0.9em; opacity: 0.9; }
+    .footer a { color: #ffc107; text-decoration: none; transition: color 0.3s; }
+    .footer a:hover { color: #fff; }
+
+    /* Responsive */
+    @media(max-width: 768px) {
+        .form-card {
+            padding: 30px 20px;
+        }
+        .header-content h1 {
+            font-size: 2em;
+        }
+        .btn-group {
+            flex-direction: column;
+        }
+        button {
+            width: 100%;
+        }
+    }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-    <div class="card">
-        <div class="header-title">
-            <h1><i class="fas fa-file-invoice-dollar"></i> Input Transaksi Keuangan RT 06</h1>
-            <p id="form-description">Masukkan rincian transaksi (Pemasukan atau Pengeluaran) untuk dicatat di Google Sheet.</p>
-        </div>
+<div class="header-elegant">
+    <div class="header-content">
+        <h1><i class="fas fa-file-invoice-dollar"></i> Input Transaksi Keuangan RT 06</h1>
+        <p id="form-description">Masukkan rincian transaksi (Pemasukan atau Pengeluaran) untuk dicatat di Google Sheet.</p>
+    </div>
+</div>
 
+<div class="container">
+    <div class="form-card">
         <form id="financeForm">
             <div class="form-group">
                 <label for="tanggal">Tanggal Transaksi</label>
@@ -194,10 +363,33 @@
                 </button>
             </div>
         </form>
+        
+        <div id="notification" class="notification"></div> 
 
-        <div id="notification" class="notification"></div>
+        <div class="menu-btn-container">
+            <a href="#" id="menuLinkAbove" class="menu-link">
+                <i class="fas fa-home"></i> Kembali ke Menu Utama
+            </a>
+        </div>
+        
     </div>
 </div>
+
+<div id="resultAlert" class="custom-alert">
+    <div class="alert-content">
+        <i class="alert-icon"></i>
+        <h3 id="alert-title"></h3>
+        <p id="alert-message"></p>
+        <button class="alert-btn" onclick="closeCustomAlert('resultAlert')">OK, Mengerti</button>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>
+        <a href="#" id="menuLinkFooter"><i class="fas fa-home"></i> Menu Utama</a> | &copy; 2025 RT 06 Management System
+    </p>
+    <p>Ditenagai oleh Google Apps Script & HTML</p>
+</footer>
 
 <script>
 // ===============================================
@@ -205,8 +397,11 @@
 // ===============================================
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwgQ-ENSsjNfh2gzitn1noXWMuo-bLOqYt_NUFR2zjK83_45XSUyXT7GQeFwRn5Uh6x3A/exec"; // GANTI DENGAN URL APPS SCRIPT ANDA!
 
+// 💡 GANTI URL MENU UTAMA DI SINI 💡
+const MAIN_MENU_URL = "pengurus06.html"; 
+
 const form = document.getElementById('financeForm');
-const notification = document.getElementById('notification');
+const loadingNotification = document.getElementById('notification'); 
 const submitInBtn = document.getElementById('submitIn');
 const submitOutBtn = document.getElementById('submitOut');
 const kategoriSelect = document.getElementById('kategori');
@@ -216,14 +411,39 @@ const keteranganInput = document.getElementById('keterangan');
 const formDescription = document.getElementById('form-description');
 const nominalInput = document.getElementById('nominal');
 
+// Tambahan untuk tombol menu
+document.getElementById('menuLinkAbove').href = MAIN_MENU_URL;
+document.getElementById('menuLinkFooter').href = MAIN_MENU_URL;
+
+
 let koordinatorDataLoaded = false;
 let isSaldoMode = false;
+
+// --- Custom Alert Functions ---
+function closeCustomAlert(id) {
+    document.getElementById(id).classList.remove('show');
+}
+
+function showCustomAlert(id, title, message, isSuccess = true) {
+    const alertElement = document.getElementById(id);
+    const iconElement = alertElement.querySelector('.alert-icon');
+    const titleElement = alertElement.querySelector('#alert-title');
+    const messageElement = alertElement.querySelector('#alert-message');
+    
+    alertElement.classList.remove('alert-success', 'alert-error');
+    alertElement.classList.add(isSuccess ? 'alert-success' : 'alert-error');
+    iconElement.className = isSuccess ? 'alert-icon fas fa-check-circle' : 'alert-icon fas fa-times-circle';
+    titleElement.textContent = title;
+    messageElement.innerHTML = message;
+    
+    alertElement.classList.add('show');
+}
+
 
 // --- Logika Kategori Dinamis ---
 kategoriSelect.addEventListener('change', function() {
     const selectedCategory = this.value;
     
-    // Reset tombol dan UI
     submitInBtn.style.display = 'flex';
     submitOutBtn.style.display = 'flex';
     submitInBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Pemasukan';
@@ -232,16 +452,14 @@ kategoriSelect.addEventListener('change', function() {
     nominalInput.min = "1";
     formDescription.textContent = 'Masukkan rincian transaksi (Pemasukan atau Pengeluaran) untuk dicatat di Google Sheet.';
     
-    // Non-Iuran Warga (termasuk Saldo)
     koordinatorGroup.classList.remove('show');
     koordinatorSelect.required = false;
     koordinatorSelect.disabled = true;
-    koordinatorSelect.value = ""; // Reset nilai koordinator
+    koordinatorSelect.value = ""; 
     
     isSaldoMode = false; 
 
     if (selectedCategory === 'Iuran Warga' && koordinatorDataLoaded) {
-        // Mode Iuran Warga
         koordinatorGroup.classList.add('show');
         koordinatorSelect.required = true;
         koordinatorSelect.disabled = false;
@@ -250,10 +468,8 @@ kategoriSelect.addEventListener('change', function() {
         submitOutBtn.disabled = false;
         
     } else if (selectedCategory === 'Saldo Bulan Sebelumnya') {
-        // Mode Saldo Bulan Sebelumnya
         isSaldoMode = true;
         
-        // Sembunyikan tombol Pengeluaran dan ubah tombol Pemasukan
         submitOutBtn.style.display = 'none';
         submitInBtn.innerHTML = '<i class="fas fa-money-check-alt"></i> Input Saldo Awal';
         submitInBtn.setAttribute('data-sheet', 'web_SaldoAwal');
@@ -263,7 +479,6 @@ kategoriSelect.addEventListener('change', function() {
         keteranganInput.placeholder = "Contoh: Saldo Akhir Oktober 2025";
         formDescription.textContent = 'Mode Saldo Awal: Data akan dicatat sebagai Saldo Awal Bulanan.';
         
-        // Coba isi keterangan otomatis
         const today = new Date(document.getElementById('tanggal').value || Date.now());
         const d = new Date(today.getFullYear(), today.getMonth(), 1); 
         d.setMonth(d.getMonth() - 1); 
@@ -271,7 +486,6 @@ kategoriSelect.addEventListener('change', function() {
         keteranganInput.value = `Saldo Akhir ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
 
     } else {
-        // Mode Transaksi Normal (Donasi, Kas, Kegiatan, dll)
         keteranganInput.placeholder = "Contoh: Beli sapu dan pel, Donasi untuk korban banjir";
         submitInBtn.disabled = false;
         submitOutBtn.disabled = false;
@@ -282,23 +496,26 @@ submitInBtn.addEventListener('click', () => submitForm(submitInBtn));
 submitOutBtn.addEventListener('click', () => submitForm(submitOutBtn));
 
 /**
- * Menampilkan notifikasi sukses atau error.
+ * Menampilkan notifikasi loading (hanya untuk koordinator)
  */
-function showNotification(message, type) {
+function showLoadingNotification(message, type) {
     const iconClass = type === 'success' ? 'fas fa-check-circle' : (type === 'error' ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle'); 
-    notification.innerHTML = `<i class="${iconClass}"></i> ${message}`;
-    notification.className = `notification ${type}`;
-    notification.style.display = 'flex';
-    setTimeout(() => {
-        notification.style.display = 'none';
-    }, 5000);
+    loadingNotification.innerHTML = `<i class="${iconClass}"></i> ${message}`;
+    loadingNotification.className = `notification ${type}`;
+    loadingNotification.style.display = 'flex';
+    if (type !== 'loading') {
+        setTimeout(() => {
+            loadingNotification.style.display = 'none';
+        }, 5000);
+    }
 }
+
 
 /**
  * Mengambil daftar Koordinator dari Google Sheet.
  */
 async function fetchKoordinatorList() {
-    showNotification("Memuat daftar Koordinator...", "loading");
+    showLoadingNotification("Memuat daftar Koordinator...", "loading");
     submitInBtn.disabled = true;
     submitOutBtn.disabled = true;
 
@@ -307,7 +524,6 @@ async function fetchKoordinatorList() {
         
         if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
         
-        // Menggunakan response.text() dan JSON.parse() untuk penanganan error yang lebih baik
         const text = await response.text(); 
         const data = JSON.parse(text); 
         
@@ -320,16 +536,16 @@ async function fetchKoordinatorList() {
                 koordinatorSelect.appendChild(option);
             });
             koordinatorDataLoaded = true;
-            showNotification("Daftar Koordinator berhasil dimuat.", "success");
+            showLoadingNotification("Daftar Koordinator berhasil dimuat.", "success");
         } else {
             koordinatorSelect.innerHTML = '<option value="" selected disabled>Tidak ada data koordinator ditemukan. Harap cek sheet ListKoordinator.</option>';
-            showNotification("Daftar Koordinator dimuat, tetapi kosong.", "error");
+            showLoadingNotification("Daftar Koordinator dimuat, tetapi kosong.", "error");
         }
 
     } catch (error) {
         console.error('Error fetching koordinator list:', error);
         koordinatorSelect.innerHTML = '<option value="" selected disabled>Gagal memuat data.</option>';
-        showNotification(`Gagal memuat daftar koordinator. Cek URL Apps Script atau jaringan.`, "error");
+        showLoadingNotification(`Gagal memuat daftar koordinator. Cek URL Apps Script atau jaringan.`, "error");
     } finally {
         submitInBtn.disabled = false;
         submitOutBtn.disabled = false;
@@ -344,7 +560,7 @@ async function fetchKoordinatorList() {
 async function submitForm(button) {
     if (!form.checkValidity()) {
         form.reportValidity();
-        showNotification("Mohon lengkapi semua data yang diperlukan pada formulir.", "error");
+        showCustomAlert('resultAlert', "Formulir Tidak Lengkap", "Mohon lengkapi semua data yang diperlukan pada formulir.", false);
         return;
     }
     
@@ -352,25 +568,21 @@ async function submitForm(button) {
     const data = Object.fromEntries(formData.entries());
     let targetSheet = button.getAttribute('data-sheet');
 
-    // 1. Tentukan Sheet Tujuan (Override jika Saldo Mode)
     if (isSaldoMode) {
         data.Sheet = 'web_SaldoAwal';
-        data.Kategori = 'Saldo Awal'; // Ganti Kategori untuk konsistensi di sheet
+        data.Kategori = 'Saldo Awal';
     } else {
         data.Sheet = targetSheet;
     }
     
-    // 2. Format Data
     if (data.Koordinator) {
         data.Keterangan = `[${data.Koordinator}] - ${data.Keterangan}`;
         delete data.Koordinator;
     }
     
-    // Format Tanggal dan Nominal
     if (data.Tanggal) { data.Tanggal = data.Tanggal.split('-').reverse().join('/'); }
     data.Nominal = parseInt(data.Nominal);
 
-    // 3. Ubah UI Tombol (Loading State)
     const originalTextIn = submitInBtn.innerHTML;
     const originalTextOut = submitOutBtn.innerHTML;
     const isPemasukan = data.Sheet === 'web_Pemasukan' || data.Sheet === 'web_SaldoAwal';
@@ -380,7 +592,6 @@ async function submitForm(button) {
     submitOutBtn.disabled = true;
     button.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Mengirim...`;
 
-    // 4. Kirim Data ke Apps Script
     try {
         await fetch(ENDPOINT_APPS_SCRIPT, {
             method: 'POST',
@@ -389,16 +600,17 @@ async function submitForm(button) {
             body: JSON.stringify(data)
         });
 
-        showNotification(`Data ${typeLabel} berhasil dicatat di Sheet ${data.Sheet}!`, "success");
-        form.reset(); 
+        showCustomAlert('resultAlert', "Transaksi Berhasil Dicatat!", 
+                        `Data ${typeLabel} sebesar **Rp ${data.Nominal.toLocaleString('id-ID')}** telah berhasil dicatat di Google Sheet.`, true);
         
-        // Reset tampilan dinamis
+        form.reset(); 
         kategoriSelect.dispatchEvent(new Event('change'));
+
     } catch (error) {
         console.error('Error submitting form:', error);
-        showNotification(`Gagal mencatat data. Error Jaringan: ${error.message}. Cek koneksi atau URL Apps Script.`, "error");
+        showCustomAlert('resultAlert', "Kesalahan Jaringan/Server!", 
+                        `Gagal mencatat data. Detail Error: ${error.message}. Cek koneksi atau URL Apps Script.`, false);
     } finally {
-        // Kembalikan UI Tombol
         submitInBtn.innerHTML = originalTextIn;
         submitOutBtn.innerHTML = originalTextOut;
         submitInBtn.disabled = false;
@@ -407,7 +619,6 @@ async function submitForm(button) {
     }
 }
 
-// Set tanggal default dan muat data koordinator saat halaman dimuat
 document.addEventListener('DOMContentLoaded', () => {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('tanggal').value = today;
