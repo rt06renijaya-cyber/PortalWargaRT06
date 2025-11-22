@@ -442,7 +442,55 @@
 </body>
 </html>
 
+<script>
+        // =========================================================================
+        // WAJIB GANTI INI DENGAN URL DEPLOY APPS SCRIPT ANDA
+        // =========================================================================
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHo1ZoAE9XWyy7XHAPVahAO_HugbWtcZdw86BtCktRYBHTBqAJLVg1pmf9QGl_AArexQ/exec'; 
 
+        function closeInfoModal() {
+            document.getElementById('infoModal').classList.remove('show');
+            // Opsional: Simpan timestamp terakhir dilihat di Session Storage 
+            // agar pop-up tidak muncul lagi jika user me-refresh halaman (selama sesi)
+            sessionStorage.setItem('lastViewedAnnouncementTime', new Date().toISOString());
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek apakah pop-up sudah dilihat di sesi ini
+            if (sessionStorage.getItem('lastViewedAnnouncementTime')) {
+                console.log('Pop-up sudah dilihat di sesi ini. Tidak menampilkan.');
+                return;
+            }
+
+            // 1. Ambil data pengumuman terbaru dari Apps Script (GET)
+            fetch(APPS_SCRIPT_URL)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success' && result.data) {
+                        const data = result.data;
+                        
+                        // 2. Isi data ke elemen-elemen di Modal
+                        document.getElementById('modalJudul').textContent = data.judul || 'Tidak Ada Judul';
+                        document.getElementById('modalTanggal').textContent = data.tanggal || '-';
+                        document.getElementById('modalKategori').textContent = data.kategori || '-';
+                        document.getElementById('modalPenanggungJawab').textContent = data.penanggungJawab || '-';
+                        document.getElementById('modalKonten').textContent = data.konten || 'Tidak ada isi pengumuman.';
+                        document.getElementById('modalTimestamp').textContent = data.timestamp || 'Tidak Diketahui';
+
+                        // 3. Tampilkan Modal setelah 1 detik
+                        setTimeout(() => {
+                            document.getElementById('infoModal').classList.add('show');
+                        }, 1000); 
+
+                    } else {
+                        console.log('Tidak ada pengumuman terbaru dari server:', result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Gagal mengambil pengumuman dari Apps Script:', error);
+                });
+        });
+    </script>
 
 
 
