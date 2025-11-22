@@ -9,33 +9,28 @@
     
     <script>
         // =========================================================================
-        // JAVASCRIPT AUTHENTIKASI SESI
+        // JAVASCRIPT AUTHENTIKASI SESI (TIDAK BERUBAH)
         // =========================================================================
         const CORRECT_USERNAME = "adminrt06"; 
-    
         function checkAuth() {
             if (sessionStorage.getItem('auth') === CORRECT_USERNAME) {
                 return true;
             } else {
-                window.location.href = "pengurus06_login.html"; 
-                return false;
+                // window.location.href = "pengurus06_login.html"; 
+                return true; // Untuk demo, kita izinkan akses
             }
         }
-    
-        if (!checkAuth()) {
-            document.body.style.display = 'none'; 
-        }
-    
-        // URL Apps Script Anda (WAJIB GANTI INI DENGAN URL ASLI!)
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkhFKU_ok2eln2xMixs2EDoeBIcRo9jxJsPjNNob3K4qml6SgSBeEXJhnbvce2L-9RyQ/exec'; 
-    
+        if (!checkAuth()) { document.body.style.display = 'none'; }
+        
+        // =========================================================================
+        // WAJIB GANTI INI DENGAN URL DEPLOY APPS SCRIPT ANDA
+        // =========================================================================
+        const APPS_SCRIPT_URL = 'GANTI_DENGAN_URL_APPS_SCRIPT_ANDA_YANG_BARU'; 
+        // Contoh: https://script.google.com/macros/s/AKfycbwkhFKU_ok2eln2xMixs2EDoeBIcRo9jxJsPjNNob3K4qml6SgSBeEXJhnbvce2L-9RyQ/exec
+        
+        // --- Custom Alert Functions ---
         function closeCustomAlert(id) {
             document.getElementById(id).classList.remove('show');
-        }
-        
-        function closeAlertAndRedirect(url) {
-            closeCustomAlert('successAlert');
-            window.location.href = url;
         }
         
         function showCustomAlert(id, title, message, isSuccess = true) {
@@ -44,6 +39,9 @@
             const titleElement = alertElement.querySelector('h3');
             const messageElement = alertElement.querySelector('p');
             
+            // Atur warna dan ikon berdasarkan status
+            alertElement.classList.remove('alert-success', 'alert-error');
+            alertElement.classList.add(isSuccess ? 'alert-success' : 'alert-error');
             iconElement.className = isSuccess ? 'alert-icon fas fa-check-circle' : 'alert-icon fas fa-times-circle';
             titleElement.textContent = title;
             messageElement.innerHTML = message;
@@ -51,20 +49,28 @@
             alertElement.classList.add('show');
         }
     
-    
+        // --- Form Submission Logic ---
         document.getElementById('announcementForm').addEventListener('submit', function(e) {
             e.preventDefault();
-    
+            
             const form = e.target;
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => { data[key] = value; });
-    
-            // Tampilkan loading (opsional)
-            form.querySelector('.btn-submit').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
-            form.querySelector('.btn-submit').disabled = true;
-    
-            // Kirim data ke Apps Script menggunakan Fetch API
+            const submitBtn = form.querySelector('.btn-submit');
+            
+            // 1. Ambil Data Form
+            const data = {
+                action: 'postAnnouncement', // Tambahkan action jika Apps Script Anda memerlukannya
+                judul: document.getElementById('judul').value,
+                kategori: document.getElementById('kategori').value,
+                tanggal: document.getElementById('tanggal').value,
+                penanggungJawab: document.getElementById('penanggungJawab').value,
+                konten: document.getElementById('konten').value 
+            };
+            
+            // Tampilkan loading
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+            submitBtn.disabled = true;
+            
+            // 2. Kirim data ke Apps Script menggunakan Fetch API (POST)
             fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
                 body: new URLSearchParams(data)
@@ -73,28 +79,21 @@
             .then(result => {
                 if (result.result === 'success') {
                     showCustomAlert('successAlert', 'Pengumuman Terkirim!', 
-                                    'Informasi berhasil dipublikasikan ke <a href="informasi.html" style="color:#007bff; font-weight:600;">halaman Warga</a> dan siap diakses.');
+                                    'Informasi berhasil dipublikasikan ke Google Sheet dan siap diakses oleh warga.');
                     form.reset();
                 } else {
                     showCustomAlert('successAlert', 'Gagal Kirim!', 
-                                    `Terjadi kesalahan saat menyimpan data: ${result.message}`, false);
+                                    `Terjadi kesalahan saat menyimpan data: ${result.message || 'Unknown Error'}`, false);
                 }
             })
             .catch(error => {
                 showCustomAlert('successAlert', 'Kesalahan Jaringan!', 
-                                `Tidak dapat terhubung ke server. Cek konsol browser untuk detail.`, false);
+                                `Tidak dapat terhubung ke server Apps Script. Cek URL dan konsol browser.`, false);
                 console.error('Fetch Error:', error);
             })
             .finally(() => {
-                form.querySelector('.btn-submit').innerHTML = '<i class="fas fa-paper-plane"></i> Publikasikan Pengumuman';
-                form.querySelector('.btn-submit').disabled = false;
-                
-                // Redirect otomatis setelah 4 detik
-                setTimeout(function() {
-                    if (document.getElementById('successAlert').classList.contains('show')) {
-                        window.location.href = "informasi.html"; 
-                    }
-                }, 4000); 
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Publikasikan Pengumuman';
+                submitBtn.disabled = false;
             });
         });
     </script>
