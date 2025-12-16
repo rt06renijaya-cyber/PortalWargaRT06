@@ -1,1 +1,0 @@
-# eRTe06renijaya
