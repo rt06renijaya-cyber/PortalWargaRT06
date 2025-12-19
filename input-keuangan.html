@@ -328,8 +328,19 @@ async function submitForm(button){
       body: JSON.stringify(data)
     });
 
-    showCustomAlert('resultAlert',"Transaksi Berhasil Dicatat!",
-      `Data ${typeLabel} sebesar **Rp ${data.Nominal.toLocaleString('id-ID')}** telah berhasil dicatat di Google Sheet.`, true);
+    showCustomAlert(
+      'resultAlert',
+      "Transaksi Berhasil Dicatat!",
+      `
+        <div class="alert-text">
+          <div class="alert-line">Data ${typeLabel.toLowerCase()} sebesar</div>
+          <div class="alert-nominal">Rp ${data.Nominal.toLocaleString('id-ID')}</div>
+          <div class="alert-line">berhasil tercatat di Google Sheet</div>
+        </div>
+      `,
+      true
+    );
+
 
     form.reset();
     kategoriSelect.dispatchEvent(new Event('change'));
