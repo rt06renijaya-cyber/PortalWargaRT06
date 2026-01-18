@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="logo_favicon.png">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-    
+
     <style>
         /* ============================
            GAYA DASAR KONSISTEN
@@ -327,23 +328,20 @@
 
     <div class="page-header">
         <div class="breadcrumb">
-            <a href="warga06.html"><i class="fas fa-home"></i> Portal Warga</a> 
-            &gt;
-            <a href="layanan-administratif.html">Layanan Administratif</a>
-            &gt; 
-            Laporan Pindah/Datang
+            <a href="warga06.html"><i class="fas fa-home"></i> Portal Warga</a> &gt;
+            <a href="layanan-administratif.html">Layanan Administratif</a> &gt; Laporan Pindah/Datang
         </div>
-        
+
         <i class="fas fa-walking" style="font-size: 3em; margin-bottom: 15px;"></i>
         <h1>Formulir Laporan Pindah/Datang</h1>
         <p>Gunakan formulir ini untuk melaporkan kedatangan warga baru atau perpindahan warga keluar dari RT. 06.</p>
     </div>
 
     <div class="container">
-        
+
         <div class="form-card">
-            <form id="pindahDatangForm" action="#" method="POST"> 
-                
+            <form id="pindahDatangForm" action="#" method="POST">
+
                 <h2>Informasi Pelapor</h2>
                 <div class="divider" style="margin: 10px auto 20px 0; width: 60px; background-color: #007bff;"></div>
 
@@ -351,7 +349,7 @@
                     <label for="nama_pelapor">Nama Lengkap (Sesuai KTP)</label>
                     <input type="text" id="nama_pelapor" name="nama_pelapor" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="nik_pelapor">NIK Pelapor</label>
                     <input type="text" id="nik_pelapor" name="nik_pelapor" pattern="\d{16}" title="NIK harus 16 digit angka" required>
@@ -369,12 +367,10 @@
                     <label>Pilih Jenis Laporan</label>
                     <div class="radio-group">
                         <label for="laporan_datang">
-                            <input type="radio" id="laporan_datang" name="jenis_laporan" value="Kedatangan Warga Baru" required>
-                            Kedatangan Warga Baru
+                            <input type="radio" id="laporan_datang" name="jenis_laporan" value="Kedatangan Warga Baru" required> Kedatangan Warga Baru
                         </label>
                         <label for="laporan_pindah">
-                            <input type="radio" id="laporan_pindah" name="jenis_laporan" value="Kepindahan Warga Keluar">
-                            Kepindahan Warga Keluar
+                            <input type="radio" id="laporan_pindah" name="jenis_laporan" value="Kepindahan Warga Keluar"> Kepindahan Warga Keluar
                         </label>
                     </div>
                 </div>
@@ -392,17 +388,17 @@
 
                 <div class="form-group">
                     <label for="alamat_asal_tujuan">Alamat Asal (Jika Datang) / Alamat Tujuan (Jika Pindah)</label>
-                    <textarea id="alamat_asal_tujuan" name="alamat_asal_tujuan" placeholder="Contoh: Jl. Merdeka No. 12, RT. 01/RW. 05, Kel. Suka Maju, Jakarta Pusat" required></textarea>
+                    <textarea id="alamat_asal_tujuan" name="alamat_asal_tujuan" placeholder="Contoh: Jl. Natuna Raya Blok S No.1 RT.06/06 Reni Jaya" required></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="keterangan_tambahan">Keterangan Tambahan</label>
-                    <textarea id="keterangan_tambahan" name="keterangan_tambahan" placeholder="Contoh: Pindah kerja ke Surabaya, atau Datang untuk kuliah di UPN."></textarea>
+                    <textarea id="keterangan_tambahan" name="keterangan_tambahan" placeholder="Contoh: Membeli rumah Bapak Ronaldo atau Kontrak rumah Bapak Messi atau lainnya."></textarea>
                 </div>
-                
+
                 <h2>Persetujuan & Tanda Tangan Pelapor</h2>
                 <div class="divider" style="margin: 10px auto 20px 0; width: 60px; background-color: #007bff;"></div>
-                
+
                 <div class="signature-area">
                     <label>Tanda Tangan Digital Pelapor (Gunakan mouse/touch)</label>
                     <canvas id="signatureCanvas"></canvas>
@@ -412,18 +408,18 @@
                 </div>
 
                 <input type="hidden" id="signatureData" name="tanda_tangan_base64">
-                
+
                 <div class="form-group agreement">
                     <input type="checkbox" id="persetujuan" name="persetujuan" value="Ya" required style="width: auto; margin-right: 10px;">
                     <label for="persetujuan">Saya menyatakan bahwa semua informasi di atas adalah benar dan dapat dipertanggungjawabkan.</label>
                 </div>
-                
+
                 <button type="submit" class="btn-submit" id="submitButton">
                     <i class="fas fa-paper-plane"></i> Kirim Laporan
                 </button>
             </form>
         </div>
-        
+
         <div style="margin-top: 30px;">
             <a href="layanan-administratif.html" style="color: #007bff; text-decoration: none; font-weight: 600;"><i class="fas fa-arrow-left"></i> Kembali ke Pusat Layanan</a>
         </div>
@@ -439,122 +435,109 @@
             <i class="fas fa-check-circle icon-success"></i>
             <h3>Pengajuan Berhasil Dikirim!</h3>
             <p>Data Anda telah tercatat. Mohon segera lengkapi persyaratan fisik untuk melanjutkan proses validasi.</p>
-            
+
             <p style="font-weight: 600; color: #0056b3;">Langkah Selanjutnya:</p>
             <ul>
                 <li><i class="fas fa-file-pdf"></i> Serahkan **Fotokopi KTP** (1 lembar).</li>
                 <li><i class="fas fa-file-pdf"></i> Serahkan **Fotokopi Kartu Keluarga (KK)** (1 lembar).</li>
                 <li><i class="fas fa-clock"></i> Berkas diserahkan ke pengurus RT dalam waktu **1x24 jam**.</li>
             </ul>
-            
+
             <button id="closeModal" class="btn-close-modal">Selesai</button>
         </div>
     </div>
+
+    <div id="loadingOverlay" style="
+    display: none;
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+">
+        <div style="
+        background:white;
+        padding:20px 30px;
+        border-radius:10px;
+        display:flex;
+        align-items:center;
+        gap:15px;
+        font-weight:600;
+        font-size:1.2em;
+    ">
+            <i class="fas fa-spinner fa-spin"></i> Mengirim Data...
+        </div>
+    </div>
+
+
     <script>
-    // Inisialisasi Signature Pad
-    const canvas = document.getElementById('signatureCanvas');
-    
-    function resizeCanvas() {
-        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        const canvas = document.getElementById("signatureCanvas");
+        const signaturePad = new SignaturePad(canvas);
+        
+        function resizeCanvas(){
+        const ratio = window.devicePixelRatio || 1;
         canvas.width = canvas.offsetWidth * ratio;
-        canvas.height = canvas.offsetHeight * ratio;
-        canvas.getContext('2d').scale(ratio, ratio);
-        if (signaturePad) signaturePad.clear(); 
-    }
-    window.onresize = resizeCanvas;
-
-    const signaturePad = new SignaturePad(canvas, {
-        backgroundColor: 'rgb(247, 247, 247)', 
-        penColor: 'rgb(66, 133, 244)'
-    });
-    
-    document.getElementById('clearSignature').addEventListener('click', () => {
-        signaturePad.clear();
-    });
-
-    resizeCanvas(); 
-
-    // =========================================================
-    // SKRIP AJAX KE GOOGLE APPS SCRIPT
-    // =========================================================
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('pindahDatangForm');
-        const submitButton = document.getElementById('submitButton');
-        const signatureDataInput = document.getElementById('signatureData');
-        const successModal = document.getElementById('successModal');
-        const closeModalButton = document.getElementById('closeModal');
+        canvas.height = 150 * ratio;
+        canvas.getContext("2d").setTransform(ratio,0,0,ratio,0,0);
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
         
-        // **********************************************
-        // GANTI URL INI DENGAN URL WEB APP ANDA
-        // **********************************************
-        const GS_URL = 'https://script.google.com/macros/s/AKfycbyTnUs2tzEPugwHLcupRUitcS48j2rCAB2mYO4mLdEF7_3FQTn4_LehUHOTP0BlH9Z5fw/exec'; 
-
-        // Fungsi untuk menampilkan modal
-        const showModal = () => {
-            successModal.classList.add('active');
-        };
+        document.getElementById("clearSignature").onclick = ()=>signaturePad.clear();
         
-        // Fungsi untuk menyembunyikan modal
-        const hideModal = () => {
-            successModal.classList.remove('active');
-        };
-
-        // Event listener untuk tombol tutup modal
-        closeModalButton.addEventListener('click', hideModal);
-
-        form.addEventListener('submit', async (e) => {
+        const GS_URL = "https://script.google.com/macros/s/AKfycbwYPDJluSSqVSsbRrrAy0UkEQ-mXKTCuJ-D9JRnMcsGWHT2ynMitLlta369gX37Y5P5pw/exec";
+        
+        document.getElementById("pindahDatangForm").addEventListener("submit", async e=>{
             e.preventDefault();
-
-            // 1. Validasi Tanda Tangan
-            if (signaturePad.isEmpty()) {
-                alert("Mohon berikan tanda tangan digital Anda sebelum mengirim laporan.");
-                return; 
+        
+            if(signaturePad.isEmpty()){
+                alert("Tanda tangan wajib diisi");
+                return;
             }
-            
-            // Simpan data tanda tangan ke input tersembunyi
-            signatureDataInput.value = signaturePad.toDataURL("image/png"); 
-
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
-
-            const formData = new FormData(form);
-            const data = {};
-            
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-            
+        
+            document.getElementById("signatureData").value = signaturePad.toDataURL("image/png");
+        
+            // Tampilkan overlay loading
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            loadingOverlay.style.display = "flex";
+        
+            const btn = document.getElementById("submitButton");
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Mengirim...`;
+        
+            const formData = new FormData(e.target);
+        
             try {
-                const response = await fetch(GS_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    // Tampilkan Modal Sukses
-                    showModal(); 
-                    form.reset(); 
+                const res = await fetch(GS_URL,{method:"POST",body:formData});
+                const json = await res.json();
+                if(json.status==="success"){
+                    document.getElementById("successModal").classList.add("active");
+                    e.target.reset();
                     signaturePad.clear();
                 } else {
-                    alert('Gagal mengirim laporan. Pesan: ' + result.message);
+                    alert(json.message);
                 }
-
-            } catch (error) {
-                console.error('Error saat mengirim:', error);
-                alert('Terjadi kesalahan jaringan atau koneksi ke server.');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Laporan';
+            } catch(err){
+                alert("Gagal koneksi ke server");
+                console.error(err);
             }
+        
+            // Sembunyikan overlay loading
+            loadingOverlay.style.display = "none";
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fas fa-paper-plane"></i> Kirim Laporan`;
         });
-    });
-</script>
+        
+        
+        document.getElementById("closeModal").onclick=()=>{
+        document.getElementById("successModal").classList.remove("active");
+        };
+    </script>
+
 </body>
+
 </html>
