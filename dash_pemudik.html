@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Dashboard Mudik RT 06</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* =======================
+GLOBAL
+======================= */
+
+body{
+font-family:'Poppins',sans-serif;
+background:#f4f7fb;
+margin:0;
+padding:0;
+color:#333;
+}
+
+/* =======================
+HEADER
+======================= */
+
+.header{
+
+background:linear-gradient(135deg,#2c7be5,#1c4ed8);
+color:white;
+text-align:center;
+padding:30px 20px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
+
+}
+
+.logo{
+width:80px;
+border-radius:50%;
+background:white;
+padding:6px;
+box-shadow:0 4px 10px rgba(0,0,0,0.25);
+}
+
+.header h1{
+margin:10px 0 0;
+font-weight:700;
+}
+
+/* =======================
+CONTAINER
+======================= */
+
+.container{
+padding:25px;
+max-width:1200px;
+margin:auto;
+}
+
+/* =======================
+STATS
+======================= */
+
+.stats{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+margin-bottom:30px;
+
+}
+
+.card{
+
+background:white;
+padding:22px;
+border-radius:14px;
+box-shadow:0 6px 18px rgba(0,0,0,0.08);
+text-align:center;
+transition:0.3s;
+
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+.card h2{
+margin:0;
+font-size:30px;
+color:#2c7be5;
+}
+
+.card p{
+margin:6px 0 0;
+font-size:14px;
+color:#555;
+}
+
+/* =======================
+TABLE
+======================= */
+
+.table-container{
+
+background:white;
+padding:25px;
+border-radius:14px;
+box-shadow:0 6px 18px rgba(0,0,0,0.08);
+overflow-x:auto;
+
+}
+
+.table-container h3{
+margin-top:0;
+}
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+th,td{
+
+padding:12px;
+text-align:left;
+border-bottom:1px solid #eee;
+font-size:14px;
+
+}
+
+th{
+
+background:#f1f5ff;
+font-weight:600;
+
+}
+
+tr:hover{
+
+background:#f9fbff;
+
+}
+
+/* =======================
+STATUS BADGE
+======================= */
+
+.badge{
+
+padding:6px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+
+}
+
+.badge-kosong{
+
+background:#ffe5e5;
+color:#d80027;
+
+}
+
+.badge-jaga{
+
+background:#e5fff1;
+color:#00994d;
+
+}
+
+/* =======================
+LOADING
+======================= */
+
+.loading{
+
+text-align:center;
+padding:30px;
+color:#888;
+
+}
+
+/* =======================
+RESPONSIVE
+======================= */
+
+@media(max-width:768px){
+
+.container{
+padding:15px;
+}
+
+.card h2{
+font-size:26px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+<img src="assets/logo_rt06.png" class="logo">
+
+<h1>Dashboard Mudik RT 06</h1>
+
+</div>
+
+<div class="container">
+
+<div class="stats">
+
+<div class="card">
+<h2 id="totalRumah">0</h2>
+<p>Total Laporan</p>
+</div>
+
+<div class="card">
+<h2 id="rumahKosong">0</h2>
+<p>Rumah Kosong</p>
+</div>
+
+<div class="card">
+<h2 id="rumahJaga">0</h2>
+<p>Ada Penjaga</p>
+</div>
+
+</div>
+
+<div class="table-container">
+
+<h3>Daftar Warga Mudik</h3>
+
+<div id="loading" class="loading">
+Memuat data...
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Nama</th>
+<th>Alamat</th>
+<th>Pergi</th>
+<th>Kembali</th>
+<th>Status</th>
+</tr>
+
+</thead>
+
+<tbody id="dataMudik"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+const SHEET_URL="https://opensheet.elk.sh/1G3LEYkMFImS96bqJ52BXwR1yXfLF9DHALNqvsY0ZmdE/DATA_MUDIK";
+
+fetch(SHEET_URL)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+document.getElementById("loading").style.display="none";
+
+let kosong=0;
+let jaga=0;
+
+const tbody=document.getElementById("dataMudik");
+
+data.forEach(d=>{
+
+let statusClass="badge-jaga";
+let statusText="Ada Penjaga";
+
+if(d["Status Rumah"]=="Kosong"){
+
+statusClass="badge-kosong";
+statusText="Kosong";
+
+kosong++;
+
+}else{
+
+jaga++;
+
+}
+
+const row=`
+
+<tr>
+<td>${d["Nama"]}</td>
+<td>${d["Alamat"]}</td>
+<td>${d["Tanggal Pergi"]}</td>
+<td>${d["Tanggal Kembali"]}</td>
+<td>
+<span class="badge ${statusClass}">
+${statusText}
+</span>
+</td>
+</tr>
+
+`;
+
+tbody.innerHTML+=row;
+
+});
+
+document.getElementById("totalRumah").innerText=data.length;
+document.getElementById("rumahKosong").innerText=kosong;
+document.getElementById("rumahJaga").innerText=jaga;
+
+});
+
+</script>
+
+</body>
+</html>
