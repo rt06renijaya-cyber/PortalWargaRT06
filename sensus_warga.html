@@ -3,85 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Sensus Warga RT 06</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-  font-family:Poppins;
-  margin:0;
-  background:#f4f7fb;
+font-family:'Poppins',sans-serif;
+background:#f4f7fb;
+color:#333;
 }
 
+/* HEADER */
 .header{
-  background:linear-gradient(135deg,#1e88e5,#1565c0);
-  color:white;
-  text-align:center;
-  padding:40px 20px;
+background:linear-gradient(135deg,#00796B,#26A69A);
+color:white;
+padding:30px 20px;
+text-align:center;
 }
+.header h1{font-size:22px}
+.header p{font-size:14px;opacity:.9}
 
+/* CARD */
 .container{
-  max-width:800px;
-  margin:-40px auto 40px;
-  padding:0 15px;
+max-width:700px;
+margin:20px auto;
+padding:15px;
 }
 
 .card{
-  background:white;
-  border-radius:12px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,0.08);
 }
+
+/* FORM */
+.form-group{margin-bottom:15px}
+label{font-weight:600;font-size:13px;display:block;margin-bottom:5px}
 
 input,select{
-  width:100%;
-  padding:12px;
-  margin-top:8px;
-  border-radius:8px;
-  border:1px solid #ddd;
-  box-sizing:border-box;
+width:100%;
+padding:11px;
+border:1px solid #ddd;
+border-radius:6px;
+font-size:14px;
 }
 
+input:focus,select:focus{
+border-color:#00796B;
+outline:none;
+}
+
+/* GRID */
 .grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
 }
 
 @media(max-width:600px){
-  .grid{grid-template-columns:1fr;}
+.grid{grid-template-columns:1fr}
 }
 
-button{
-  width:100%;
-  padding:15px;
-  background:#1565c0;
-  color:white;
-  border:none;
-  border-radius:8px;
-  font-weight:600;
-  cursor:pointer;
+/* ANGGOTA */
+.anggota{
+border:1px solid #eee;
+padding:15px;
+border-radius:10px;
+margin-top:15px;
+background:#fafafa;
 }
 
+.anggota-title{
+font-weight:700;
+margin-bottom:10px;
+color:#00796B;
+}
+
+/* BUTTON */
+.btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:8px;
+font-weight:600;
+cursor:pointer;
+margin-top:10px;
+}
+
+.btn-primary{background:#00796B;color:white}
+.btn-add{background:#26A69A;color:white}
+.btn-remove{background:#e53935;color:white}
+
+/* MODAL */
 .modal{
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  background:rgba(0,0,0,.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.5);
+display:none;
+justify-content:center;
+align-items:center;
 }
 
-.modal.active{display:flex;}
-
-.modal-box{
-  background:white;
-  padding:30px;
-  border-radius:12px;
-  text-align:center;
+.modal-content{
+background:white;
+padding:25px;
+border-radius:12px;
+text-align:center;
+max-width:300px;
 }
 </style>
 </head>
@@ -89,125 +122,214 @@ button{
 <body>
 
 <div class="header">
-  <h1>Sensus Warga RT 06</h1>
-  <p>Berbasis Kartu Keluarga</p>
+<h1>Sensus Warga RT 06</h1>
+<p>Input data per KK (lebih cepat & praktis)</p>
 </div>
 
 <div class="container">
-
-<form id="form">
-
 <div class="card">
-<h3>Data Rumah</h3>
 
-<div class="grid">
-<input placeholder="Blok" id="blok" required>
-<input placeholder="No Rumah" id="noRumah" required>
+<!-- DATA RUMAH -->
+<div class="form-group">
+<label>Blok Rumah</label>
+<input id="blok" required>
 </div>
 
-<input placeholder="Alamat" id="alamat" required>
-<input placeholder="No KK" id="kk" required>
+<div class="form-group">
+<label>Nomor Rumah</label>
+<input id="noRumah" required>
+</div>
 
-<select id="tinggal">
-<option value="Milik">Milik</option>
-<option value="Kontrak">Kontrak</option>
-</select>
+<div class="form-group">
+<label>Alamat</label>
+<input id="alamat" required>
+</div>
 
+<div class="form-group">
+<label>Nomor KK</label>
+<input id="kkGlobal" required>
+</div>
+
+<div class="form-group">
+<label>Upload KK (1x saja)</label>
 <input type="file" id="kkFile">
-
 </div>
 
-<div class="card">
-<h3>Kepala Keluarga</h3>
+<!-- ANGGOTA -->
+<div id="anggotaContainer"></div>
 
-<input placeholder="Nama" id="nama">
-<input placeholder="NIK" id="nik">
+<button class="btn btn-add" onclick="addAnggota()">+ Tambah Anggota</button>
 
-<select id="jk">
-<option>Laki-laki</option>
-<option>Perempuan</option>
-</select>
-
-<input placeholder="No HP" id="hp">
-
-<input placeholder="Tempat Lahir" id="tempat">
-<input type="date" id="tgl">
-
-<input placeholder="Pekerjaan" id="pekerjaan">
-
-<select id="agama">
-<option>Islam</option>
-<option>Kristen</option>
-</select>
+<button class="btn btn-primary" onclick="submitData()">Kirim Data</button>
 
 </div>
-
-<button type="submit">Kirim Data</button>
-
-</form>
-
 </div>
 
-<div id="modal" class="modal">
-<div class="modal-box">
-<h2>Berhasil ✅</h2>
-<p>Data tersimpan</p>
-<button onclick="closeModal()">OK</button>
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3>✅ Data Berhasil</h3>
+<p>Data warga sudah tersimpan.</p>
+<button class="btn btn-primary" onclick="closeModal()">OK</button>
 </div>
 </div>
 
 <script>
-const URL = "ISI_URL_APPS_SCRIPT_KAMU";
 
-function toBase64(file){
- return new Promise((res)=>{
-  const reader=new FileReader();
-  reader.onload=()=>res(reader.result.split(',')[1]);
-  reader.readAsDataURL(file);
- });
+let anggotaCount = 0;
+
+function addAnggota(){
+
+anggotaCount++;
+
+const isKepala = anggotaCount === 1;
+
+const html = `
+<div class="anggota">
+<div class="anggota-title">${isKepala ? 'Kepala Keluarga' : 'Anggota ' + anggotaCount}</div>
+
+<div class="form-group">
+<label>Nama</label>
+<input class="nama">
+</div>
+
+<div class="form-group">
+<label>NIK</label>
+<input class="nik">
+</div>
+
+${isKepala ? `
+<div class="form-group">
+<label>No HP (Kepala Keluarga)</label>
+<input class="hp">
+</div>
+` : ''}
+
+<div class="grid">
+
+<select class="jk">
+<option>Laki-laki</option>
+<option>Perempuan</option>
+</select>
+
+<select class="status">
+<option>Belum Kawin</option>
+<option>Kawin</option>
+<option>Cerai</option>
+</select>
+
+<select class="agama">
+<option>Islam</option>
+<option>Kristen</option>
+<option>Katolik</option>
+<option>Hindu</option>
+<option>Buddha</option>
+<option>Konghucu</option>
+</select>
+
+<input type="text" class="tempat" placeholder="Tempat Lahir">
+<input type="date" class="tgl">
+
+<select class="pendidikan">
+<option>SD</option>
+<option>SMP</option>
+<option>SMA</option>
+<option>D3</option>
+<option>S1</option>
+</select>
+
+<select class="hubungan">
+<option>Kepala Keluarga</option>
+<option>Istri</option>
+<option>Anak</option>
+<option>Lainnya</option>
+</select>
+
+<select class="tinggal">
+<option>Milik Sendiri</option>
+<option>Kontrak</option>
+<option>Numpang</option>
+</select>
+
+</div>
+
+<div class="form-group">
+<label>Pekerjaan</label>
+<input class="pekerjaan">
+</div>
+
+<div class="form-group">
+<label>Upload KTP</label>
+<input type="file" class="ktp">
+</div>
+
+<button class="btn btn-remove" onclick="this.parentElement.remove()">Hapus</button>
+
+</div>
+`;
+
+document.getElementById('anggotaContainer').insertAdjacentHTML('beforeend', html);
 }
 
-document.getElementById("form").addEventListener("submit", async e=>{
- e.preventDefault();
+/* SUBMIT */
+function submitData(){
 
- const kkFile = document.getElementById("kkFile").files[0];
+const blok = document.getElementById('blok').value;
+const noRumah = document.getElementById('noRumah').value.padStart(3,'0');
+const alamat = document.getElementById('alamat').value;
+const kkGlobal = document.getElementById('kkGlobal').value;
+const kkFile = document.getElementById('kkFile').files[0];
 
- let kkBase64 = "";
- if(kkFile) kkBase64 = await toBase64(kkFile);
+const anggota = document.querySelectorAll('.anggota');
 
- const data = [{
-  blok:blok.value,
-  noRumah:noRumah.value,
-  alamat:alamat.value,
-  kk:kk.value,
-  nama:nama.value,
-  nik:nik.value,
-  jk:jk.value,
-  hp:hp.value,
-  tempat:tempat.value,
-  tgl:tgl.value,
-  pekerjaan:pekerjaan.value,
-  agama:agama.value,
-  hubungan:"Kepala Keluarga",
-  pendidikan:"",
-  tinggal:tinggal.value,
-  kkFile:kkBase64,
-  anggotaKe:1,
-  kkKe:1
- }];
+let data = [];
 
- await fetch(URL,{
-  method:"POST",
-  body:JSON.stringify(data)
- });
+anggota.forEach((el,i)=>{
 
- document.getElementById("modal").classList.add("active");
- form.reset();
+const get = cls => el.querySelector(cls);
+
+data.push({
+blok,
+noRumah,
+alamat,
+rt:"006",
+kkKe:1,
+anggotaKe:i+1,
+
+nama:get('.nama').value,
+nik:get('.nik').value,
+kk: kkGlobal, // ✅ pakai KK global
+hp: i===0 ? get('.hp')?.value : "",
+
+jk:get('.jk').value,
+status:get('.status').value,
+agama:get('.agama').value,
+tempat:get('.tempat').value,
+tgl:get('.tgl').value,
+pekerjaan:get('.pekerjaan').value,
+hubungan:get('.hubungan').value,
+pendidikan:get('.pendidikan').value,
+tinggal:get('.tinggal').value
 });
 
-function closeModal(){
- document.getElementById("modal").classList.remove("active");
+});
+
+fetch("YOUR_WEB_APP_URL",{
+method:"POST",
+body:JSON.stringify(data)
+})
+.then(res=>res.json())
+.then(()=>{
+document.getElementById('modal').style.display='flex';
+});
+
 }
+
+function closeModal(){
+document.getElementById('modal').style.display='none';
+location.reload();
+}
+
 </script>
 
 </body>
