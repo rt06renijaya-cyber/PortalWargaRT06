@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Dashboard RT 06</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,14 +27,13 @@ body{font-family:Poppins;background:#f5f7fb}
   box-shadow:0 8px 25px rgba(0,0,0,0.05);
 }
 
-.table thead{background:#f1f5f9}
 .table th{font-weight:600;color:#555}
 
 .action-btn{
   border:none;
   background:none;
-  cursor:pointer;
   font-size:16px;
+  cursor:pointer;
   color:#555;
 }
 .action-btn:hover{color:#0f766e}
@@ -49,26 +49,9 @@ body{font-family:Poppins;background:#f5f7fb}
   padding:12px;
   border-radius:10px;
   border:1px solid #eee;
-  position:relative;
 }
 
-.edit-icon{
-  position:absolute;
-  top:8px;
-  right:10px;
-  font-size:14px;
-  cursor:pointer;
-  color:#888;
-}
-
-.edit-icon:hover{color:#0f766e}
-
-input.inline-edit{
-  width:100%;
-  border:1px solid #ddd;
-  border-radius:6px;
-  padding:4px;
-}
+input.form-control-sm{font-size:13px}
 </style>
 </head>
 
@@ -82,7 +65,7 @@ input.inline-edit{
 <div class="container mt-4">
 <div class="card p-3">
 
-<div class="d-flex gap-2 mb-3">
+<div class="d-flex gap-2 mb-3 flex-wrap">
 <input id="search" class="form-control" placeholder="Cari..." style="max-width:250px">
 
 <select id="sort" class="form-select" style="max-width:200px">
@@ -99,23 +82,27 @@ input.inline-edit{
 </div>
 </div>
 
-<!-- DETAIL -->
+<!-- DETAIL MODAL -->
 <div class="modal fade" id="detailModal">
 <div class="modal-dialog modal-lg">
 <div class="modal-content">
+
 <div class="modal-header">
 <h5>Detail Warga</h5>
 <button class="btn-close" data-bs-dismiss="modal"></button>
 </div>
+
 <div class="modal-body" id="detailBody"></div>
+
 </div>
 </div>
 </div>
 
-<!-- DELETE -->
+<!-- DELETE MODAL -->
 <div class="modal fade" id="deleteModal">
 <div class="modal-dialog">
 <div class="modal-content text-center p-3">
+
 <h5>Hapus Data</h5>
 <p>Tunggu <b id="timer">5</b> detik</p>
 
@@ -132,24 +119,23 @@ input.inline-edit{
 
 <script>
 
-const URL = "https://script.google.com/macros/s/AKfycbx2v5mgcsoagSYbg0q3tj_k1Z5IXLEH68K9SeRmPIKgyl9LyZpkjTc_o_FNWLM_OLdj9w/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2v5mgcsoagSYbg0q3tj_k1Z5IXLEH68K9SeRmPIKgyl9LyZpkjTc_o_FNWLM_OLdj9w/exec";
 
 let dataAll=[], headers=[];
-let currentData=null;
-let editBuffer=[];
+let currentData=[], editBuffer=[];
 
-// LOAD
+// LOAD DATA
 async function load(){
-let res=await fetch(URL);
-let json=await res.json();
+const res = await fetch(WEB_APP_URL);
+const json = await res.json();
 
-headers=json.header;
-dataAll=json.data;
+headers = json.header;
+dataAll = json.data;
 
 render();
 }
 
-// TABLE
+// RENDER TABLE
 function render(){
 let s=document.getElementById("search").value.toLowerCase();
 let sort=document.getElementById("sort").value;
@@ -161,7 +147,7 @@ if(sort==="nama_desc") data.sort((a,b)=>b[3].localeCompare(a[3]));
 if(sort==="id") data.sort((a,b)=>a[0].localeCompare(b[0]));
 if(sort==="alamat") data.sort((a,b)=>a[1].localeCompare(b[1]));
 
-let html=`<table class="table">
+let html=`<table class="table table-striped">
 <thead><tr>
 <th>ID</th><th>Nama</th><th>Alamat</th><th>Aksi</th>
 </tr></thead><tbody>`;
@@ -173,8 +159,15 @@ html+=`
 <td>${r[3]}</td>
 <td>${r[1]}</td>
 <td>
-<button class="action-btn" onclick="detail(${i})"><i class="fas fa-eye"></i></button>
-<button class="action-btn" onclick="hapus('${r[0]}')"><i class="fas fa-trash"></i></button>
+
+<button class="action-btn" onclick="openDetail(${i})">
+<i class="fas fa-eye"></i>
+</button>
+
+<button class="action-btn" onclick="openDelete('${r[0]}')">
+<i class="fas fa-trash"></i>
+</button>
+
 </td>
 </tr>`;
 });
@@ -183,23 +176,34 @@ html+="</tbody></table>";
 document.getElementById("table").innerHTML=html;
 }
 
-// DETAIL
-function detail(i){
+// OPEN DETAIL
+function openDetail(i){
 currentData = [...dataAll[i]];
 editBuffer = [...currentData];
 
+renderDetail();
+new bootstrap.Modal(detailModal).show();
+}
+
+// RENDER DETAIL
+function renderDetail(){
+
 let html='<div class="detail-grid">';
 
-currentData.forEach((v,x)=>{
+editBuffer.forEach((v,i)=>{
+
 html+=`
 <div class="card-mini">
-<small>${headers[x]}</small>
 
-<div id="field-${x}">
+<small>${headers[i]}</small>
+
+<div id="field-${i}" style="margin-top:5px">
 <b>${v||"-"}</b>
 </div>
 
-<i class="fas fa-pen edit-icon" onclick="editField(${x})"></i>
+<button onclick="editField(${i})" class="btn btn-sm btn-light mt-2">
+<i class="fas fa-pen"></i>
+</button>
 
 </div>`;
 });
@@ -207,59 +211,68 @@ html+=`
 html+='</div>';
 
 document.getElementById("detailBody").innerHTML=html;
-new bootstrap.Modal(detailModal).show();
 }
 
-// EDIT MODE
-function editField(index){
-let el=document.getElementById(`field-${index}`);
-let val=editBuffer[index]||"";
+// EDIT FIELD
+function editField(i){
 
-el.innerHTML=`
-<div style="display:flex; gap:5px;">
-<input class="form-control form-control-sm" id="input-${index}" value="${val}">
-<button onclick="saveField(${index})" class="btn btn-sm btn-success">✔</button>
-<button onclick="cancelField(${index})" class="btn btn-sm btn-light">✖</button>
+const val = editBuffer[i] || "";
+
+document.getElementById(`field-${i}`).innerHTML = `
+<input id="input-${i}" class="form-control form-control-sm" value="${val}">
+<div class="d-flex gap-1 mt-1">
+<button class="btn btn-success btn-sm" onclick="saveField(${i})">✔</button>
+<button class="btn btn-light btn-sm" onclick="cancelField(${i})">✖</button>
 </div>
 `;
 }
 
 // SAVE FIELD
-async function saveField(index){
-let val=document.getElementById(`input-${index}`).value;
-editBuffer[index]=val;
+async function saveField(i){
 
-await fetch(URL,{
+const val = document.getElementById(`input-${i}`).value;
+editBuffer[i] = val;
+
+try{
+await fetch(WEB_APP_URL,{
 method:"POST",
-body:JSON.stringify({
+body: JSON.stringify({
 action:"update",
-id:editBuffer[0],
-values:editBuffer
+id: editBuffer[0],
+values: editBuffer
 })
 });
 
-load();
-document.querySelector(".modal.show").classList.remove("show");
-document.body.classList.remove("modal-open");
-document.querySelectorAll(".modal-backdrop").forEach(el=>el.remove());
+showToast("Data berhasil diupdate");
+
+await load();
+
+// refresh detail biar tetap kebuka
+currentData = [...editBuffer];
+renderDetail();
+
+}catch(e){
+showToast("Gagal update");
+}
 }
 
 // CANCEL
-function cancelField(index){
-let el=document.getElementById(`field-${index}`);
-el.innerHTML=`<b>${currentData[index]||"-"}</b>`;
+function cancelField(i){
+renderDetail();
 }
 
 // DELETE
-function hapus(id){
-let modal=new bootstrap.Modal(deleteModal);
+function openDelete(id){
+
+const modal = new bootstrap.Modal(deleteModal);
 modal.show();
 
 let t=5;
-let btn=document.getElementById("btnDelete");
+const btn=document.getElementById("btnDelete");
 btn.disabled=true;
+document.getElementById("timer").innerText=t;
 
-let interval=setInterval(()=>{
+const interval=setInterval(()=>{
 t--;
 document.getElementById("timer").innerText=t;
 
@@ -269,13 +282,39 @@ btn.disabled=false;
 }
 },1000);
 
-btn.onclick=async()=>{
-await fetch(URL,{
+btn.onclick = async ()=>{
+await fetch(WEB_APP_URL,{
 method:"POST",
-body:JSON.stringify({action:"delete",id})
+body: JSON.stringify({action:"delete",id})
 });
-location.reload();
+modal.hide();
+load();
+showToast("Data dihapus");
 };
+}
+
+// TOAST
+function showToast(msg){
+const t=document.createElement("div");
+t.innerText=msg;
+t.style=`
+position:fixed;
+bottom:20px;
+right:20px;
+background:#111;
+color:#fff;
+padding:10px 15px;
+border-radius:8px;
+z-index:9999;
+opacity:0;
+transition:.3s`;
+document.body.appendChild(t);
+
+setTimeout(()=>t.style.opacity=1,100);
+setTimeout(()=>{
+t.style.opacity=0;
+setTimeout(()=>t.remove(),300);
+},2000);
 }
 
 // EVENT
