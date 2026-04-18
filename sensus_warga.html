@@ -6,148 +6,110 @@
 <title>Sensus Warga RT 06</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
-*,
-*::before,
-*::after{
-box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
 font-family:'Poppins',sans-serif;
 margin:0;
 background:#f4f7fb;
-color:#333;
 }
 
-/* CONTAINER FIX */
-.container{
-max-width:720px;
-margin:-60px auto 40px;
-padding:0 16px;
-}
-
-/* CARD FIX */
-.card{
-background:#fff;
-border-radius:16px;
-padding:20px;
-box-shadow:0 8px 25px rgba(0,0,0,0.08);
-margin-bottom:20px;
-}
-
-/* SECTION TITLE */
-.section h3{
-margin:0 0 5px;
-font-size:18px;
-}
-.section small{
-color:#777;
-}
-
-/* GRID FIX */
-.grid{
-display:grid;
-gap:12px;
-margin-top:15px;
-}
-
-.grid-2{
-grid-template-columns:1fr 1fr;
-}
-
-@media(max-width:600px){
-.grid-2{
-grid-template-columns:1fr;
-}
-}
-
-/* INPUT FIX (INI KUNCI UTAMA) */
-input,select{
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:10px;
-font-size:14px;
-background:#fff;
-}
-
-/* FILE INPUT BIAR RAPI */
-input[type="file"]{
-padding:8px;
-}
-
-/* MEMBER CARD */
-.member{
-border:1px solid #eee;
-border-radius:12px;
-padding:15px;
-margin-top:15px;
-background:#fafafa;
-}
-
-.member h4{
-margin:0 0 12px;
-font-size:15px;
-}
-
-/* BUTTON */
-.btn{
-width:100%;
-padding:14px;
-border-radius:30px;
-border:none;
-font-weight:600;
-cursor:pointer;
-}
-
-.btn-primary{
-background:#007bff;
-color:white;
-}
-
-.btn-outline{
-background:#fff;
-border:1px dashed #ccc;
-}
-
-/* PREVIEW */
-.preview img{
-max-width:100px;
-margin-top:8px;
-border-radius:6px;
-}
-
-/* HEADER FIX BIAR ALIGN */
+/* HEADER */
 .header{
 background:linear-gradient(135deg,#0056b3,#007bff);
 color:white;
 text-align:center;
 padding:50px 20px 80px;
 }
+
+/* CONTAINER */
+.container{
+max-width:700px;
+margin:-60px auto 40px;
+padding:0 15px;
+}
+
+/* CARD */
+.card{
+background:#fff;
+padding:20px;
+border-radius:15px;
+box-shadow:0 8px 25px rgba(0,0,0,0.08);
+margin-bottom:20px;
+}
+
+/* GRID */
+.grid{display:grid;gap:12px;margin-top:10px;}
+.grid-2{grid-template-columns:1fr 1fr;}
+@media(max-width:600px){.grid-2{grid-template-columns:1fr;}}
+
+/* INPUT */
+input,select{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+}
+
+/* MEMBER */
+.member{
+border:1px solid #eee;
+padding:15px;
+border-radius:12px;
+margin-top:15px;
+background:#fafafa;
+}
+
+/* BUTTON */
+.btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:30px;
+font-weight:600;
+cursor:pointer;
+}
+
+.btn-primary{background:#007bff;color:white}
+.btn-outline{background:white;border:1px dashed #ccc}
+
+/* PREVIEW */
+.preview img{
+max-width:100px;
+margin-top:10px;
+border-radius:6px;
+}
+
+/* LOADING */
+#loading{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.6);
+justify-content:center;
+align-items:center;
+color:white;
+z-index:999;
+}
 </style>
 </head>
 
 <body>
 
-<div id="loading"><i class="fas fa-spinner fa-spin"></i> Mengirim Data...</div>
+<div id="loading">Mengirim Data...</div>
 
 <div class="header">
-<h1>Sensus Warga RT 06</h1>
+<h2>Sensus Warga RT 06</h2>
 <p>Pendataan berbasis Kartu Keluarga</p>
 </div>
 
 <div class="container">
 
-<!-- DATA RUMAH -->
 <div class="card">
-
-<div class="section">
 <h3>Data Rumah / KK</h3>
-<small>Isi data utama kartu keluarga</small>
-</div>
 
 <div class="grid grid-2">
 <input id="blok" placeholder="Blok">
@@ -161,8 +123,7 @@ padding:50px 20px 80px;
 
 <div class="grid grid-2">
 <select id="tinggal">
-<option value="">Status Tinggal</option>
-<option>Milik Sendiri</option>
+<option>Milik</option>
 <option>Kontrak</option>
 <option>Kost</option>
 </select>
@@ -173,28 +134,20 @@ padding:50px 20px 80px;
 
 </div>
 
-<!-- ANGGOTA -->
 <div class="card">
-
-<div class="section">
 <h3>Anggota Keluarga</h3>
-<small>Isi semua anggota dalam satu KK</small>
-</div>
 
 <div id="anggota"></div>
 
 <button class="btn btn-outline" onclick="addMember()">
-<i class="fas fa-plus"></i> Tambah Anggota
++ Tambah Anggota
 </button>
 
 </div>
 
-<!-- SUBMIT -->
-<button class="btn btn-primary" onclick="submitData()">
-<i class="fas fa-paper-plane"></i> Kirim Data
+<button class="btn btn-primary" type="button" onclick="submitData()">
+Kirim Data
 </button>
-
-<div class="footer">RT 06 • Sistem Pendataan Warga</div>
 
 </div>
 
@@ -205,15 +158,12 @@ const URL="https://script.google.com/macros/s/AKfycbx2v5mgcsoagSYbg0q3tj_k1Z5IXL
 function addMember(){
 let i=document.getElementById("anggota").children.length+1;
 
-let title=i===1?"Kepala Keluarga":"Anggota Keluarga "+i;
-
 let html=`
 <div class="member">
-
-<h4>${title}</h4>
+<h4>${i===1?"Kepala Keluarga":"Anggota "+i}</h4>
 
 <div class="grid">
-<input id="nama_${i}" placeholder="Nama Lengkap">
+<input id="nama_${i}" placeholder="Nama">
 <input id="nik_${i}" placeholder="NIK">
 </div>
 
@@ -222,8 +172,7 @@ let html=`
 <option>Laki-laki</option>
 <option>Perempuan</option>
 </select>
-
-${i===1?`<input id="hp_1" placeholder="No Handphone">`:""}
+${i===1?'<input id="hp_1" placeholder="No HP">':""}
 </div>
 
 <div class="grid grid-2">
@@ -241,27 +190,10 @@ ${i===1?`<input id="hp_1" placeholder="No Handphone">`:""}
 <option>Islam</option>
 <option>Kristen</option>
 <option>Katolik</option>
-<option>Hindu</option>
-<option>Buddha</option>
 </select>
 </div>
 
-<div class="grid grid-2">
 <input id="kerja_${i}" placeholder="Pekerjaan">
-
-<select id="hub_${i}">
-<option>${i===1?"Kepala Keluarga":"Anggota Keluarga"}</option>
-<option>Istri</option>
-<option>Anak</option>
-</select>
-</div>
-
-<select id="didik_${i}">
-<option>SD</option>
-<option>SMP</option>
-<option>SMA</option>
-<option>S1</option>
-</select>
 
 <input type="file" id="ktp_${i}">
 <div id="prev_${i}" class="preview"></div>
@@ -271,9 +203,10 @@ ${i===1?`<input id="hp_1" placeholder="No Handphone">`:""}
 
 document.getElementById("anggota").insertAdjacentHTML("beforeend",html);
 
-// preview KTP
+// preview
 document.getElementById(`ktp_${i}`).onchange=e=>{
 let f=e.target.files[0];
+if(!f)return;
 let r=new FileReader();
 r.onload=ev=>document.getElementById(`prev_${i}`).innerHTML=`<img src="${ev.target.result}">`;
 r.readAsDataURL(f);
@@ -283,6 +216,7 @@ r.readAsDataURL(f);
 /* PREVIEW KK */
 kkFile.onchange=e=>{
 let f=e.target.files[0];
+if(!f)return;
 let r=new FileReader();
 r.onload=ev=>kkPreview.innerHTML=`<img src="${ev.target.result}">`;
 r.readAsDataURL(f);
@@ -290,6 +224,7 @@ r.readAsDataURL(f);
 
 function toBase64(file){
 return new Promise(res=>{
+if(!file)return res(null);
 let r=new FileReader();
 r.onload=()=>res(r.result.split(',')[1]);
 r.readAsDataURL(file);
@@ -299,12 +234,14 @@ r.readAsDataURL(file);
 /* SUBMIT */
 async function submitData(){
 
-document.getElementById("loading").style.display="flex";
+let loading=document.getElementById("loading");
+loading.style.display="flex";
+
+try{
 
 let anggota=document.getElementById("anggota").children;
-
 let kk64=await toBase64(kkFile.files[0]);
-let hp=document.getElementById("hp_1").value;
+let hp=document.getElementById("hp_1")?.value || "";
 
 let data=[];
 
@@ -314,6 +251,7 @@ let idx=i+1;
 let nik=document.getElementById(`nik_${idx}`).value;
 if(nik.length!==16){
 alert("NIK harus 16 digit");
+loading.style.display="none";
 return;
 }
 
@@ -334,8 +272,6 @@ agama:document.getElementById(`agama_${idx}`).value,
 tempat:document.getElementById(`tempat_${idx}`).value,
 tgl:document.getElementById(`tgl_${idx}`).value,
 pekerjaan:document.getElementById(`kerja_${idx}`).value,
-hubungan:document.getElementById(`hub_${idx}`).value,
-pendidikan:document.getElementById(`didik_${idx}`).value,
 kkKe:1,
 anggotaKe:idx,
 ktp:ktp64,
@@ -345,11 +281,17 @@ kkFile:kk64
 
 await fetch(URL,{method:"POST",body:JSON.stringify(data)});
 
-alert("Data berhasil dikirim!");
+alert("Berhasil!");
 location.reload();
+
+}catch(err){
+alert("Error kirim data");
+console.error(err);
 }
 
-// auto tambah kepala keluarga
+loading.style.display="none";
+}
+
 window.onload=()=>addMember();
 </script>
 
