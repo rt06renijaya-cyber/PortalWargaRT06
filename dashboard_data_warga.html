@@ -3,104 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin RT 06</title>
+<title>Dashboard RT 06</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-body{
-    font-family:'Poppins';
-    background:#f4f7f6;
+body{font-family:Poppins;background:#f5f7fb}
+
+.hero{
+  background:linear-gradient(135deg,#0f766e,#134e4a);
+  color:white;
+  padding:50px 20px;
+  border-radius:0 0 30px 30px;
+  text-align:center;
 }
 
 .card{
-    border:none;
-    border-radius:15px;
-    box-shadow:0 4px 20px rgba(0,0,0,0.05);
+  border:none;
+  border-radius:15px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.05);
 }
 
-.header{
-    font-weight:700;
-    color:#00796B;
+.table thead{background:#f1f5f9}
+.table th{font-weight:600;color:#555}
+
+.action-btn{
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:16px;
+  color:#555;
+}
+.action-btn:hover{color:#0f766e}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
 }
 
-.table thead{
-    background:#00796B;
-    color:white;
-    position:sticky;
-    top:0;
+.card-mini{
+  background:#f9fafb;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #eee;
+  position:relative;
 }
 
-.btn-primary-custom{
-    background:#00796B;
-    color:white;
+.edit-icon{
+  position:absolute;
+  top:8px;
+  right:10px;
+  font-size:14px;
+  cursor:pointer;
+  color:#888;
 }
 
-.btn-primary-custom:hover{
-    background:#26A69A;
-}
+.edit-icon:hover{color:#0f766e}
 
-.modal-header{
-    background:linear-gradient(135deg,#00796B,#26A69A);
-    color:white;
+input.inline-edit{
+  width:100%;
+  border:1px solid #ddd;
+  border-radius:6px;
+  padding:4px;
 }
-
-.grid-detail{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-}
-
-.detail-card{
-    background:#f9fafb;
-    padding:15px;
-    border-radius:10px;
-    border:1px solid #e5e7eb;
-}
-
-.pagination-btn{
-    cursor:pointer;
-    margin:5px;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="container my-4">
+<div class="hero">
+  <h2>Sensus Warga RT 06</h2>
+  <p style="opacity:.8">Dashboard Data Warga</p>
+</div>
 
-<h3 class="header mb-3"><i class="fas fa-database"></i> Dashboard Warga RT 06</h3>
-
+<div class="container mt-4">
 <div class="card p-3">
 
-<div class="d-flex flex-wrap gap-2 mb-3">
-
-<input type="text" id="search" class="form-control" placeholder="Cari nama / NIK..." style="max-width:250px">
+<div class="d-flex gap-2 mb-3">
+<input id="search" class="form-control" placeholder="Cari..." style="max-width:250px">
 
 <select id="sort" class="form-select" style="max-width:200px">
-<option value="">Sort</option>
-<option value="nama">Nama A-Z</option>
-<option value="alamat">Alamat</option>
+<option value="">Urutkan</option>
+<option value="nama_asc">Nama A-Z</option>
+<option value="nama_desc">Nama Z-A</option>
 <option value="id">ID</option>
+<option value="alamat">Alamat</option>
 </select>
-
 </div>
 
-<div id="tableContainer">Loading...</div>
-
-<div class="d-flex justify-content-between mt-3">
-<button class="btn btn-secondary" onclick="prevPage()">Prev</button>
-<span id="pageInfo"></span>
-<button class="btn btn-secondary" onclick="nextPage()">Next</button>
-</div>
+<div id="table"></div>
 
 </div>
 </div>
 
-<!-- MODAL DETAIL -->
+<!-- DETAIL -->
 <div class="modal fade" id="detailModal">
 <div class="modal-dialog modal-lg">
 <div class="modal-content">
@@ -113,17 +112,18 @@ body{
 </div>
 </div>
 
-<!-- MODAL DELETE -->
+<!-- DELETE -->
 <div class="modal fade" id="deleteModal">
 <div class="modal-dialog">
-<div class="modal-content">
-<div class="modal-header bg-danger text-white">
-<h5>Konfirmasi Hapus</h5>
+<div class="modal-content text-center p-3">
+<h5>Hapus Data</h5>
+<p>Tunggu <b id="timer">5</b> detik</p>
+
+<div class="d-flex justify-content-center gap-2 mt-3">
+<button id="btnDelete" class="btn btn-dark" disabled>Hapus</button>
+<button class="btn btn-light" data-bs-dismiss="modal">Batal</button>
 </div>
-<div class="modal-body text-center">
-<p>Tunggu <span id="countdown">5</span> detik untuk konfirmasi</p>
-<button id="confirmDelete" class="btn btn-danger" disabled>Hapus</button>
-</div>
+
 </div>
 </div>
 </div>
@@ -134,141 +134,156 @@ body{
 
 const URL = "https://script.google.com/macros/s/AKfycbx2v5mgcsoagSYbg0q3tj_k1Z5IXLEH68K9SeRmPIKgyl9LyZpkjTc_o_FNWLM_OLdj9w/exec";
 
-let allData = [];
-let headers = [];
-let currentPage = 1;
-let perPage = 20;
-let deleteId = null;
+let dataAll=[], headers=[];
+let currentData=null;
+let editBuffer=[];
 
-// LOAD DATA
-async function loadData(){
-    const res = await fetch(URL);
-    const json = await res.json();
+// LOAD
+async function load(){
+let res=await fetch(URL);
+let json=await res.json();
 
-    headers = json.header;
-    allData = json.data;
+headers=json.header;
+dataAll=json.data;
 
-    renderTable();
+render();
 }
 
-function renderTable(){
+// TABLE
+function render(){
+let s=document.getElementById("search").value.toLowerCase();
+let sort=document.getElementById("sort").value;
 
-    let search = document.getElementById("search").value.toLowerCase();
+let data=dataAll.filter(r=>r.join(" ").toLowerCase().includes(s));
 
-    let filtered = allData.filter(r =>
-        r.join(" ").toLowerCase().includes(search)
-    );
+if(sort==="nama_asc") data.sort((a,b)=>a[3].localeCompare(b[3]));
+if(sort==="nama_desc") data.sort((a,b)=>b[3].localeCompare(a[3]));
+if(sort==="id") data.sort((a,b)=>a[0].localeCompare(b[0]));
+if(sort==="alamat") data.sort((a,b)=>a[1].localeCompare(b[1]));
 
-    let sort = document.getElementById("sort").value;
+let html=`<table class="table">
+<thead><tr>
+<th>ID</th><th>Nama</th><th>Alamat</th><th>Aksi</th>
+</tr></thead><tbody>`;
 
-    if(sort==="nama") filtered.sort((a,b)=>a[3].localeCompare(b[3]));
-    if(sort==="alamat") filtered.sort((a,b)=>a[1].localeCompare(b[1]));
-    if(sort==="id") filtered.sort((a,b)=>a[0].localeCompare(b[0]));
+data.forEach((r,i)=>{
+html+=`
+<tr>
+<td>${r[0]}</td>
+<td>${r[3]}</td>
+<td>${r[1]}</td>
+<td>
+<button class="action-btn" onclick="detail(${i})"><i class="fas fa-eye"></i></button>
+<button class="action-btn" onclick="hapus('${r[0]}')"><i class="fas fa-trash"></i></button>
+</td>
+</tr>`;
+});
 
-    let start = (currentPage-1)*perPage;
-    let pageData = filtered.slice(start,start+perPage);
-
-    let html = `<div class="table-responsive"><table class="table table-striped">`;
-
-    html += "<thead><tr><th>ID</th><th>Nama</th><th>NIK</th><th>Alamat</th><th>Aksi</th></tr></thead><tbody>";
-
-    pageData.forEach((row,i)=>{
-
-        html += `
-        <tr>
-        <td>${row[0]}</td>
-        <td>${row[3]}</td>
-        <td>${row[4]}</td>
-        <td>${row[1]}</td>
-        <td>
-        <button class="btn btn-sm btn-primary" onclick="showDetail(${start+i})"><i class="fas fa-eye"></i></button>
-        <button class="btn btn-sm btn-danger" onclick="openDelete('${row[0]}')"><i class="fas fa-trash"></i></button>
-        </td>
-        </tr>
-        `;
-    });
-
-    html += "</tbody></table></div>";
-
-    document.getElementById("tableContainer").innerHTML = html;
-
-    document.getElementById("pageInfo").innerText = `Page ${currentPage}`;
+html+="</tbody></table>";
+document.getElementById("table").innerHTML=html;
 }
 
-// DETAIL VIEW PREMIUM
-function showDetail(index){
+// DETAIL
+function detail(i){
+currentData = [...dataAll[i]];
+editBuffer = [...currentData];
 
-    let data = allData[index];
+let html='<div class="detail-grid">';
 
-    let html = `<div class="grid-detail">`;
+currentData.forEach((v,x)=>{
+html+=`
+<div class="card-mini">
+<small>${headers[x]}</small>
 
-    data.forEach((val,i)=>{
-        let label = headers[i] || `Field ${i+1}`;
-        let value = val || "-";
+<div id="field-${x}">
+<b>${v||"-"}</b>
+</div>
 
-        if(typeof value === "string" && value.includes("http")){
-            value = `<a href="${value}" target="_blank">Lihat File</a>`;
-        }
+<i class="fas fa-pen edit-icon" onclick="editField(${x})"></i>
 
-        html += `
-        <div class="detail-card">
-        <div style="font-size:12px;color:#6b7280">${label}</div>
-        <div style="font-weight:600">${value}</div>
-        </div>`;
-    });
+</div>`;
+});
 
-    html += "</div>";
+html+='</div>';
 
-    document.getElementById("detailBody").innerHTML = html;
-
-    new bootstrap.Modal(document.getElementById("detailModal")).show();
+document.getElementById("detailBody").innerHTML=html;
+new bootstrap.Modal(detailModal).show();
 }
 
-// DELETE SYSTEM DELAY
-function openDelete(id){
+// EDIT MODE
+function editField(index){
+let el=document.getElementById(`field-${index}`);
+let val=editBuffer[index]||"";
 
-    deleteId = id;
-    let modal = new bootstrap.Modal(document.getElementById("deleteModal"));
-    modal.show();
-
-    let count = 5;
-    let btn = document.getElementById("confirmDelete");
-
-    btn.disabled = true;
-
-    let interval = setInterval(()=>{
-        count--;
-        document.getElementById("countdown").innerText = count;
-
-        if(count===0){
-            clearInterval(interval);
-            btn.disabled = false;
-        }
-    },1000);
-
-    btn.onclick = deleteData;
+el.innerHTML=`
+<div style="display:flex; gap:5px;">
+<input class="form-control form-control-sm" id="input-${index}" value="${val}">
+<button onclick="saveField(${index})" class="btn btn-sm btn-success">✔</button>
+<button onclick="cancelField(${index})" class="btn btn-sm btn-light">✖</button>
+</div>
+`;
 }
 
-async function deleteData(){
+// SAVE FIELD
+async function saveField(index){
+let val=document.getElementById(`input-${index}`).value;
+editBuffer[index]=val;
 
-    await fetch(URL,{
-        method:"POST",
-        body:JSON.stringify({action:"delete",id:deleteId})
-    });
+await fetch(URL,{
+method:"POST",
+body:JSON.stringify({
+action:"update",
+id:editBuffer[0],
+values:editBuffer
+})
+});
 
-    location.reload();
+load();
+document.querySelector(".modal.show").classList.remove("show");
+document.body.classList.remove("modal-open");
+document.querySelectorAll(".modal-backdrop").forEach(el=>el.remove());
 }
 
-// PAGINATION
-function nextPage(){ currentPage++; renderTable(); }
-function prevPage(){ if(currentPage>1) currentPage--; renderTable(); }
+// CANCEL
+function cancelField(index){
+let el=document.getElementById(`field-${index}`);
+el.innerHTML=`<b>${currentData[index]||"-"}</b>`;
+}
+
+// DELETE
+function hapus(id){
+let modal=new bootstrap.Modal(deleteModal);
+modal.show();
+
+let t=5;
+let btn=document.getElementById("btnDelete");
+btn.disabled=true;
+
+let interval=setInterval(()=>{
+t--;
+document.getElementById("timer").innerText=t;
+
+if(t===0){
+clearInterval(interval);
+btn.disabled=false;
+}
+},1000);
+
+btn.onclick=async()=>{
+await fetch(URL,{
+method:"POST",
+body:JSON.stringify({action:"delete",id})
+});
+location.reload();
+};
+}
 
 // EVENT
-document.getElementById("search").addEventListener("input",()=>{currentPage=1;renderTable();});
-document.getElementById("sort").addEventListener("change",renderTable);
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("sort").addEventListener("change",render);
 
 // INIT
-loadData();
+load();
 
 </script>
 
