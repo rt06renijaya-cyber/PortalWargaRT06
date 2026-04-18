@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sensus Warga RT 06</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*,
+*::before,
+*::after{
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+margin:0;
+background:#f4f7fb;
+color:#333;
+}
+
+/* CONTAINER FIX */
+.container{
+max-width:720px;
+margin:-60px auto 40px;
+padding:0 16px;
+}
+
+/* CARD FIX */
+.card{
+background:#fff;
+border-radius:16px;
+padding:20px;
+box-shadow:0 8px 25px rgba(0,0,0,0.08);
+margin-bottom:20px;
+}
+
+/* SECTION TITLE */
+.section h3{
+margin:0 0 5px;
+font-size:18px;
+}
+.section small{
+color:#777;
+}
+
+/* GRID FIX */
+.grid{
+display:grid;
+gap:12px;
+margin-top:15px;
+}
+
+.grid-2{
+grid-template-columns:1fr 1fr;
+}
+
+@media(max-width:600px){
+.grid-2{
+grid-template-columns:1fr;
+}
+}
+
+/* INPUT FIX (INI KUNCI UTAMA) */
+input,select{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+font-size:14px;
+background:#fff;
+}
+
+/* FILE INPUT BIAR RAPI */
+input[type="file"]{
+padding:8px;
+}
+
+/* MEMBER CARD */
+.member{
+border:1px solid #eee;
+border-radius:12px;
+padding:15px;
+margin-top:15px;
+background:#fafafa;
+}
+
+.member h4{
+margin:0 0 12px;
+font-size:15px;
+}
+
+/* BUTTON */
+.btn{
+width:100%;
+padding:14px;
+border-radius:30px;
+border:none;
+font-weight:600;
+cursor:pointer;
+}
+
+.btn-primary{
+background:#007bff;
+color:white;
+}
+
+.btn-outline{
+background:#fff;
+border:1px dashed #ccc;
+}
+
+/* PREVIEW */
+.preview img{
+max-width:100px;
+margin-top:8px;
+border-radius:6px;
+}
+
+/* HEADER FIX BIAR ALIGN */
+.header{
+background:linear-gradient(135deg,#0056b3,#007bff);
+color:white;
+text-align:center;
+padding:50px 20px 80px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="loading"><i class="fas fa-spinner fa-spin"></i> Mengirim Data...</div>
+
+<div class="header">
+<h1>Sensus Warga RT 06</h1>
+<p>Pendataan berbasis Kartu Keluarga</p>
+</div>
+
+<div class="container">
+
+<!-- DATA RUMAH -->
+<div class="card">
+
+<div class="section">
+<h3>Data Rumah / KK</h3>
+<small>Isi data utama kartu keluarga</small>
+</div>
+
+<div class="grid grid-2">
+<input id="blok" placeholder="Blok">
+<input id="noRumah" placeholder="No Rumah">
+</div>
+
+<div class="grid">
+<input id="alamat" placeholder="Alamat Lengkap">
+<input id="kk" placeholder="Nomor KK">
+</div>
+
+<div class="grid grid-2">
+<select id="tinggal">
+<option value="">Status Tinggal</option>
+<option>Milik Sendiri</option>
+<option>Kontrak</option>
+<option>Kost</option>
+</select>
+<input type="file" id="kkFile">
+</div>
+
+<div id="kkPreview" class="preview"></div>
+
+</div>
+
+<!-- ANGGOTA -->
+<div class="card">
+
+<div class="section">
+<h3>Anggota Keluarga</h3>
+<small>Isi semua anggota dalam satu KK</small>
+</div>
+
+<div id="anggota"></div>
+
+<button class="btn btn-outline" onclick="addMember()">
+<i class="fas fa-plus"></i> Tambah Anggota
+</button>
+
+</div>
+
+<!-- SUBMIT -->
+<button class="btn btn-primary" onclick="submitData()">
+<i class="fas fa-paper-plane"></i> Kirim Data
+</button>
+
+<div class="footer">RT 06 • Sistem Pendataan Warga</div>
+
+</div>
+
+<script>
+const URL="https://script.google.com/macros/s/AKfycbx2v5mgcsoagSYbg0q3tj_k1Z5IXLEH68K9SeRmPIKgyl9LyZpkjTc_o_FNWLM_OLdj9w/exec";
+
+/* TAMBAH ANGGOTA */
+function addMember(){
+let i=document.getElementById("anggota").children.length+1;
+
+let title=i===1?"Kepala Keluarga":"Anggota Keluarga "+i;
+
+let html=`
+<div class="member">
+
+<h4>${title}</h4>
+
+<div class="grid">
+<input id="nama_${i}" placeholder="Nama Lengkap">
+<input id="nik_${i}" placeholder="NIK">
+</div>
+
+<div class="grid grid-2">
+<select id="jk_${i}">
+<option>Laki-laki</option>
+<option>Perempuan</option>
+</select>
+
+${i===1?`<input id="hp_1" placeholder="No Handphone">`:""}
+</div>
+
+<div class="grid grid-2">
+<input id="tempat_${i}" placeholder="Tempat Lahir">
+<input type="date" id="tgl_${i}">
+</div>
+
+<div class="grid grid-2">
+<select id="status_${i}">
+<option>Belum Kawin</option>
+<option>Kawin</option>
+</select>
+
+<select id="agama_${i}">
+<option>Islam</option>
+<option>Kristen</option>
+<option>Katolik</option>
+<option>Hindu</option>
+<option>Buddha</option>
+</select>
+</div>
+
+<div class="grid grid-2">
+<input id="kerja_${i}" placeholder="Pekerjaan">
+
+<select id="hub_${i}">
+<option>${i===1?"Kepala Keluarga":"Anggota Keluarga"}</option>
+<option>Istri</option>
+<option>Anak</option>
+</select>
+</div>
+
+<select id="didik_${i}">
+<option>SD</option>
+<option>SMP</option>
+<option>SMA</option>
+<option>S1</option>
+</select>
+
+<input type="file" id="ktp_${i}">
+<div id="prev_${i}" class="preview"></div>
+
+</div>
+`;
+
+document.getElementById("anggota").insertAdjacentHTML("beforeend",html);
+
+// preview KTP
+document.getElementById(`ktp_${i}`).onchange=e=>{
+let f=e.target.files[0];
+let r=new FileReader();
+r.onload=ev=>document.getElementById(`prev_${i}`).innerHTML=`<img src="${ev.target.result}">`;
+r.readAsDataURL(f);
+};
+}
+
+/* PREVIEW KK */
+kkFile.onchange=e=>{
+let f=e.target.files[0];
+let r=new FileReader();
+r.onload=ev=>kkPreview.innerHTML=`<img src="${ev.target.result}">`;
+r.readAsDataURL(f);
+};
+
+function toBase64(file){
+return new Promise(res=>{
+let r=new FileReader();
+r.onload=()=>res(r.result.split(',')[1]);
+r.readAsDataURL(file);
+});
+}
+
+/* SUBMIT */
+async function submitData(){
+
+document.getElementById("loading").style.display="flex";
+
+let anggota=document.getElementById("anggota").children;
+
+let kk64=await toBase64(kkFile.files[0]);
+let hp=document.getElementById("hp_1").value;
+
+let data=[];
+
+for(let i=0;i<anggota.length;i++){
+let idx=i+1;
+
+let nik=document.getElementById(`nik_${idx}`).value;
+if(nik.length!==16){
+alert("NIK harus 16 digit");
+return;
+}
+
+let ktp64=await toBase64(document.getElementById(`ktp_${idx}`).files[0]);
+
+data.push({
+alamat:alamat.value,
+blok:blok.value,
+noRumah:noRumah.value,
+kk:kk.value,
+hp:hp,
+tinggal:tinggal.value,
+nama:document.getElementById(`nama_${idx}`).value,
+nik:nik,
+jk:document.getElementById(`jk_${idx}`).value,
+status:document.getElementById(`status_${idx}`).value,
+agama:document.getElementById(`agama_${idx}`).value,
+tempat:document.getElementById(`tempat_${idx}`).value,
+tgl:document.getElementById(`tgl_${idx}`).value,
+pekerjaan:document.getElementById(`kerja_${idx}`).value,
+hubungan:document.getElementById(`hub_${idx}`).value,
+pendidikan:document.getElementById(`didik_${idx}`).value,
+kkKe:1,
+anggotaKe:idx,
+ktp:ktp64,
+kkFile:kk64
+});
+}
+
+await fetch(URL,{method:"POST",body:JSON.stringify(data)});
+
+alert("Data berhasil dikirim!");
+location.reload();
+}
+
+// auto tambah kepala keluarga
+window.onload=()=>addMember();
+</script>
+
+</body>
+</html>
