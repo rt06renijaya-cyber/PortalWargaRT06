@@ -9,112 +9,69 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-font-family:'Poppins',sans-serif;
-background:#f4f7fb;
-color:#333;
-}
+body{font-family:Poppins;background:#f4f7fb;margin:0}
 
 /* HEADER */
 .header{
 background:linear-gradient(135deg,#00796B,#26A69A);
-color:white;
-padding:30px 20px;
-text-align:center;
+color:white;padding:30px;text-align:center;
 }
-.header h1{font-size:22px}
-.header p{font-size:14px;opacity:.9}
 
 /* CARD */
-.container{
-max-width:700px;
-margin:20px auto;
-padding:15px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 5px 20px rgba(0,0,0,0.08);
-}
+.container{max-width:700px;margin:auto;padding:15px}
+.card{background:white;padding:20px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,.08)}
 
 /* FORM */
-.form-group{margin-bottom:15px}
-label{font-weight:600;font-size:13px;display:block;margin-bottom:5px}
-
+label{font-size:13px;font-weight:600}
 input,select{
-width:100%;
-padding:11px;
-border:1px solid #ddd;
-border-radius:6px;
-font-size:14px;
+width:100%;padding:11px;margin-top:5px;margin-bottom:12px;
+border:1px solid #ddd;border-radius:6px
 }
 
-input:focus,select:focus{
-border-color:#00796B;
-outline:none;
-}
-
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-@media(max-width:600px){
-.grid{grid-template-columns:1fr}
-}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
 
 /* ANGGOTA */
 .anggota{
-border:1px solid #eee;
-padding:15px;
-border-radius:10px;
-margin-top:15px;
-background:#fafafa;
-}
-
-.anggota-title{
-font-weight:700;
-margin-bottom:10px;
-color:#00796B;
+background:#fafafa;padding:15px;border-radius:10px;margin-top:15px
 }
 
 /* BUTTON */
-.btn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:8px;
-font-weight:600;
-cursor:pointer;
-margin-top:10px;
+button{
+width:100%;padding:14px;border:none;border-radius:8px;
+margin-top:10px;font-weight:600;cursor:pointer
 }
-
-.btn-primary{background:#00796B;color:white}
 .btn-add{background:#26A69A;color:white}
-.btn-remove{background:#e53935;color:white}
+.btn-submit{background:#00796B;color:white}
+
+/* PREVIEW */
+.preview{
+margin-top:5px;
+text-align:center;
+}
+.preview img{
+max-width:100%;
+max-height:120px;
+border-radius:6px;
+margin-top:5px;
+}
 
 /* MODAL */
 .modal{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.5);
-display:none;
-justify-content:center;
-align-items:center;
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,.6);
+display:none;justify-content:center;align-items:center
+}
+.modal-box{
+background:white;padding:25px;border-radius:12px;text-align:center
 }
 
-.modal-content{
-background:white;
-padding:25px;
-border-radius:12px;
-text-align:center;
-max-width:300px;
+/* LOADING */
+.loading{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,.6);
+display:none;justify-content:center;align-items:center;
+color:white;font-size:18px;font-weight:600
 }
 </style>
 </head>
@@ -122,171 +79,130 @@ max-width:300px;
 <body>
 
 <div class="header">
-<h1>Sensus Warga RT 06</h1>
-<p>Input data per KK (lebih cepat & praktis)</p>
+<h2>Sensus Warga RT 06</h2>
+<p>Input data per KK</p>
 </div>
 
 <div class="container">
 <div class="card">
 
-<!-- DATA RUMAH -->
-<div class="form-group">
-<label>Blok Rumah</label>
-<input id="blok" required>
-</div>
+<input id="blok" placeholder="Blok Rumah">
+<input id="noRumah" placeholder="Nomor Rumah">
+<input id="alamat" placeholder="Alamat">
+<input id="kkGlobal" placeholder="Nomor KK">
 
-<div class="form-group">
-<label>Nomor Rumah</label>
-<input id="noRumah" required>
-</div>
+<label>Upload KK</label>
+<input type="file" id="kkFile" onchange="previewFile(this,'previewKK')">
+<div class="preview" id="previewKK"></div>
 
-<div class="form-group">
-<label>Alamat</label>
-<input id="alamat" required>
-</div>
+<div id="anggota"></div>
 
-<div class="form-group">
-<label>Nomor KK</label>
-<input id="kkGlobal" required>
-</div>
-
-<div class="form-group">
-<label>Upload KK (1x saja)</label>
-<input type="file" id="kkFile">
-</div>
-
-<!-- ANGGOTA -->
-<div id="anggotaContainer"></div>
-
-<button class="btn btn-add" onclick="addAnggota()">+ Tambah Anggota</button>
-
-<button class="btn btn-primary" onclick="submitData()">Kirim Data</button>
+<button class="btn-add" onclick="add()">+ Tambah Anggota</button>
+<button class="btn-submit" onclick="submitData()">Kirim Data</button>
 
 </div>
 </div>
 
 <!-- MODAL -->
 <div class="modal" id="modal">
-<div class="modal-content">
-<h3>✅ Data Berhasil</h3>
-<p>Data warga sudah tersimpan.</p>
-<button class="btn btn-primary" onclick="closeModal()">OK</button>
+<div class="modal-box">
+<h3>✅ Berhasil</h3>
+<p>Data berhasil disimpan</p>
+<button onclick="location.reload()">OK</button>
 </div>
 </div>
+
+<!-- LOADING -->
+<div class="loading" id="loading">Mengirim data...</div>
 
 <script>
 
-let anggotaCount = 0;
+let count=0;
 
-function addAnggota(){
-
-anggotaCount++;
-
-const isKepala = anggotaCount === 1;
-
-const html = `
+function add(){
+count++;
+let html=`
 <div class="anggota">
-<div class="anggota-title">${isKepala ? 'Kepala Keluarga' : 'Anggota ' + anggotaCount}</div>
 
-<div class="form-group">
-<label>Nama</label>
-<input class="nama">
-</div>
+<b>${count==1?'Kepala Keluarga':'Anggota '+count}</b>
 
-<div class="form-group">
-<label>NIK</label>
-<input class="nik">
-</div>
+<input class="nama" placeholder="Nama">
+<input class="nik" placeholder="NIK">
 
-${isKepala ? `
-<div class="form-group">
-<label>No HP (Kepala Keluarga)</label>
-<input class="hp">
-</div>
-` : ''}
+${count==1?'<input class="hp" placeholder="No HP">':''}
 
 <div class="grid">
-
-<select class="jk">
-<option>Laki-laki</option>
-<option>Perempuan</option>
-</select>
-
-<select class="status">
-<option>Belum Kawin</option>
-<option>Kawin</option>
-<option>Cerai</option>
-</select>
-
-<select class="agama">
-<option>Islam</option>
-<option>Kristen</option>
-<option>Katolik</option>
-<option>Hindu</option>
-<option>Buddha</option>
-<option>Konghucu</option>
-</select>
-
-<input type="text" class="tempat" placeholder="Tempat Lahir">
+<select class="jk"><option>Laki-laki</option><option>Perempuan</option></select>
+<select class="status"><option>Kawin</option><option>Belum Kawin</option></select>
+<select class="agama"><option>Islam</option><option>Kristen</option></select>
+<input class="tempat" placeholder="Tempat Lahir">
 <input type="date" class="tgl">
-
-<select class="pendidikan">
-<option>SD</option>
-<option>SMP</option>
-<option>SMA</option>
-<option>D3</option>
-<option>S1</option>
-</select>
-
-<select class="hubungan">
-<option>Kepala Keluarga</option>
-<option>Istri</option>
-<option>Anak</option>
-<option>Lainnya</option>
-</select>
-
-<select class="tinggal">
-<option>Milik Sendiri</option>
-<option>Kontrak</option>
-<option>Numpang</option>
-</select>
-
+<select class="pendidikan"><option>SMA</option><option>S1</option></select>
+<select class="hubungan"><option>Kepala</option><option>Anak</option></select>
+<select class="tinggal"><option>Milik</option><option>Kontrak</option></select>
 </div>
 
-<div class="form-group">
-<label>Pekerjaan</label>
-<input class="pekerjaan">
-</div>
+<input class="pekerjaan" placeholder="Pekerjaan">
 
-<div class="form-group">
-<label>Upload KTP</label>
-<input type="file" class="ktp">
-</div>
+<label>KTP</label>
+<input type="file" class="ktp" onchange="previewFile(this,this.nextElementSibling)">
+<div class="preview"></div>
 
-<button class="btn btn-remove" onclick="this.parentElement.remove()">Hapus</button>
+</div>`;
+document.getElementById('anggota').insertAdjacentHTML('beforeend',html);
+}
 
-</div>
-`;
+/* PREVIEW */
+function previewFile(input,target){
+let file=input.files[0];
+if(!file)return;
 
-document.getElementById('anggotaContainer').insertAdjacentHTML('beforeend', html);
+let reader=new FileReader();
+reader.onload=e=>{
+if(typeof target==="string"){
+document.getElementById(target).innerHTML=`<img src="${e.target.result}">`;
+}else{
+target.innerHTML=`<img src="${e.target.result}">`;
+}
+}
+reader.readAsDataURL(file);
+}
+
+/* BASE64 */
+function toBase64(file){
+return new Promise((res)=>{
+let r=new FileReader();
+r.onload=()=>res(r.result.split(',')[1]);
+r.readAsDataURL(file);
+});
 }
 
 /* SUBMIT */
-function submitData(){
+async function submitData(){
 
-const blok = document.getElementById('blok').value;
-const noRumah = document.getElementById('noRumah').value.padStart(3,'0');
-const alamat = document.getElementById('alamat').value;
-const kkGlobal = document.getElementById('kkGlobal').value;
-const kkFile = document.getElementById('kkFile').files[0];
+let loading=document.getElementById('loading');
+loading.style.display='flex';
 
-const anggota = document.querySelectorAll('.anggota');
+try{
 
-let data = [];
+let blok=document.getElementById('blok').value;
+let noRumah=document.getElementById('noRumah').value.padStart(3,'0');
+let alamat=document.getElementById('alamat').value;
+let kk=document.getElementById('kkGlobal').value;
 
-anggota.forEach((el,i)=>{
+let kkFile=document.getElementById('kkFile').files[0];
+let kkBase64=kkFile?await toBase64(kkFile):"";
 
-const get = cls => el.querySelector(cls);
+let anggota=document.querySelectorAll('.anggota');
+
+let data=[];
+
+for(let i=0;i<anggota.length;i++){
+
+let el=anggota[i];
+
+let ktpFile=el.querySelector('.ktp').files[0];
+let ktpBase64=ktpFile?await toBase64(ktpFile):"";
 
 data.push({
 blok,
@@ -296,38 +212,44 @@ rt:"006",
 kkKe:1,
 anggotaKe:i+1,
 
-nama:get('.nama').value,
-nik:get('.nik').value,
-kk: kkGlobal, // ✅ pakai KK global
-hp: i===0 ? get('.hp')?.value : "",
+nama:el.querySelector('.nama').value,
+nik:el.querySelector('.nik').value,
+kk:kk,
+hp:i==0?el.querySelector('.hp')?.value:"",
 
-jk:get('.jk').value,
-status:get('.status').value,
-agama:get('.agama').value,
-tempat:get('.tempat').value,
-tgl:get('.tgl').value,
-pekerjaan:get('.pekerjaan').value,
-hubungan:get('.hubungan').value,
-pendidikan:get('.pendidikan').value,
-tinggal:get('.tinggal').value
+jk:el.querySelector('.jk').value,
+status:el.querySelector('.status').value,
+agama:el.querySelector('.agama').value,
+tempat:el.querySelector('.tempat').value,
+tgl:el.querySelector('.tgl').value,
+pekerjaan:el.querySelector('.pekerjaan').value,
+hubungan:el.querySelector('.hubungan').value,
+pendidikan:el.querySelector('.pendidikan').value,
+tinggal:el.querySelector('.tinggal').value,
+
+ktp:ktpBase64,
+kkFile:kkBase64
 });
-
-});
-
-fetch("YOUR_WEB_APP_URL",{
-method:"POST",
-body:JSON.stringify(data)
-})
-.then(res=>res.json())
-.then(()=>{
-document.getElementById('modal').style.display='flex';
-});
-
 }
 
-function closeModal(){
-document.getElementById('modal').style.display='none';
-location.reload();
+let res=await fetch("https://script.google.com/macros/s/AKfycbx2v5mgcsoagSYbg0q3tj_k1Z5IXLEH68K9SeRmPIKgyl9LyZpkjTc_o_FNWLM_OLdj9w/exec",{
+method:"POST",
+body:JSON.stringify(data)
+});
+
+let json=await res.json();
+
+if(json.status==="success"){
+document.getElementById('modal').style.display='flex';
+}else{
+alert("Error: "+json.message);
+}
+
+}catch(err){
+alert("Gagal kirim: "+err);
+}
+
+loading.style.display='none';
 }
 
 </script>
