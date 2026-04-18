@@ -8,291 +8,206 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box}
-
 body{
-font-family:'Poppins',sans-serif;
-margin:0;
-background:#f4f7fb;
+  font-family:Poppins;
+  margin:0;
+  background:#f4f7fb;
 }
 
-/* HEADER */
 .header{
-background:linear-gradient(135deg,#0056b3,#007bff);
-color:white;
-text-align:center;
-padding:50px 20px 80px;
+  background:linear-gradient(135deg,#1e88e5,#1565c0);
+  color:white;
+  text-align:center;
+  padding:40px 20px;
 }
 
-/* CONTAINER */
 .container{
-max-width:700px;
-margin:-60px auto 40px;
-padding:0 15px;
+  max-width:800px;
+  margin:-40px auto 40px;
+  padding:0 15px;
 }
 
-/* CARD */
 .card{
-background:#fff;
-padding:20px;
-border-radius:15px;
-box-shadow:0 8px 25px rgba(0,0,0,0.08);
-margin-bottom:20px;
+  background:white;
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
-/* GRID */
-.grid{display:grid;gap:12px;margin-top:10px;}
-.grid-2{grid-template-columns:1fr 1fr;}
-@media(max-width:600px){.grid-2{grid-template-columns:1fr;}}
-
-/* INPUT */
 input,select{
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:10px;
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  box-sizing:border-box;
 }
 
-/* MEMBER */
-.member{
-border:1px solid #eee;
-padding:15px;
-border-radius:12px;
-margin-top:15px;
-background:#fafafa;
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
-/* BUTTON */
-.btn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:30px;
-font-weight:600;
-cursor:pointer;
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr;}
 }
 
-.btn-primary{background:#007bff;color:white}
-.btn-outline{background:white;border:1px dashed #ccc}
-
-/* PREVIEW */
-.preview img{
-max-width:100px;
-margin-top:10px;
-border-radius:6px;
+button{
+  width:100%;
+  padding:15px;
+  background:#1565c0;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
 }
 
-/* LOADING */
-#loading{
-display:none;
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.6);
-justify-content:center;
-align-items:center;
-color:white;
-z-index:999;
+.modal{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal.active{display:flex;}
+
+.modal-box{
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  text-align:center;
 }
 </style>
 </head>
 
 <body>
 
-<div id="loading">Mengirim Data...</div>
-
 <div class="header">
-<h2>Sensus Warga RT 06</h2>
-<p>Pendataan berbasis Kartu Keluarga</p>
+  <h1>Sensus Warga RT 06</h1>
+  <p>Berbasis Kartu Keluarga</p>
 </div>
 
 <div class="container">
 
-<div class="card">
-<h3>Data Rumah / KK</h3>
+<form id="form">
 
-<div class="grid grid-2">
-<input id="blok" placeholder="Blok">
-<input id="noRumah" placeholder="No Rumah">
-</div>
+<div class="card">
+<h3>Data Rumah</h3>
 
 <div class="grid">
-<input id="alamat" placeholder="Alamat Lengkap">
-<input id="kk" placeholder="Nomor KK">
+<input placeholder="Blok" id="blok" required>
+<input placeholder="No Rumah" id="noRumah" required>
 </div>
 
-<div class="grid grid-2">
+<input placeholder="Alamat" id="alamat" required>
+<input placeholder="No KK" id="kk" required>
+
 <select id="tinggal">
-<option>Milik</option>
-<option>Kontrak</option>
-<option>Kost</option>
+<option value="Milik">Milik</option>
+<option value="Kontrak">Kontrak</option>
 </select>
-<input type="file" id="kkFile">
-</div>
 
-<div id="kkPreview" class="preview"></div>
+<input type="file" id="kkFile">
 
 </div>
 
 <div class="card">
-<h3>Anggota Keluarga</h3>
+<h3>Kepala Keluarga</h3>
 
-<div id="anggota"></div>
+<input placeholder="Nama" id="nama">
+<input placeholder="NIK" id="nik">
 
-<button class="btn btn-outline" onclick="addMember()">
-+ Tambah Anggota
-</button>
-
-</div>
-
-<button class="btn btn-primary" type="button" onclick="submitData()">
-Kirim Data
-</button>
-
-</div>
-
-<script>
-const URL="https://script.google.com/macros/s/AKfycbx2v5mgcsoagSYbg0q3tj_k1Z5IXLEH68K9SeRmPIKgyl9LyZpkjTc_o_FNWLM_OLdj9w/exec";
-
-/* TAMBAH ANGGOTA */
-function addMember(){
-let i=document.getElementById("anggota").children.length+1;
-
-let html=`
-<div class="member">
-<h4>${i===1?"Kepala Keluarga":"Anggota "+i}</h4>
-
-<div class="grid">
-<input id="nama_${i}" placeholder="Nama">
-<input id="nik_${i}" placeholder="NIK">
-</div>
-
-<div class="grid grid-2">
-<select id="jk_${i}">
+<select id="jk">
 <option>Laki-laki</option>
 <option>Perempuan</option>
 </select>
-${i===1?'<input id="hp_1" placeholder="No HP">':""}
-</div>
 
-<div class="grid grid-2">
-<input id="tempat_${i}" placeholder="Tempat Lahir">
-<input type="date" id="tgl_${i}">
-</div>
+<input placeholder="No HP" id="hp">
 
-<div class="grid grid-2">
-<select id="status_${i}">
-<option>Belum Kawin</option>
-<option>Kawin</option>
-</select>
+<input placeholder="Tempat Lahir" id="tempat">
+<input type="date" id="tgl">
 
-<select id="agama_${i}">
+<input placeholder="Pekerjaan" id="pekerjaan">
+
+<select id="agama">
 <option>Islam</option>
 <option>Kristen</option>
-<option>Katolik</option>
 </select>
-</div>
-
-<input id="kerja_${i}" placeholder="Pekerjaan">
-
-<input type="file" id="ktp_${i}">
-<div id="prev_${i}" class="preview"></div>
 
 </div>
-`;
 
-document.getElementById("anggota").insertAdjacentHTML("beforeend",html);
+<button type="submit">Kirim Data</button>
 
-// preview
-document.getElementById(`ktp_${i}`).onchange=e=>{
-let f=e.target.files[0];
-if(!f)return;
-let r=new FileReader();
-r.onload=ev=>document.getElementById(`prev_${i}`).innerHTML=`<img src="${ev.target.result}">`;
-r.readAsDataURL(f);
-};
-}
+</form>
 
-/* PREVIEW KK */
-kkFile.onchange=e=>{
-let f=e.target.files[0];
-if(!f)return;
-let r=new FileReader();
-r.onload=ev=>kkPreview.innerHTML=`<img src="${ev.target.result}">`;
-r.readAsDataURL(f);
-};
+</div>
+
+<div id="modal" class="modal">
+<div class="modal-box">
+<h2>Berhasil ✅</h2>
+<p>Data tersimpan</p>
+<button onclick="closeModal()">OK</button>
+</div>
+</div>
+
+<script>
+const URL = "ISI_URL_APPS_SCRIPT_KAMU";
 
 function toBase64(file){
-return new Promise(res=>{
-if(!file)return res(null);
-let r=new FileReader();
-r.onload=()=>res(r.result.split(',')[1]);
-r.readAsDataURL(file);
+ return new Promise((res)=>{
+  const reader=new FileReader();
+  reader.onload=()=>res(reader.result.split(',')[1]);
+  reader.readAsDataURL(file);
+ });
+}
+
+document.getElementById("form").addEventListener("submit", async e=>{
+ e.preventDefault();
+
+ const kkFile = document.getElementById("kkFile").files[0];
+
+ let kkBase64 = "";
+ if(kkFile) kkBase64 = await toBase64(kkFile);
+
+ const data = [{
+  blok:blok.value,
+  noRumah:noRumah.value,
+  alamat:alamat.value,
+  kk:kk.value,
+  nama:nama.value,
+  nik:nik.value,
+  jk:jk.value,
+  hp:hp.value,
+  tempat:tempat.value,
+  tgl:tgl.value,
+  pekerjaan:pekerjaan.value,
+  agama:agama.value,
+  hubungan:"Kepala Keluarga",
+  pendidikan:"",
+  tinggal:tinggal.value,
+  kkFile:kkBase64,
+  anggotaKe:1,
+  kkKe:1
+ }];
+
+ await fetch(URL,{
+  method:"POST",
+  body:JSON.stringify(data)
+ });
+
+ document.getElementById("modal").classList.add("active");
+ form.reset();
 });
+
+function closeModal(){
+ document.getElementById("modal").classList.remove("active");
 }
-
-/* SUBMIT */
-async function submitData(){
-
-let loading=document.getElementById("loading");
-loading.style.display="flex";
-
-try{
-
-let anggota=document.getElementById("anggota").children;
-let kk64=await toBase64(kkFile.files[0]);
-let hp=document.getElementById("hp_1")?.value || "";
-
-let data=[];
-
-for(let i=0;i<anggota.length;i++){
-let idx=i+1;
-
-let nik=document.getElementById(`nik_${idx}`).value;
-if(nik.length!==16){
-alert("NIK harus 16 digit");
-loading.style.display="none";
-return;
-}
-
-let ktp64=await toBase64(document.getElementById(`ktp_${idx}`).files[0]);
-
-data.push({
-alamat:alamat.value,
-blok:blok.value,
-noRumah:noRumah.value,
-kk:kk.value,
-hp:hp,
-tinggal:tinggal.value,
-nama:document.getElementById(`nama_${idx}`).value,
-nik:nik,
-jk:document.getElementById(`jk_${idx}`).value,
-status:document.getElementById(`status_${idx}`).value,
-agama:document.getElementById(`agama_${idx}`).value,
-tempat:document.getElementById(`tempat_${idx}`).value,
-tgl:document.getElementById(`tgl_${idx}`).value,
-pekerjaan:document.getElementById(`kerja_${idx}`).value,
-kkKe:1,
-anggotaKe:idx,
-ktp:ktp64,
-kkFile:kk64
-});
-}
-
-await fetch(URL,{method:"POST",body:JSON.stringify(data)});
-
-alert("Berhasil!");
-location.reload();
-
-}catch(err){
-alert("Error kirim data");
-console.error(err);
-}
-
-loading.style.display="none";
-}
-
-window.onload=()=>addMember();
 </script>
 
 </body>
