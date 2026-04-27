@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approval Ketua PKK</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+.header{
+  background:linear-gradient(135deg,#064e3b,#0f766e);
+  color:white;
+  text-align:center;
+  padding:30px;
+  border-bottom-left-radius:30px;
+  border-bottom-right-radius:30px;
+}
+
+.header img{
+  width:70px;
+  margin-bottom:10px;
+}
+
+.card{
+  transition:0.3s;
+}
+.card:hover{
+  transform:translateY(-3px);
+}
+
+body{font-family:Poppins;background:#f4f7fb;margin:0;}
+.header{background:#4a148c;color:white;padding:25px;text-align:center;}
+.container{max-width:900px;margin:20px auto;padding:20px;}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+
+button{padding:10px 15px;border:none;border-radius:8px;color:white;font-weight:600;cursor:pointer;}
+.btn-refresh{background:#2196f3;}
+.btn-approve{background:#4caf50;margin-top:10px;}
+.btn-reject{background:#f44336;margin-top:10px;}
+
+.card{background:white;padding:15px;border-radius:12px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);cursor:pointer;}
+
+.status{padding:5px 10px;border-radius:20px;font-size:12px;}
+.diajukan{background:#fff3cd;}
+.disetujui{background:#d4edda;}
+.ditolak{background:#f8d7da;}
+
+.loader{text-align:center;padding:50px;}
+.spinner{width:50px;height:50px;border:5px solid #eee;border-top:5px solid #4a148c;border-radius:50%;animation:spin 1s linear infinite;margin:auto;}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+.empty{text-align:center;color:#999;padding:40px;}
+
+.modal-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;justify-content:center;align-items:center;
+}
+.modal-overlay.show{display:flex;}
+
+.modal-box{
+  background:white;
+  padding:20px;
+  border-radius:15px;
+  width:90%;
+  max-width:500px;
+  max-height:80vh;
+  overflow-y:auto;
+
+  transform:scale(0.8);
+  opacity:0;
+  transition:all 0.3s ease;
+}
+
+.modal-overlay.show .modal-box{
+  transform:scale(1);
+  opacity:1;
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.close-btn{
+  font-size:22px;
+  cursor:pointer;
+  color:#999;
+}
+.close-btn:hover{color:black;}
+
+.summary{background:#eee;padding:10px;border-radius:10px;margin-bottom:10px;}
+.item{padding:10px;border-radius:10px;margin-bottom:10px;}
+.in{background:#f1fff5;}
+.out{background:#fff3f3;}
+
+.detail-loading{text-align:center;padding:30px;}
+.detail-spinner{
+  width:40px;height:40px;
+  border:4px solid #eee;
+  border-top:4px solid #4a148c;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:auto;
+}
+
+.modal-success{text-align:center;}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="https://yourdomain.com/logo.png">
+  <h2>Approval Ketua PKK</h2>
+</div>
+
+<div class="container">
+
+  <div class="topbar">
+    <h3>Daftar Batch</h3>
+    <button class="btn-refresh" onclick="loadBatch()">Refresh</button>
+  </div>
+
+  <div id="batchList"></div>
+
+</div>
+
+<!-- MODAL DETAIL -->
+<div id="modal" class="modal-overlay" onclick="overlayClose(event)">
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <h3>Detail Batch</h3>
+      <span class="close-btn" onclick="closeDetail()">✕</span>
+    </div>
+
+    <div id="detailData"></div>
+
+    <div id="actionButtons">
+      <button class="btn-approve" id="btnApprove" onclick="approve('Disetujui')">Setujui</button>
+      <button class="btn-reject" id="btnReject" onclick="approve('Ditolak')">Tolak</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL SUCCESS -->
+<div id="successModal" class="modal-overlay">
+  <div class="modal-box modal-success">
+    <h3>Berhasil!</h3>
+    <p>Status berhasil diperbarui</p>
+    <button class="btn-approve" onclick="closeSuccess()">OK</button>
+  </div>
+</div>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbxlADmaE0i7EFaXFIGZlS242IDucuOnlYesRYPL0vd-VexWKAZrdKwZVo198Wt2DZh2/exec";
+let selectedBatch = "";
+
+// LOAD BATCH
+async function loadBatch(){
+  const container = document.getElementById('batchList');
+
+  container.innerHTML = `
+    <div class="loader">
+      <div class="spinner"></div>
+      <p>Memuat data...</p>
+    </div>
+  `;
+
+  try{
+    const res = await fetch(`${ENDPOINT}?action=getBatch&_=${Date.now()}`);
+    const data = await res.json();
+
+    if(!data.length){
+      container.innerHTML = `<div class="empty">Tidak ada data batch</div>`;
+      return;
+    }
+
+    let html = "";
+
+    data.reverse().forEach(row=>{
+      const status = row[3].toLowerCase();
+
+      html += `
+        <div class="card" onclick="showDetail('${row[0]}','${row[3]}')">
+          <b>${row[0]}</b><br>
+          Bendahara: ${row[2]}<br>
+          <span class="status ${status}">${row[3]}</span>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+
+  }catch(err){
+    container.innerHTML = `<div class="empty">Gagal memuat data</div>`;
+  }
+}
+
+// SHOW DETAIL
+async function showDetail(batchId, status){
+  selectedBatch = batchId;
+
+  document.getElementById('modal').classList.add('show');
+
+  document.getElementById('detailData').innerHTML = `
+    <div class="detail-loading">
+      <div class="detail-spinner"></div>
+      <p>Memuat detail...</p>
+    </div>
+  `;
+
+  document.getElementById('btnApprove').disabled = true;
+  document.getElementById('btnReject').disabled = true;
+
+  try{
+    const res = await fetch(`${ENDPOINT}?action=getDetail&batch=${batchId}&_=${Date.now()}`);
+    const data = await res.json();
+
+    let html = "";
+    let totalMasuk = 0;
+    let totalKeluar = 0;
+
+    data.forEach(item=>{
+      const r = item.data;
+
+      if(item.jenis === "Pemasukan"){
+        totalMasuk += Number(r[4]);
+
+        html += `
+          <div class="item in">
+            📥 <b>Pemasukan</b><br>
+            👤 ${r[1]}<br>
+            📝 ${r[3]}<br>
+            💰 Rp ${Number(r[4]).toLocaleString('id-ID')}
+          </div>
+        `;
+      } else {
+        totalKeluar += Number(r[3]);
+
+        html += `
+          <div class="item out">
+            📤 <b>Pengeluaran</b><br>
+            📝 ${r[2]}<br>
+            💰 Rp ${Number(r[3]).toLocaleString('id-ID')}
+          </div>
+        `;
+      }
+    });
+
+    const saldo = totalMasuk - totalKeluar;
+
+    html = `
+      <div class="summary">
+        💰 <b>Ringkasan</b><br>
+        Total Masuk: Rp ${totalMasuk.toLocaleString('id-ID')}<br>
+        Total Keluar: Rp ${totalKeluar.toLocaleString('id-ID')}<br>
+        <b>Saldo: Rp ${saldo.toLocaleString('id-ID')}</b>
+      </div>
+    ` + html;
+
+    document.getElementById('detailData').innerHTML = html;
+
+    // disable tombol jika sudah final
+    if(status === "Disetujui" || status === "Ditolak"){
+      document.getElementById('btnApprove').disabled = true;
+      document.getElementById('btnReject').disabled = true;
+
+      document.getElementById('btnApprove').style.opacity = 0.5;
+      document.getElementById('btnReject').style.opacity = 0.5;
+    } else {
+      document.getElementById('btnApprove').disabled = false;
+      document.getElementById('btnReject').disabled = false;
+
+      document.getElementById('btnApprove').style.opacity = 1;
+      document.getElementById('btnReject').style.opacity = 1;
+    }
+
+  }catch(err){
+    document.getElementById('detailData').innerHTML = `<div class="empty">Gagal memuat detail</div>`;
+  }
+}
+
+// APPROVE
+async function approve(status){
+  await fetch(ENDPOINT,{
+    method:'POST',
+    mode:'no-cors',
+    body: JSON.stringify({
+      action:"approveAction",
+      batchId:selectedBatch,
+      status:status,
+      ketua:"Ketua PKK"
+    })
+  });
+
+  closeDetail();
+  document.getElementById('successModal').classList.add('show');
+}
+
+// CLOSE MODAL
+function closeDetail(){
+  document.getElementById('modal').classList.remove('show');
+}
+
+function overlayClose(e){
+  if(e.target.id === 'modal'){
+    closeDetail();
+  }
+}
+
+function closeSuccess(){
+  document.getElementById('successModal').classList.remove('show');
+  loadBatch();
+}
+
+// INIT
+loadBatch();
+</script>
+
+</body>
+</html>
