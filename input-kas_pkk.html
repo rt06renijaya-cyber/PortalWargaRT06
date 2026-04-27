@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kas PKK</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#0f766e;
+  --primary-dark:#064e3b;
+  --bg:#f1f5f9;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:var(--bg);
+  margin:0;
+}
+
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:white;
+  padding:25px 15px 50px;
+  text-align:center;
+  border-bottom-left-radius:30px;
+  border-bottom-right-radius:30px;
+}
+
+.header img{
+  width:70px;
+  margin-bottom:10px;
+}
+
+/* CONTAINER */
+.container{
+  max-width:650px;
+  margin:-30px auto 20px;
+  background:white;
+  padding:20px;
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* INPUT */
+input,select{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:14px;
+  box-sizing:border-box;
+}
+
+input:focus,select:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 0 6px rgba(15,118,110,0.2);
+}
+
+/* BUTTON */
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:50px;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  font-size:15px;
+  transition:0.25s;
+}
+
+.btn-save{
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+}
+
+.btn-approve{
+  background:linear-gradient(135deg,#f59e0b,#f97316);
+  margin-top:10px;
+}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+  padding:15px;
+}
+
+.modal-overlay.show{
+  display:flex;
+}
+
+.modal-box{
+  background:white;
+  border-radius:18px;
+  padding:20px;
+  width:100%;
+  max-width:380px;
+  text-align:center;
+}
+
+/* modal body */
+.modal-body{
+  background:#f8fafc;
+  padding:12px;
+  border-radius:10px;
+  text-align:left;
+  font-size:14px;
+  margin-top:10px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+}
+
+/* modal buttons */
+.btn-cancel{
+  flex:1;
+  background:#e5e7eb;
+  color:#111;
+}
+
+.btn-green{
+  flex:1;
+  background:linear-gradient(135deg,#0f766e,#14b8a6);
+  color:white;
+}
+
+/* spinner */
+.spinner{
+  border:4px solid #eee;
+  border-top:4px solid var(--primary);
+  border-radius:50%;
+  width:45px;
+  height:45px;
+  margin:15px auto;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  100%{transform:rotate(360deg)}
+}
+
+.checkmark{
+  font-size:45px;
+  color:#16a34a;
+}
+
+/* mobile */
+@media(max-width:500px){
+  .container{
+    margin:-20px 12px 20px;
+    padding:15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="https://yourdomain.com/logo.png">
+  <h2>Kas PKK</h2>
+  <p>Pemasukan & Pengeluaran</p>
+</div>
+
+<div class="container">
+
+  <input type="date" id="tanggal">
+
+  <select id="jenis">
+    <option value="Pemasukan">Pemasukan</option>
+    <option value="Pengeluaran">Pengeluaran</option>
+  </select>
+
+  <select id="koordinator">
+    <option value="">Pilih Koordinator</option>
+    <option>Koordinator Ibu Rasikun</option>
+    <option>Koordinator Ibu Made</option>
+    <option>Koordinator Ibu Tanti</option>
+    <option>Koordinator Ibu Nurhasan</option>
+    <option>Koordinator Ibu Maryati</option>
+    <option>Koordinator Ibu Eko</option>
+    <option>Koordinator Ibu Sachri</option>
+    <option>Koordinator Ibu Idham</option>
+    <option>Koordinator Ibu Umi</option>
+    <option>Koordinator Ibu Slamet</option>
+    <option>Koordinator Ibu Abdullah</option>
+    <option>Koordinator Bpk. Chamzah</option>
+  </select>
+
+  <select id="kategori">
+    <option value="">Pilih Kategori</option>
+    <option>Saldo Awal</option>
+    <option>Iuran PKK</option>
+    <option>Donasi</option>
+    <option>Bansos</option>
+    <option>Kegiatan</option>
+    <option>Lainnya</option>
+  </select>
+
+  <input type="text" id="keterangan" placeholder="Keterangan">
+  <input type="number" id="nominal" placeholder="Nominal">
+
+  <button class="btn-save" onclick="submitData()">Simpan</button>
+  <button class="btn-approve" onclick="submitApproval()">Ajukan Approval</button>
+
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal-overlay">
+  <div class="modal-box">
+    <div id="content"></div>
+  </div>
+</div>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbxlADmaE0i7EFaXFIGZlS242IDucuOnlYesRYPL0vd-VexWKAZrdKwZVo198Wt2DZh2/exec";
+
+document.getElementById('tanggal').value =
+  new Date().toISOString().split('T')[0];
+
+let tempData = {};
+
+// =====================
+// TRANSAKSI
+// =====================
+function submitData(){
+  tempData = {
+    action:"transaksi",
+    Tanggal:document.getElementById('tanggal').value.split('-').reverse().join('/'),
+    Koordinator:document.getElementById('koordinator').value,
+    Jenis:document.getElementById('jenis').value,
+    Kategori:document.getElementById('kategori').value,
+    Keterangan:document.getElementById('keterangan').value,
+    Nominal:document.getElementById('nominal').value
+  };
+
+  showModalPreview();
+}
+
+function showModalPreview(){
+  document.getElementById('modal').classList.add('show');
+
+  document.getElementById('content').innerHTML = `
+    <h3>Konfirmasi</h3>
+    <div class="modal-body">
+      ${tempData.Tanggal}<br>
+      ${tempData.Jenis}<br>
+      ${tempData.Keterangan}<br>
+      Rp ${Number(tempData.Nominal || 0).toLocaleString('id-ID')}
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-green" onclick="confirm()">Simpan</button>
+    </div>
+  `;
+}
+
+async function confirm(){
+  document.getElementById('content').innerHTML = `
+    <div class="spinner"></div>
+    <p>Menyimpan...</p>
+  `;
+
+  await fetch(ENDPOINT,{
+    method:'POST',
+    mode:'no-cors',
+    body:JSON.stringify(tempData)
+  });
+
+  document.getElementById('content').innerHTML = `
+    <div class="checkmark">✔</div>
+    <h3>Berhasil</h3>
+    <button class="btn-green" onclick="afterSuccess()">Tutup</button>
+  `;
+}
+
+// =====================
+// FIX APPROVAL (INI YANG KEMARIN ERROR)
+// =====================
+function submitApproval(){
+
+  const data = {
+    action: "approval",
+    Bendahara: document.getElementById('koordinator').value || "-"
+  };
+
+  document.getElementById('modal').classList.add('show');
+
+  document.getElementById('content').innerHTML = `
+    <div class="spinner"></div>
+    <p>Mengajukan approval...</p>
+  `;
+
+  fetch(ENDPOINT,{
+    method:'POST',
+    mode:'no-cors',
+    body:JSON.stringify(data)
+  });
+
+  setTimeout(() => {
+    document.getElementById('content').innerHTML = `
+      <div class="checkmark">✔</div>
+      <h3>Approval Terkirim</h3>
+      <button class="btn-green" onclick="afterSuccess()">Tutup</button>
+    `;
+  }, 1200);
+}
+
+// =====================
+// CLOSE + RESET
+// =====================
+function afterSuccess(){
+  closeModal();
+  resetForm();
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('show');
+}
+
+function resetForm(){
+  document.getElementById('tanggal').value =
+    new Date().toISOString().split('T')[0];
+
+  document.getElementById('jenis').value = "Pemasukan";
+  document.getElementById('koordinator').value = "";
+  document.getElementById('kategori').value = "";
+  document.getElementById('keterangan').value = "";
+  document.getElementById('nominal').value = "";
+}
+</script>
+
+</body>
+</html>
