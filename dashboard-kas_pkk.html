@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard PKK</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{margin:0;font-family:Poppins;background:#f3f7f6;}
+
+.header{
+  background:linear-gradient(135deg,#0b3d2e,#0f6d4f);
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+
+.header img{width:70px;}
+
+.container{padding:15px;}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.card{
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.big{font-size:22px;font-weight:bold;color:#0f6d4f;}
+
+button{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#0f6d4f;
+  color:white;
+  margin-top:10px;
+  cursor:pointer;
+}
+
+table{width:100%;border-collapse:collapse;}
+th,td{border:1px solid #ddd;padding:6px;font-size:12px;}
+
+/* LOADING */
+#loadingOverlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+}
+
+#loadingOverlay.show{
+  display:flex;
+}
+
+.spinner{
+  width:50px;
+  height:50px;
+  border:5px solid #eee;
+  border-top:5px solid #0f6d4f;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+  .grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="logo_rt06.png" alt="Logo RT 06" class="logo-elegant">
+  <h2>Dashboard PKK</h2>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <label>Filter Bulan</label>
+    <select id="filterBulan"></select>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h4>Pemasukan</h4>
+      <div id="totalMasuk" class="big">Rp 0</div>
+    </div>
+
+    <div class="card">
+      <h4>Pengeluaran</h4>
+      <div id="totalKeluar" class="big">Rp 0</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <div class="card">
+    <h4>Export per Batch</h4>
+    <select id="batchSelect"></select>
+    <button onclick="exportBatch()">Download PDF Batch</button>
+  </div>
+
+  <div class="card">
+    <h4>Laporan</h4>
+    <div id="laporanContent">Memuat...</div>
+  </div>
+
+</div>
+
+<!-- LOADING -->
+<div id="loadingOverlay">
+  <div style="background:white;padding:25px;border-radius:12px;text-align:center;">
+    <div class="spinner"></div>
+    <p id="loadingText">Memuat data...</p>
+  </div>
+</div>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbxlADmaE0i7EFaXFIGZlS242IDucuOnlYesRYPL0vd-VexWKAZrdKwZVo198Wt2DZh2/exec";
+
+let chart;
+let loadingTimer;
+
+// ===== LOADING =====
+function showLoading(text="Memuat data..."){
+  clearTimeout(loadingTimer);
+  document.getElementById("loadingText").innerText = text;
+  document.getElementById("loadingOverlay").classList.add("show");
+}
+
+function hideLoading(){
+  // MINIMAL tampil 500ms biar ga kedip
+  loadingTimer = setTimeout(()=>{
+    document.getElementById("loadingOverlay").classList.remove("show");
+  }, 500);
+}
+
+// ===== DASHBOARD =====
+async function loadDashboard(){
+  showLoading("Memuat dashboard...");
+
+  try{
+    const res = await fetch(`${ENDPOINT}?action=getDashboard&_=${Date.now()}`);
+    const data = await res.json();
+
+    if(!data || !data.perBulan) throw "Data kosong";
+
+    const labels = Object.keys(data.perBulan);
+
+    let masuk=[], keluar=[], totalMasuk=0, totalKeluar=0;
+
+    labels.forEach(b=>{
+      const m = data.perBulan[b].masuk || 0;
+      const k = data.perBulan[b].keluar || 0;
+
+      masuk.push(m);
+      keluar.push(k);
+
+      totalMasuk += m;
+      totalKeluar += k;
+    });
+
+    document.getElementById("totalMasuk").innerText =
+      "Rp " + totalMasuk.toLocaleString('id-ID');
+
+    document.getElementById("totalKeluar").innerText =
+      "Rp " + totalKeluar.toLocaleString('id-ID');
+
+    if(chart) chart.destroy();
+
+    chart = new Chart(document.getElementById("chart"),{
+      type:"bar",
+      data:{
+        labels:labels,
+        datasets:[
+          {label:"Masuk",data:masuk,backgroundColor:"#2ecc71"},
+          {label:"Keluar",data:keluar,backgroundColor:"#e74c3c"}
+        ]
+      }
+    });
+
+    // TABLE
+    let html = "<table><tr><th>Bulan</th><th>Masuk</th><th>Keluar</th></tr>";
+    labels.forEach(b=>{
+      html += `<tr>
+        <td>${b}</td>
+        <td>Rp ${data.perBulan[b].masuk.toLocaleString('id-ID')}</td>
+        <td>Rp ${data.perBulan[b].keluar.toLocaleString('id-ID')}</td>
+      </tr>`;
+    });
+    html += "</table>";
+
+    document.getElementById("laporanContent").innerHTML = html;
+
+  }catch(err){
+    document.getElementById("laporanContent").innerHTML =
+      "<b style='color:red'>Gagal memuat data</b>";
+    console.error(err);
+  }
+
+  hideLoading();
+}
+
+// ===== BATCH =====
+async function loadBatch(){
+  try{
+    const res = await fetch(`${ENDPOINT}?action=getBatch&_=${Date.now()}`);
+    const data = await res.json();
+
+    let select = document.getElementById("batchSelect");
+    select.innerHTML = "";
+
+    data.forEach(r=>{
+      let opt = document.createElement("option");
+      opt.value = r[0];
+      opt.textContent = r[0];
+      select.appendChild(opt);
+    });
+
+  }catch(err){
+    console.error(err);
+  }
+}
+
+// ===== PDF =====
+async function exportBatch(){
+  const batch = document.getElementById("batchSelect").value;
+  if(!batch) return alert("Pilih batch dulu");
+
+  showLoading("Membuat PDF...");
+
+  try{
+    const res = await fetch(`${ENDPOINT}?action=getDetail&batch=${batch}`);
+    const data = await res.json();
+
+    let html = `<h2 style="text-align:center;">Laporan ${batch}</h2><hr>`;
+
+    data.forEach(d=>{
+      const nominal = d.jenis==="Pemasukan" ? d.data[4] : d.data[3];
+      html += `<p>${d.jenis} - Rp ${Number(nominal).toLocaleString('id-ID')}</p>`;
+    });
+
+    let div = document.createElement("div");
+    div.innerHTML = html;
+
+    await html2pdf().from(div).save(`Batch_${batch}.pdf`);
+
+  }catch(err){
+    console.error(err);
+    alert("Gagal membuat PDF");
+  }
+
+  hideLoading();
+}
+
+// INIT (🔥 FIX UTAMA)
+window.onload = async () => {
+  showLoading("Memuat aplikasi...");
+  await loadDashboard();
+  await loadBatch();
+};
+</script>
+
+</body>
+</html>
