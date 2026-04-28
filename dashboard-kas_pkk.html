@@ -318,23 +318,20 @@ async function exportBatch(){
   const batch = document.getElementById("batchSelect").value;
   if(!batch) return alert("Pilih batch dulu");
 
-  showLoading("Generate PDF...");
+  showLoading();
 
   try{
-    const res = await fetch(ENDPOINT, {
-      method:"POST",
-      body: JSON.stringify({
-        action:"generatePDF",
-        batchId:batch
-      })
-    });
-
+    const res = await fetch(`${ENDPOINT}?action=generatePDF&batch=${batch}`);
     const data = await res.json();
 
-    window.open(data.url, "_blank");
+    if(data.url){
+      window.open(data.url, "_blank");
+    }else{
+      alert("Gagal generate PDF");
+    }
 
   }catch(err){
-    alert("Gagal generate PDF");
+    alert("Error export PDF");
   }
 
   hideLoading();
