@@ -24,23 +24,22 @@ body{
 .header{
   background:linear-gradient(135deg,var(--primary-dark),var(--primary));
   color:white;
-  padding:25px 15px 50px;
+  padding:20px 15px 60px;
   text-align:center;
   border-bottom-left-radius:30px;
   border-bottom-right-radius:30px;
 }
 
 .header img{
-  width:70px;
-  margin-bottom:10px;
+  width:60px;
 }
 
 /* CONTAINER */
 .container{
-  max-width:650px;
-  margin:-30px auto 20px;
+  max-width:500px;
+  margin:-40px auto 20px;
   background:white;
-  padding:20px;
+  padding:18px;
   border-radius:18px;
   box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
@@ -48,31 +47,24 @@ body{
 /* INPUT */
 input,select{
   width:100%;
-  padding:12px;
+  padding:14px;
   margin-bottom:12px;
-  border-radius:10px;
+  border-radius:12px;
   border:1px solid #ddd;
-  font-size:14px;
+  font-size:15px;
   box-sizing:border-box;
-}
-
-input:focus,select:focus{
-  outline:none;
-  border-color:var(--primary);
-  box-shadow:0 0 6px rgba(15,118,110,0.2);
 }
 
 /* BUTTON */
 button{
   width:100%;
-  padding:14px;
+  padding:15px;
   border:none;
   border-radius:50px;
   color:white;
   font-weight:600;
   cursor:pointer;
   font-size:15px;
-  transition:0.25s;
 }
 
 .btn-save{
@@ -91,78 +83,85 @@ button{
   background:rgba(0,0,0,0.6);
   display:none;
   justify-content:center;
-  align-items:center;
+  align-items:flex-end; /* 🔥 dari bawah kayak app */
   z-index:999;
-  padding:15px;
 }
 
-.modal-overlay.show{
-  display:flex;
-}
+.modal-overlay.show{display:flex;}
 
 .modal-box{
   background:white;
-  border-radius:18px;
+  border-radius:20px 20px 0 0;
   padding:20px;
   width:100%;
-  max-width:380px;
-  text-align:center;
+  max-width:500px;
+  animation:slideUp .3s ease;
 }
 
-/* modal body */
+@keyframes slideUp{
+  from{transform:translateY(100%);}
+  to{transform:translateY(0);}
+}
+
 .modal-body{
   background:#f8fafc;
   padding:12px;
   border-radius:10px;
-  text-align:left;
   font-size:14px;
-  margin-top:10px;
+  max-height:250px;
+  overflow:auto;
 }
 
 .modal-actions{
   display:flex;
   gap:10px;
-  margin-top:12px;
+  margin-top:15px;
 }
 
-/* modal buttons */
 .btn-cancel{
   flex:1;
   background:#e5e7eb;
-  color:#111;
+  color:black;
 }
 
 .btn-green{
   flex:1;
-  background:linear-gradient(135deg,#0f766e,#14b8a6);
-  color:white;
+  background:var(--primary);
 }
 
-/* spinner */
 .spinner{
   border:4px solid #eee;
   border-top:4px solid var(--primary);
   border-radius:50%;
-  width:45px;
-  height:45px;
+  width:45px;height:45px;
   margin:15px auto;
   animation:spin 1s linear infinite;
 }
 
-@keyframes spin{
-  100%{transform:rotate(360deg)}
-}
+@keyframes spin{100%{transform:rotate(360deg)}}
 
 .checkmark{
   font-size:45px;
   color:#16a34a;
+  text-align:center;
 }
 
-/* mobile */
-@media(max-width:500px){
+/* 📱 MOBILE IMPROVEMENT */
+@media(max-width:480px){
+
   .container{
-    margin:-20px 12px 20px;
+    margin:-35px 10px 20px;
     padding:15px;
+  }
+
+  input,select{
+    padding:16px;
+    font-size:16px; /* biar ga zoom iOS */
+  }
+
+  button{
+    padding:16px;
+    font-size:16px;
   }
 }
 </style>
@@ -171,14 +170,23 @@ button{
 <body>
 
 <div class="header">
-  <img src="logo_rt06.png" alt="Logo RT 06" class="logo-elegant">
+  <img src="logo_rt06.png">
   <h2>Kas PKK</h2>
-  <p>Pemasukan & Pengeluaran</p>
 </div>
 
 <div class="container">
 
   <input type="date" id="tanggal">
+
+  <select id="kategori" onchange="handleKategori()">
+    <option value="">Pilih Kategori</option>
+    <option>Saldo Awal</option>
+    <option>Iuran PKK</option>
+    <option>Donasi</option>
+    <option>Bansos</option>
+    <option>Kegiatan</option>
+    <option>Lainnya</option>
+  </select>
 
   <select id="jenis">
     <option value="Pemasukan">Pemasukan</option>
@@ -201,16 +209,6 @@ button{
     <option>Koordinator Bpk. Chamzah</option>
   </select>
 
-  <select id="kategori">
-    <option value="">Pilih Kategori</option>
-    <option>Saldo Awal</option>
-    <option>Iuran PKK</option>
-    <option>Donasi</option>
-    <option>Bansos</option>
-    <option>Kegiatan</option>
-    <option>Lainnya</option>
-  </select>
-
   <input type="text" id="keterangan" placeholder="Keterangan">
   <input type="number" id="nominal" placeholder="Nominal">
 
@@ -229,14 +227,24 @@ button{
 <script>
 const ENDPOINT = "https://script.google.com/macros/s/AKfycbxlADmaE0i7EFaXFIGZlS242IDucuOnlYesRYPL0vd-VexWKAZrdKwZVo198Wt2DZh2/exec";
 
-document.getElementById('tanggal').value =
-  new Date().toISOString().split('T')[0];
-
 let tempData = {};
 
-// =====================
-// TRANSAKSI
-// =====================
+// AUTO KETERANGAN
+function handleKategori(){
+  const kategori = document.getElementById("kategori").value;
+  const tanggal = document.getElementById("tanggal").value;
+
+  if(kategori === "Iuran PKK" && tanggal){
+    const bulan = new Date(tanggal).toLocaleString('id-ID',{month:'long'});
+    document.getElementById("keterangan").value = "Iuran PKK " + bulan;
+    document.getElementById("keterangan").readOnly = true;
+  } else {
+    document.getElementById("keterangan").value = "";
+    document.getElementById("keterangan").readOnly = false;
+  }
+}
+
+// SIMPAN
 function submitData(){
   tempData = {
     action:"transaksi",
@@ -260,7 +268,7 @@ function showModalPreview(){
       ${tempData.Tanggal}<br>
       ${tempData.Jenis}<br>
       ${tempData.Keterangan}<br>
-      Rp ${Number(tempData.Nominal || 0).toLocaleString('id-ID')}
+      Rp ${Number(tempData.Nominal).toLocaleString('id-ID')}
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Batal</button>
@@ -270,10 +278,7 @@ function showModalPreview(){
 }
 
 async function confirm(){
-  document.getElementById('content').innerHTML = `
-    <div class="spinner"></div>
-    <p>Menyimpan...</p>
-  `;
+  document.getElementById('content').innerHTML = `<div class="spinner"></div>`;
 
   await fetch(ENDPOINT,{
     method:'POST',
@@ -288,59 +293,103 @@ async function confirm(){
   `;
 }
 
-// =====================
-// FIX APPROVAL (INI YANG KEMARIN ERROR)
-// =====================
-function submitApproval(){
-
-  const data = {
-    action: "approval",
-    Bendahara: document.getElementById('koordinator').value || "-"
-  };
+// PREVIEW APPROVAL
+async function submitApproval(){
 
   document.getElementById('modal').classList.add('show');
 
   document.getElementById('content').innerHTML = `
     <div class="spinner"></div>
-    <p>Mengajukan approval...</p>
+    <p>Memuat preview...</p>
   `;
 
-  fetch(ENDPOINT,{
-    method:'POST',
-    mode:'no-cors',
-    body:JSON.stringify(data)
+  const res = await fetch(`${ENDPOINT}?action=getDetailDraft`);
+  const data = await res.json();
+
+  if(!data.length){
+    document.getElementById('content').innerHTML = `<p>Tidak ada data draft</p>`;
+    return;
+  }
+
+  let html = "";
+  let total = 0;
+
+  data.forEach(d=>{
+    total += d.nominal;
+    html += `<div>• ${d.jenis} - Rp ${d.nominal.toLocaleString('id-ID')}</div>`;
   });
 
-  setTimeout(() => {
-    document.getElementById('content').innerHTML = `
-      <div class="checkmark">✔</div>
-      <h3>Approval Terkirim</h3>
-      <button class="btn-green" onclick="afterSuccess()">Tutup</button>
-    `;
-  }, 1200);
+  document.getElementById('content').innerHTML = `
+    <h3>Preview Approval</h3>
+    <div class="modal-body">
+      ${html}
+      <hr>
+      <b>Total: Rp ${total.toLocaleString('id-ID')}</b>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-green" onclick="confirmApproval()">Kirim</button>
+    </div>
+  `;
 }
 
-// =====================
-// CLOSE + RESET
-// =====================
+async function confirmApproval(){
+
+  document.getElementById('content').innerHTML = `<div class="spinner"></div>`;
+
+  await fetch(ENDPOINT,{
+    method:'POST',
+    mode:'no-cors',
+    body:JSON.stringify({
+      action:"approval",
+      Bendahara:"Bendahara PKK"
+    })
+  });
+
+  document.getElementById('content').innerHTML = `
+    <div class="checkmark">✔</div>
+    <h3>Berhasil Diajukan</h3>
+    <button class="btn-green" onclick="afterSuccess()">Tutup</button>
+  `;
+}
+
 function afterSuccess(){
   closeModal();
-  resetForm();
+  location.reload();
 }
 
 function closeModal(){
   document.getElementById('modal').classList.remove('show');
 }
 
-function resetForm(){
-  document.getElementById('tanggal').value =
-    new Date().toISOString().split('T')[0];
+const bulanNama = [
+  "Januari","Februari","Maret","April","Mei","Juni",
+  "Juli","Agustus","September","Oktober","November","Desember"
+];
 
-  document.getElementById('jenis').value = "Pemasukan";
-  document.getElementById('koordinator').value = "";
-  document.getElementById('kategori').value = "";
-  document.getElementById('keterangan').value = "";
-  document.getElementById('nominal').value = "";
+// trigger saat kategori / tanggal berubah
+document.getElementById("kategori").addEventListener("change", autoKeterangan);
+document.getElementById("tanggal").addEventListener("change", autoKeterangan);
+
+function autoKeterangan(){
+  const kategori = document.getElementById("kategori").value;
+  const tanggal = document.getElementById("tanggal").value;
+  const ket = document.getElementById("keterangan");
+
+  if(kategori === "Iuran PKK" && tanggal){
+    const tgl = new Date(tanggal);
+
+    const bulan = bulanNama[tgl.getMonth()];
+    const tahun = tgl.getFullYear();
+
+    ket.value = `Iuran Bulan ${bulan} ${tahun}`;
+    ket.readOnly = true;
+    ket.style.background = "#e5e7eb";
+  } else {
+    ket.readOnly = false;
+    ket.value = "";
+    ket.style.background = "white";
+  }
 }
 </script>
 
