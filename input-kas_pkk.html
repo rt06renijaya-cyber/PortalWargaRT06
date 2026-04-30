@@ -319,6 +319,13 @@ async function confirm(){
 
 // 🔥 FIX UTAMA ADA DISINI
 async function confirmApproval(){
+  const bendahara = val("bendahara");
+
+  if(!bendahara){
+    alertModal("Bendahara wajib dipilih");
+    return;
+  }
+
   showLoading("Mengirim...");
 
   await fetch(ENDPOINT,{
@@ -326,7 +333,7 @@ async function confirmApproval(){
     mode:'no-cors',
     body:JSON.stringify({
       action:"approval",
-      Bendahara: val("bendahara") // 🔥 WAJIB!
+      Bendahara: bendahara
     })
   });
 
