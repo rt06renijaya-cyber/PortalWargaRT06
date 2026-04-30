@@ -73,30 +73,30 @@ button{
   margin-top:10px;
 }
 
-/* MODAL */
+/* MODAL CENTER FIX */
 .modal-overlay{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,0.6);
   display:none;
   justify-content:center;
-  align-items:flex-end;
+  align-items:center; /* 🔥 FIX DISINI */
   z-index:999;
 }
 .modal-overlay.show{ display:flex; }
 
 .modal-box{
   background:white;
-  border-radius:20px 20px 0 0;
+  border-radius:20px;
   padding:20px;
-  width:100%;
-  max-width:520px;
-  animation:slideUp .25s ease;
+  width:90%;
+  max-width:420px;
+  animation:fadeIn .2s ease;
 }
 
-@keyframes slideUp{
-  from{transform:translateY(100%)}
-  to{transform:translateY(0)}
+@keyframes fadeIn{
+  from{opacity:0;transform:scale(.9)}
+  to{opacity:1;transform:scale(1)}
 }
 
 .modal-body{
@@ -130,7 +130,7 @@ button{
   border-top:4px solid var(--primary);
   border-radius:50%;
   width:40px;height:40px;
-  margin:15px auto;
+  margin:20px auto;
   animation:spin 1s linear infinite;
 }
 @keyframes spin{100%{transform:rotate(360deg)}}
@@ -192,7 +192,7 @@ button{
   <!-- 5 -->
   <select id="koordinator" style="display:none;">
     <option value="">Pilih Koordinator</option>
-    <option>Koordinator Ibu Rasikun</option>
+     <option>Koordinator Ibu Rasikun</option>
     <option>Koordinator Ibu Made</option>
     <option>Koordinator Ibu Tanti</option>
     <option>Koordinator Ibu Nurhasan</option>
@@ -231,15 +231,11 @@ let tempData = {};
 
 // STEP FLOW
 function stepBendahara(){
-  if(val("bendahara")){
-    enable("tanggal");
-  }
+  if(val("bendahara")) enable("tanggal");
 }
 
 document.getElementById("tanggal").addEventListener("change", function(){
-  if(this.value){
-    enable("kategori");
-  }
+  if(this.value) enable("kategori");
 });
 
 function handleKategori(){
@@ -321,7 +317,23 @@ async function confirm(){
   showSuccess("Data tersimpan");
 }
 
-// APPROVAL (TIDAK DIUBAH)
+// 🔥 FIX UTAMA ADA DISINI
+async function confirmApproval(){
+  showLoading("Mengirim...");
+
+  await fetch(ENDPOINT,{
+    method:'POST',
+    mode:'no-cors',
+    body:JSON.stringify({
+      action:"approval",
+      Bendahara: val("bendahara") // 🔥 WAJIB!
+    })
+  });
+
+  showSuccess("Approval berhasil dikirim");
+}
+
+// APPROVAL
 async function submitApproval(){
   showLoading("Memuat data...");
 
@@ -355,16 +367,6 @@ async function submitApproval(){
   `);
 }
 
-async function confirmApproval(){
-  showLoading("Mengirim...");
-  await fetch(ENDPOINT,{
-    method:'POST',
-    mode:'no-cors',
-    body:JSON.stringify({action:"approval"})
-  });
-  showSuccess("Approval berhasil dikirim");
-}
-
 // HELPER
 function val(id){ return document.getElementById(id).value; }
 function setVal(id,v){ document.getElementById(id).value = v; }
@@ -388,13 +390,13 @@ function showModal(html){
 }
 
 function showLoading(text){
-  showModal(`<div class="spinner"></div><p>${text}</p>`);
+  showModal(`<div class="spinner"></div><p style="text-align:center">${text}</p>`);
 }
 
 function showSuccess(text){
   showModal(`
     <div class="checkmark">✔</div>
-    <h3>${text}</h3>
+    <h3 style="text-align:center">${text}</h3>
     <button class="btn-green" onclick="afterSuccess()">Tutup</button>
   `);
 }
