@@ -24,53 +24,50 @@ body{
 .header{
   background:linear-gradient(135deg,var(--primary-dark),var(--primary));
   color:white;
-  padding:20px 15px 60px;
+  padding:20px 15px 65px;
   text-align:center;
-  border-bottom-left-radius:30px;
-  border-bottom-right-radius:30px;
+  border-radius:0 0 25px 25px;
 }
 
-.header img{
-  width:60px;
-}
+.header img{ width:60px; }
 
 /* CONTAINER */
 .container{
-  max-width:500px;
-  margin:-40px auto 20px;
+  max-width:520px;
+  margin:-45px auto 20px;
   background:white;
   padding:18px;
-  border-radius:18px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
 }
 
 /* INPUT */
 input,select{
   width:100%;
-  padding:14px;
-  margin-bottom:12px;
+  padding:15px;
+  margin-bottom:14px;
   border-radius:12px;
   border:1px solid #ddd;
-  font-size:15px;
+  font-size:16px;
   box-sizing:border-box;
+}
+
+select:disabled,input:disabled{
+  background:#e5e7eb;
+  color:#888;
 }
 
 /* BUTTON */
 button{
   width:100%;
-  padding:15px;
+  padding:16px;
   border:none;
   border-radius:50px;
   color:white;
   font-weight:600;
-  cursor:pointer;
-  font-size:15px;
 }
 
-.btn-save{
-  background:linear-gradient(135deg,#16a34a,#22c55e);
-}
-
+.btn-save{ background:linear-gradient(135deg,#22c55e,#16a34a); }
 .btn-approve{
   background:linear-gradient(135deg,#f59e0b,#f97316);
   margin-top:10px;
@@ -83,39 +80,37 @@ button{
   background:rgba(0,0,0,0.6);
   display:none;
   justify-content:center;
-  align-items:flex-end; /* 🔥 dari bawah kayak app */
+  align-items:flex-end;
   z-index:999;
 }
-
-.modal-overlay.show{display:flex;}
+.modal-overlay.show{ display:flex; }
 
 .modal-box{
   background:white;
   border-radius:20px 20px 0 0;
   padding:20px;
   width:100%;
-  max-width:500px;
-  animation:slideUp .3s ease;
+  max-width:520px;
+  animation:slideUp .25s ease;
 }
 
 @keyframes slideUp{
-  from{transform:translateY(100%);}
-  to{transform:translateY(0);}
+  from{transform:translateY(100%)}
+  to{transform:translateY(0)}
 }
 
 .modal-body{
   background:#f8fafc;
   padding:12px;
   border-radius:10px;
+  margin-top:10px;
   font-size:14px;
-  max-height:250px;
-  overflow:auto;
 }
 
 .modal-actions{
   display:flex;
   gap:10px;
-  margin-top:15px;
+  margin-top:12px;
 }
 
 .btn-cancel{
@@ -129,39 +124,28 @@ button{
   background:var(--primary);
 }
 
+/* spinner */
 .spinner{
   border:4px solid #eee;
   border-top:4px solid var(--primary);
   border-radius:50%;
-  width:45px;height:45px;
+  width:40px;height:40px;
   margin:15px auto;
   animation:spin 1s linear infinite;
 }
-
 @keyframes spin{100%{transform:rotate(360deg)}}
 
 .checkmark{
-  font-size:45px;
-  color:#16a34a;
   text-align:center;
+  font-size:45px;
+  color:green;
 }
 
-/* 📱 MOBILE IMPROVEMENT */
+/* MOBILE */
 @media(max-width:480px){
-
   .container{
-    margin:-35px 10px 20px;
+    margin:-40px 10px 20px;
     padding:15px;
-  }
-
-  input,select{
-    padding:16px;
-    font-size:16px; /* biar ga zoom iOS */
-  }
-
-  button{
-    padding:16px;
-    font-size:16px;
   }
 }
 </style>
@@ -171,15 +155,24 @@ button{
 
 <div class="header">
   <img src="logo_rt06.png">
-  <h2>Kas PKK</h2>
+  <h2>Input Laporan Kas PKK</h2>
 </div>
 
 <div class="container">
 
-  <input type="date" id="tanggal">
+  <!-- 1 -->
+  <select id="bendahara" onchange="stepBendahara()">
+    <option value="">Pilih Bendahara</option>
+    <option>Ibu Tanti</option>
+    <option>Ibu Yani</option>
+  </select>
 
-  <select id="kategori" onchange="handleKategori()">
-    <option value="">Pilih Kategori</option>
+  <!-- 2 -->
+  <input type="date" id="tanggal" disabled>
+
+  <!-- 3 -->
+  <select id="kategori" onchange="handleKategori()" disabled>
+    <option value="">Kategori</option>
     <option>Saldo Awal</option>
     <option>Iuran PKK</option>
     <option>Donasi</option>
@@ -188,12 +181,15 @@ button{
     <option>Lainnya</option>
   </select>
 
-  <select id="jenis">
+  <!-- 4 -->
+  <select id="jenis" disabled>
+    <option value="">Pilih Jenis</option>
     <option value="Pemasukan">Pemasukan</option>
     <option value="Pengeluaran">Pengeluaran</option>
   </select>
 
-  <select id="koordinator">
+  <!-- 5 -->
+  <select id="koordinator" style="display:none;">
     <option value="">Pilih Koordinator</option>
     <option>Koordinator Ibu Rasikun</option>
     <option>Koordinator Ibu Made</option>
@@ -209,8 +205,11 @@ button{
     <option>Koordinator Bpk. Chamzah</option>
   </select>
 
-  <input type="text" id="keterangan" placeholder="Keterangan">
-  <input type="number" id="nominal" placeholder="Nominal">
+  <!-- 6 -->
+  <input type="text" id="keterangan" placeholder="Keterangan" disabled>
+
+  <!-- 7 -->
+  <input type="number" id="nominal" placeholder="Nominal" disabled>
 
   <button class="btn-save" onclick="submitData()">Simpan</button>
   <button class="btn-approve" onclick="submitApproval()">Ajukan Approval</button>
@@ -229,97 +228,119 @@ const ENDPOINT = "https://script.google.com/macros/s/AKfycbxlADmaE0i7EFaXFIGZlS2
 
 let tempData = {};
 
-// AUTO KETERANGAN
-function handleKategori(){
-  const kategori = document.getElementById("kategori").value;
-  const tanggal = document.getElementById("tanggal").value;
+// STEP FLOW
+function stepBendahara(){
+  if(val("bendahara")){
+    enable("tanggal");
+  }
+}
 
-  if(kategori === "Iuran PKK" && tanggal){
-    const bulan = new Date(tanggal).toLocaleString('id-ID',{month:'long'});
-    document.getElementById("keterangan").value = "Iuran PKK " + bulan;
-    document.getElementById("keterangan").readOnly = true;
-  } else {
-    document.getElementById("keterangan").value = "";
+document.getElementById("tanggal").addEventListener("change", function(){
+  if(this.value){
+    enable("kategori");
+  }
+});
+
+function handleKategori(){
+  const kategori = val("kategori");
+
+  if(kategori){
+    enable("jenis");
+    enable("keterangan");
+    enable("nominal");
+  }
+
+  if(kategori === "Iuran PKK"){
+    show("koordinator");
+    autoKeterangan();
+  }else{
+    hide("koordinator");
+    setVal("keterangan","");
     document.getElementById("keterangan").readOnly = false;
   }
 }
 
-// SIMPAN
-function submitData(){
-  tempData = {
-    action:"transaksi",
-    Tanggal:document.getElementById('tanggal').value.split('-').reverse().join('/'),
-    Koordinator:document.getElementById('koordinator').value,
-    Jenis:document.getElementById('jenis').value,
-    Kategori:document.getElementById('kategori').value,
-    Keterangan:document.getElementById('keterangan').value,
-    Nominal:document.getElementById('nominal').value
-  };
+// AUTO KETERANGAN
+const bulanNama = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 
-  showModalPreview();
+function autoKeterangan(){
+  const tgl = val("tanggal");
+  if(!tgl) return;
+
+  const d = new Date(tgl);
+  setVal("keterangan",`Iuran PKK ${bulanNama[d.getMonth()]} ${d.getFullYear()}`);
+  document.getElementById("keterangan").readOnly = true;
 }
 
-function showModalPreview(){
-  document.getElementById('modal').classList.add('show');
+// SUBMIT
+function submitData(){
 
-  document.getElementById('content').innerHTML = `
+  if(!val("bendahara")) return alertModal("Bendahara wajib dipilih");
+  if(!val("tanggal")) return alertModal("Tanggal wajib dipilih");
+  if(!val("kategori")) return alertModal("Kategori wajib dipilih");
+  if(!val("jenis")) return alertModal("Jenis wajib dipilih");
+  if(!val("nominal")) return alertModal("Nominal wajib diisi");
+
+  let ket = val("keterangan");
+
+  if(val("kategori") === "Iuran PKK"){
+    ket = `${val("koordinator")} - ${ket}`;
+  }
+
+  tempData = {
+    action:"transaksi",
+    Tanggal:formatTanggal(),
+    Jenis:val("jenis"),
+    Kategori:val("kategori"),
+    Keterangan:ket,
+    Nominal:val("nominal")
+  };
+
+  showModal(`
     <h3>Konfirmasi</h3>
     <div class="modal-body">
       ${tempData.Tanggal}<br>
-      ${tempData.Jenis}<br>
       ${tempData.Keterangan}<br>
-      Rp ${Number(tempData.Nominal).toLocaleString('id-ID')}
+      Rp ${Number(tempData.Nominal||0).toLocaleString('id-ID')}
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Batal</button>
       <button class="btn-green" onclick="confirm()">Simpan</button>
     </div>
-  `;
+  `);
 }
 
 async function confirm(){
-  document.getElementById('content').innerHTML = `<div class="spinner"></div>`;
-
+  showLoading("Menyimpan...");
   await fetch(ENDPOINT,{
     method:'POST',
     mode:'no-cors',
     body:JSON.stringify(tempData)
   });
-
-  document.getElementById('content').innerHTML = `
-    <div class="checkmark">✔</div>
-    <h3>Berhasil</h3>
-    <button class="btn-green" onclick="afterSuccess()">Tutup</button>
-  `;
+  showSuccess("Data tersimpan");
 }
 
-// PREVIEW APPROVAL
+// APPROVAL (TIDAK DIUBAH)
 async function submitApproval(){
-
-  document.getElementById('modal').classList.add('show');
-
-  document.getElementById('content').innerHTML = `
-    <div class="spinner"></div>
-    <p>Memuat preview...</p>
-  `;
+  showLoading("Memuat data...");
 
   const res = await fetch(`${ENDPOINT}?action=getDetailDraft`);
   const data = await res.json();
 
   if(!data.length){
-    document.getElementById('content').innerHTML = `<p>Tidak ada data draft</p>`;
+    showModal("<p>Tidak ada data draft</p>");
     return;
   }
 
-  let html = "";
   let total = 0;
+  let html = "";
 
   data.forEach(d=>{
     total += d.nominal;
     html += `<div>• ${d.jenis} - Rp ${d.nominal.toLocaleString('id-ID')}</div>`;
   });
 
-  document.getElementById('content').innerHTML = `
+  showModal(`
     <h3>Preview Approval</h3>
     <div class="modal-body">
       ${html}
@@ -330,27 +351,55 @@ async function submitApproval(){
       <button class="btn-cancel" onclick="closeModal()">Batal</button>
       <button class="btn-green" onclick="confirmApproval()">Kirim</button>
     </div>
-  `;
+  `);
 }
 
 async function confirmApproval(){
-
-  document.getElementById('content').innerHTML = `<div class="spinner"></div>`;
-
+  showLoading("Mengirim...");
   await fetch(ENDPOINT,{
     method:'POST',
     mode:'no-cors',
-    body:JSON.stringify({
-      action:"approval",
-      Bendahara:"Bendahara PKK"
-    })
+    body:JSON.stringify({action:"approval"})
   });
+  showSuccess("Approval berhasil dikirim");
+}
 
-  document.getElementById('content').innerHTML = `
+// HELPER
+function val(id){ return document.getElementById(id).value; }
+function setVal(id,v){ document.getElementById(id).value = v; }
+function enable(id){ document.getElementById(id).disabled = false; }
+function show(id){ document.getElementById(id).style.display = "block"; }
+function hide(id){ document.getElementById(id).style.display = "none"; }
+
+function alertModal(msg){
+  showModal(`
+    <h3>Oops</h3>
+    <div class="modal-body">${msg}</div>
+    <div class="modal-actions">
+      <button class="btn-green" onclick="closeModal()">OK</button>
+    </div>
+  `);
+}
+
+function showModal(html){
+  document.getElementById('modal').classList.add('show');
+  document.getElementById('content').innerHTML = html;
+}
+
+function showLoading(text){
+  showModal(`<div class="spinner"></div><p>${text}</p>`);
+}
+
+function showSuccess(text){
+  showModal(`
     <div class="checkmark">✔</div>
-    <h3>Berhasil Diajukan</h3>
+    <h3>${text}</h3>
     <button class="btn-green" onclick="afterSuccess()">Tutup</button>
-  `;
+  `);
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('show');
 }
 
 function afterSuccess(){
@@ -358,38 +407,8 @@ function afterSuccess(){
   location.reload();
 }
 
-function closeModal(){
-  document.getElementById('modal').classList.remove('show');
-}
-
-const bulanNama = [
-  "Januari","Februari","Maret","April","Mei","Juni",
-  "Juli","Agustus","September","Oktober","November","Desember"
-];
-
-// trigger saat kategori / tanggal berubah
-document.getElementById("kategori").addEventListener("change", autoKeterangan);
-document.getElementById("tanggal").addEventListener("change", autoKeterangan);
-
-function autoKeterangan(){
-  const kategori = document.getElementById("kategori").value;
-  const tanggal = document.getElementById("tanggal").value;
-  const ket = document.getElementById("keterangan");
-
-  if(kategori === "Iuran PKK" && tanggal){
-    const tgl = new Date(tanggal);
-
-    const bulan = bulanNama[tgl.getMonth()];
-    const tahun = tgl.getFullYear();
-
-    ket.value = `Iuran Bulan ${bulan} ${tahun}`;
-    ket.readOnly = true;
-    ket.style.background = "#e5e7eb";
-  } else {
-    ket.readOnly = false;
-    ket.value = "";
-    ket.style.background = "white";
-  }
+function formatTanggal(){
+  return val("tanggal").split('-').reverse().join('/');
 }
 </script>
 
