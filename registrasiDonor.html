@@ -33,9 +33,25 @@
         .header-banner {
             background: linear-gradient(135deg, #B41424 0%, #d32f2f 100%);
             color: #ffffff;
-            padding: 30px 20px;
+            padding: 25px 20px 20px 20px;
             text-align: center;
             position: relative;
+        }
+
+        /* UPGRADE: Penataan Kontainer Logo Organisasi */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 12px;
+        }
+
+        .logo-img {
+            height: 42px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.15));
         }
 
         .header-banner h1 {
@@ -281,6 +297,10 @@
 
 <div class="container">
     <div class="header-banner">
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Logo_Palang_Merah_Indonesia.svg" class="logo-img" alt="Logo PMI">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Logo_Karang_Taruna.svg" class="logo-img" alt="Logo Karang Taruna">
+        </div>
         <h1>DONOR BERSATU</h1>
         <p>Karang Taruna Sub RW 06 Kel. Pondok Benda</p>
     </div>
@@ -396,7 +416,6 @@
 </div>
 
 <script>
-    // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT BARU ANDA DI SINI
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzb0grFq3v0_wFxYN2ndqANq-BaTHf824jlyZexzU-JtjXXM2tvVDh7Nl4j1j5VeW2puw/exec";
 
     const form = document.getElementById('donorForm');
@@ -410,7 +429,6 @@
         submitBtn.disabled = true;
         loadingOverlay.style.display = 'flex';
 
-        // Pengumpulan data terbaru (Tempat & Tanggal lahir terpisah)
         const formData = {
             nama_lengkap: document.getElementById('nama_lengkap').value,
             nik: document.getElementById('nik').value,
