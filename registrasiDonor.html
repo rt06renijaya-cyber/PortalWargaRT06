@@ -38,17 +38,17 @@
             position: relative;
         }
 
-        /* UPGRADE: Penataan Kontainer Logo Organisasi */
+        /* Penataan Kontainer 3 Logo Berjejer Sejajar */
         .logo-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 25px;
-            margin-bottom: 12px;
+            gap: 20px;
+            margin-bottom: 15px;
         }
 
         .logo-img {
-            height: 42px;
+            height: 45px;
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.15));
@@ -196,6 +196,7 @@
             line-height: 1.6;
         }
 
+        /* Overlay Global untuk Loading Screen & Pop-up Sukses */
         .overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -207,6 +208,7 @@
             z-index: 9999;
         }
 
+        /* Animasi Loading Spinner */
         .loader-box {
             background: white;
             padding: 30px;
@@ -239,6 +241,7 @@
             color: #555;
         }
 
+        /* Tampilan Pop-up Sukses Terdaftar */
         .modal-box {
             background: white;
             padding: 30px;
@@ -295,19 +298,16 @@
 </head>
 <body>
 
+<div class="container">
     <div class="header-banner">
         <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Logo_Palang_Merah_Indonesia.svg" class="logo-img" alt="Logo PMI">
-            
-            <img src="assets/images/logo_kartun.jpg" class="logo-img" alt="Logo Event">
-            
-            <img src="assets/images/logo_donor_bersatu.png" class="logo-img" alt="Logo Karang Taruna">
+            <img src="assets/images/logo_pmi.png" class="logo-img" alt="Logo PMI">
+            <img src="assets/images/logo_donor_bersatu.png" class="logo-img" alt="Logo Event Donor">
+            <img src="assets/images/logo_kartun.png" class="logo-img" alt="Logo Karang Taruna">
         </div>
         <h1>DONOR BERSATU</h1>
         <p>Karang Taruna Sub RW 06 Kel. Pondok Benda</p>
     </div>
-        
-
     <div class="sub-header">
         📍 Balai Warga 06 — Satu Tetes, Sejuta Harapan
     </div>
@@ -420,6 +420,7 @@
 </div>
 
 <script>
+    // Menyambung langsung ke Apps Script URL Anda yang aktif
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzb0grFq3v0_wFxYN2ndqANq-BaTHf824jlyZexzU-JtjXXM2tvVDh7Nl4j1j5VeW2puw/exec";
 
     const form = document.getElementById('donorForm');
